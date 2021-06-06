@@ -55,7 +55,6 @@ std::string ParseShader(const std::string& filepath){
     while (getline(stream, line)) {
         source << line << '\n';
     }
-    std::cout << source.str() << std::endl;
     return source.str();
 }
 
