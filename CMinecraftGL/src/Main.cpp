@@ -18,6 +18,10 @@ GLuint indices[6] = {
     0, 2, 3
 };
 
+void on_resize(GLFWwindow* window, GLsizei width, GLsizei height) {
+    glViewport(0, 0, width, height);
+}
+
 
 void send_data_to_gpu() {
     GLuint vao;
@@ -33,6 +37,20 @@ void send_data_to_gpu() {
     glGenBuffers(1, &ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(int), indices, GL_STATIC_DRAW);
+}
+
+
+void draw(GLFWwindow* window) {
+    /* Render here */
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+    /* Swap front and back buffers */
+    glfwSwapBuffers(window);
+
+    /* Poll for and process events */
+    glfwPollEvents();
 }
 
 int main(void)
@@ -51,6 +69,7 @@ int main(void)
         return -1;
     }
 
+    glfwSetFramebufferSizeCallback(window, on_resize);
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
@@ -74,18 +93,10 @@ int main(void)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
-
-        /* Poll for and process events */
-        glfwPollEvents();
+        draw(window);
     }
 
     glfwTerminate();
     return 0;
 }
+
