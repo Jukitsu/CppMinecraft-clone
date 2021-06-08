@@ -3,7 +3,11 @@
 #include <GL/glu.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "shader.h"
+#include "renderer/gl/vbo.h"
+#include "renderer/gl/ibo.h"
+#include "renderer/gl/vao.h"
+#include "renderer/gl/shader.h"
+
 
 
 GLfloat vertices[12] = {
@@ -23,21 +27,6 @@ void on_resize(GLFWwindow* window, GLsizei width, GLsizei height) {
 }
 
 
-void send_data_to_gpu() {
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    GLuint vbo;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(0);
-    GLuint ibo;
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(int), indices, GL_STATIC_DRAW);
-}
 
 
 void draw(GLFWwindow* window) {
@@ -81,21 +70,29 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    send_data_to_gpu();
-    std::string vertex_shader_source = ParseShader("res/shaders/vertex_shader.glsl");
-    std::string fragment_shader_source = ParseShader("res/shaders/fragment_shader.glsl");
-    GLuint shader_program = create_shader(vertex_shader_source, fragment_shader_source);
+    VertexArray vao;
+    VertexBuffer vbo(vertices, sizeof(vertices));
+    vbo.genVertexAttrib(0, 3);
+    IndexBuffer ibo(indices, sizeof(indices));
+    Shader VertexShader = Shader("res/shaders/vertex_shader.glsl", GL_VERTEX_SHADER);
+    Shader FragmentShader = Shader("res/shaders/fragment_shader.glsl", GL_FRAGMENT_SHADER);
+    ShaderProgram shader_program = createShaderProgram(VertexShader, FragmentShader);
+    VertexShader.clear();
+    FragmentShader.clear();
+    glUseProgram(shader_program.id);
 
-    glUseProgram(shader_program);
-
+    int location = glGetUniformLocation(shader_program.id, "color");
+    glUniform4f(location, 0.0f, 0.0f, 0.0f, 0.0f); // Uniform testing
 
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        vao.bind();
         draw(window);
     }
 
+    glDeleteProgram(shader_program.id);
     glfwTerminate();
     return 0;
 }
