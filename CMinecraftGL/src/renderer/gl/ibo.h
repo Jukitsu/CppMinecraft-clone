@@ -13,6 +13,7 @@ public:
 	GLuint id;
 	IndexBuffer(const void* indices, GLuint size);
 	~IndexBuffer();
+	void modifyIndices(const void* indices, GLuint size);
 	void bind();
 	void unbind();
 };

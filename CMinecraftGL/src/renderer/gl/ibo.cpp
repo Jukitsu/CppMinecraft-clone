@@ -15,6 +15,10 @@ IndexBuffer::~IndexBuffer() {
 	glDeleteBuffers(1, &id);
 }
 
+void IndexBuffer::modifyIndices(const void* indices, GLuint size) {
+	this->indices = indices; this->size = size;
+}
+
 void IndexBuffer::bind() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);

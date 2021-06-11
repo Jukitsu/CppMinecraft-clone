@@ -15,6 +15,7 @@ public:
 	GLuint attr_index;
 	VertexBuffer(const void* data, GLuint size, GLint data_dim, GLuint attr_index);
 	~VertexBuffer();
+	void modifyData(const void* data, GLuint size);
 	void bind();
 	void unbind();
 };

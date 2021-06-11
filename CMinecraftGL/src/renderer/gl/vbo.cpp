@@ -15,7 +15,9 @@ VertexBuffer::~VertexBuffer() {
 	glDeleteBuffers(1, &id);
 }
 
-
+void VertexBuffer::modifyData(const void* data, GLuint size) {
+	this->data = data; this->size = size;
+}
 
 void VertexBuffer::bind() {
 	glBindBuffer(GL_ARRAY_BUFFER, id);
