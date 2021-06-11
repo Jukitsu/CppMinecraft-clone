@@ -1,5 +1,7 @@
 #pragma once
+#define GLEW_STATIC
 #include <GL/glew.h>
+#include <GL/glu.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 
@@ -22,6 +24,7 @@ public:
 	void compileProgram();
 	void use();
 	void stop();
+	void delete_program();
 };
 
 ShaderProgram createShaderProgram(Shader vertexShader, Shader fragmentShader);

@@ -24,6 +24,7 @@
     <ClCompile Include="src\renderer\gl\shader.cpp" />
     <ClCompile Include="src\renderer\gl\vao.cpp" />
     <ClCompile Include="src\renderer\gl\vbo.cpp" />
+    <ClCompile Include="src\renderer\Renderer.cpp" />
     <ClCompile Include="src\util\math\Matrix4f.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -35,6 +36,7 @@
     <ClInclude Include="src\renderer\gl\ibo.h" />
     <ClInclude Include="src\renderer\gl\vao.h" />
     <ClInclude Include="src\renderer\gl\vbo.h" />
+    <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\util\math\Matrix4f.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

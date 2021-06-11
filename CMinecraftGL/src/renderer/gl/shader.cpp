@@ -35,6 +35,7 @@ GLuint Shader::_compileShader(GLuint type) {
         std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader" <<
             std::endl;
         std::cout << message << std::endl;
+        delete[] message;
         glDeleteShader(_id);
         return 0;
     }
@@ -71,6 +72,10 @@ void ShaderProgram::use() {
 
 void ShaderProgram::stop() {
     glUseProgram(0);
+}
+
+void ShaderProgram::delete_program() {
+    glDeleteProgram(id);
 }
 
 ShaderProgram createShaderProgram(Shader vertexShader, Shader fragmentShader) {

@@ -1,13 +1,14 @@
 #pragma once
+#define GLEW_STATIC
 #include <GL/glew.h>
+#include <GL/glu.h>
 #include <GLFW/glfw3.h>
 
 
 
 class VertexArray {
-private:
-	GLuint id;
 public:
+	GLuint id;
 	VertexArray();
 	~VertexArray();
 	void bind();

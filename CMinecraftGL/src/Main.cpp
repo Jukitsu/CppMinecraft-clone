@@ -10,6 +10,8 @@
 
 
 
+
+
 GLfloat vertices[12] = {
     -0.5, 0.5, 1.0,
     -0.5, -0.5, 1.0,
@@ -22,6 +24,9 @@ GLuint indices[6] = {
     0, 2, 3
 };
 
+std::string vertexShaderFilepath = "res/shaders/vertex_shader.glsl";
+std::string fragmentShaderFilepath = "res/shaders/fragment_shader.glsl";
+
 void on_resize(GLFWwindow* window, GLsizei width, GLsizei height) {
     glViewport(0, 0, width, height);
 }
@@ -32,15 +37,16 @@ void on_resize(GLFWwindow* window, GLsizei width, GLsizei height) {
 void draw(GLFWwindow* window) {
     /* Render here */
     glClear(GL_COLOR_BUFFER_BIT);
-
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
     /* Swap front and back buffers */
     glfwSwapBuffers(window);
 
     /* Poll for and process events */
     glfwPollEvents();
 }
+
+
+
 
 int main(void)
 {
@@ -70,16 +76,18 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    VertexArray vao;
-    VertexBuffer vbo(vertices, sizeof(vertices));
-    vbo.genVertexAttrib(0, 3);
+    VertexArray vao; 
+    vao.bind();
+    VertexBuffer vbo(vertices, sizeof(vertices), 3, 0);
+    vbo.bind();
     IndexBuffer ibo(indices, sizeof(indices));
+    ibo.bind();
     Shader VertexShader = Shader("res/shaders/vertex_shader.glsl", GL_VERTEX_SHADER);
     Shader FragmentShader = Shader("res/shaders/fragment_shader.glsl", GL_FRAGMENT_SHADER);
     ShaderProgram shader_program = createShaderProgram(VertexShader, FragmentShader);
     VertexShader.clear();
     FragmentShader.clear();
-    glUseProgram(shader_program.id);
+    shader_program.use();
 
     int location = glGetUniformLocation(shader_program.id, "color");
     glUniform4f(location, 0.0f, 0.0f, 0.0f, 0.0f); // Uniform testing
@@ -89,10 +97,10 @@ int main(void)
     while (!glfwWindowShouldClose(window))
     {
         vao.bind();
+        ibo.bind();
         draw(window);
     }
-
-    glDeleteProgram(shader_program.id);
+    shader_program.delete_program();
     glfwTerminate();
     return 0;
 }
