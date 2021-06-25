@@ -24,7 +24,7 @@ GLfloat vertices[12] = {
 };
 
 
-GLuint indices[6]{
+GLuint indices[6] = {
     0, 1, 2,
     0, 2, 3
 };
