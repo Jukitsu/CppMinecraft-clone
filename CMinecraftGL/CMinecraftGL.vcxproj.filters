@@ -18,9 +18,6 @@
     <ClCompile Include="src\Main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\Matrix4f.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\renderer\gl\vbo.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -36,15 +33,18 @@
     <ClCompile Include="src\renderer\Renderer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\renderer\gl\glErrors.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\Camera.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\vertex_shader.glsl" />
     <None Include="res\shaders\fragment_shader.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\util\math\Matrix4f.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\renderer\gl\vbo.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -58,6 +58,12 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer\Renderer.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\gl\glErrors.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\Camera.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

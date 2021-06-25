@@ -6,20 +6,21 @@
 #include <iostream>
 
 
-VertexArray::VertexArray()
-{
-	glGenVertexArrays(1, &id);
-	glBindVertexArray(id);
-}
+VertexArray::VertexArray():id(){}
+
 
 VertexArray::~VertexArray() {
-	glDeleteVertexArrays(1, &id);
+	glCall (glDeleteVertexArrays(1, &id));
+}
+
+void VertexArray::init() {
+	glCall (glGenVertexArrays(1, &id));
 }
 
 void VertexArray::bind() {
-	glBindVertexArray(id);
+	glCall (glBindVertexArray(id));
 }
 
 void VertexArray::unbind() {
-	glBindVertexArray(0);
+	glCall (glBindVertexArray(0));
 }

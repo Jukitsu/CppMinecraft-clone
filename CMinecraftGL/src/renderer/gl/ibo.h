@@ -3,17 +3,17 @@
 #include <GL/glew.h>
 #include <GL/glu.h>
 #include <GLFW/glfw3.h>
+#include "glErrors.h"
 
 
 
 class IndexBuffer {
 public:
-	const void* indices;
-	GLuint size;
 	GLuint id;
-	IndexBuffer(const void* indices, GLuint size);
+	IndexBuffer();
 	~IndexBuffer();
-	void modifyIndices(const void* indices, GLuint size);
+	void init();
+	void sendIndices(const void* indices, GLuint size);
 	void bind();
 	void unbind();
 };

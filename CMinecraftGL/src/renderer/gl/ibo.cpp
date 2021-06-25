@@ -5,25 +5,25 @@
 #include <GLFW/glfw3.h>
 
 
-IndexBuffer::IndexBuffer(const void* indices, GLuint size)
-	:indices(indices), size(size)
-{
-	glGenBuffers(1, &id);
-}
+IndexBuffer::IndexBuffer():id(){}
 
 IndexBuffer::~IndexBuffer() {
-	glDeleteBuffers(1, &id);
+	glCall (glDeleteBuffers(1, &id));
 }
 
-void IndexBuffer::modifyIndices(const void* indices, GLuint size) {
-	this->indices = indices; this->size = size;
+void IndexBuffer::init() {
+	glCall (glGenBuffers(1, &id));
+}
+
+void IndexBuffer::sendIndices(const void* indices, GLuint size) {
+	glCall (glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id));
+	glCall (glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW));
 }
 
 void IndexBuffer::bind() {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
+	glCall (glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id));
 }
 
 void IndexBuffer::unbind() {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glCall (glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }

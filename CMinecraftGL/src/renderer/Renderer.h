@@ -2,23 +2,26 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GL/glu.h>
-#include <GLFW/glfw3.h>
 #include "gl/vao.h"
 #include "gl/vbo.h"
 #include "gl/ibo.h"
+#include <GLFW/glfw3.h>
+#include "gl/glErrors.h"
+
 
 
 class Renderer {
 private:
-	VertexArray* vaoptr;
-	VertexBuffer* vboptr;
-	IndexBuffer* iboptr;
+	VertexArray* vao;
+	VertexBuffer* vbos[1];
+	IndexBuffer* ibo;
 	GLuint va_index;
 	bool is_bound;
 public:
 	Renderer();
-	void genVertexArray();
-	void sendData(const void* data, const void* indices, GLuint sizeofdata, GLuint sizeofindices);
+	~Renderer();
+	void init();
+	void sendData(GLfloat* data, GLint data_size, GLint data_dim, GLuint* indices, GLint index_count, GLuint attr_index);
 	void bind_all();
 	void clear();
 	int draw();

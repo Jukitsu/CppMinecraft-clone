@@ -3,19 +3,16 @@
 #include <GL/glew.h>
 #include <GL/glu.h>
 #include <GLFW/glfw3.h>
-
+#include "glErrors.h"
 
 
 class VertexBuffer {
 public:
 	GLuint id;
-	const void* data;
-	GLuint size;
-	GLint data_dim;
-	GLuint attr_index;
-	VertexBuffer(const void* data, GLuint size, GLint data_dim, GLuint attr_index);
+	VertexBuffer();
 	~VertexBuffer();
-	void modifyData(const void* data, GLuint size);
+	void init();
+	void sendData(const void* data, GLuint size, GLint data_dim, GLuint va_index);
 	void bind();
 	void unbind();
 };

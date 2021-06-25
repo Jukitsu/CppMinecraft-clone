@@ -8,36 +8,51 @@
 #include "gl/ibo.h"
 #include "Renderer.h"
 
-Renderer::Renderer(): vaoptr(nullptr), vboptr(nullptr), iboptr(nullptr), is_bound(false), va_index(0) {}  
+Renderer::Renderer() : vao(), vbos(), ibo(), is_bound(false), va_index(0) 
+{
+	vao = new VertexArray();
+	for (int i = 0; i < 1; i++) {
+		vbos[i] = new VertexBuffer();
+	}
+	ibo = new IndexBuffer();
+}
 // This constructor is just here to initialize random stuff
-
-void Renderer::genVertexArray() {
-	VertexArray vao;
-	vao.bind();
-	vaoptr = &vao;
+Renderer::~Renderer() {
+	delete vao;
+	for (VertexBuffer* vbo: vbos) {
+		delete vbo;
+	}
+	delete ibo;
+}
+void Renderer::init() {
+	vao->init();
+	for (VertexBuffer* vbo: vbos) {
+		vbo->init();
+	}
+	ibo->init();
+	std::cout << vao->id << std::endl;
 }
 
-void Renderer::sendData(const void* data, const void* indices, GLuint sizeofdata, GLuint sizeofindices) {
-	VertexBuffer vbo(data, sizeofdata, 3, va_index);
-	IndexBuffer ibo(indices, sizeofindices);
-	vbo.bind();
-	ibo.bind();
-	vboptr = &vbo; iboptr = &ibo;
+void Renderer::sendData(GLfloat* data, GLint data_size, GLint data_dim, GLuint* indices, GLint index_count, GLuint attr_index) {
+	vao->bind();
+	VertexBuffer* vbo = vbos[attr_index];
+	vbo->sendData(data, data_size * sizeof(GLfloat), data_dim, attr_index);
+	vbo->bind();
+	ibo->sendIndices(indices, index_count * sizeof(GLuint));
+	ibo->bind();
+	std::cout << data << std::endl;
 }
 
 void Renderer::bind_all() {
 	is_bound = true;
-	VertexArray vao = *vaoptr;
-	IndexBuffer ibo = *iboptr;
-	vao.bind();
-	ibo.bind();
+	vao->bind();
+	ibo->bind();
 }
 
 void Renderer::clear() {
 	is_bound = false;
-	vaoptr->unbind();
-	vboptr->unbind();
-	iboptr->unbind();
+	glCall (glBindVertexArray(0));
+	glCall (glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
 int Renderer::draw() {
@@ -45,8 +60,8 @@ int Renderer::draw() {
 		std::cerr << "No vao is bound" << std::endl;
 		return -1;
 	}
-	glClear(GL_COLOR_BUFFER_BIT);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	glCall (glClear(GL_COLOR_BUFFER_BIT));
+	glCall (glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 	return 0;
 }
 
