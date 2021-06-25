@@ -40,7 +40,6 @@ void Renderer::sendData(GLfloat* data, GLint data_size, GLint data_dim, GLuint* 
 	vbo->bind();
 	ibo->sendIndices(indices, index_count * sizeof(GLuint));
 	ibo->bind();
-	std::cout << data << std::endl;
 }
 
 void Renderer::bind_all() {

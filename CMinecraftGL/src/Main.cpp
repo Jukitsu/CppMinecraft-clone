@@ -80,20 +80,6 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    if (false) {
-        VertexArray vao;
-        VertexBuffer vbo;
-        IndexBuffer ibo;
-        vao.init();
-        vbo.init();
-        ibo.init();
-        vao.bind();
-        vbo.sendData(vertices, 12 * sizeof(GLfloat), 3, 0);
-        vbo.bind();
-        ibo.sendIndices(indices, 6 * sizeof(GLfloat));
-        ibo.bind();
-    }
-
     Renderer* mainrenderer = new Renderer();
     mainrenderer->init();
     mainrenderer->sendData(vertices, 12, 3, indices, 6, 0);
