@@ -42,7 +42,6 @@
     <ClInclude Include="src\renderer\gl\vao.h" />
     <ClInclude Include="src\renderer\gl\vbo.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
-    <ClInclude Include="src\util\mth.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

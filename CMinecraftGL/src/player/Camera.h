@@ -10,7 +10,7 @@
 #include <util/glm/trigonometric.hpp>
 #include "renderer/gl/shader.h"
 #include "renderer/gl/glErrors.h"
-#include "util/mth.h"
+
 
 class Camera {
 public:
