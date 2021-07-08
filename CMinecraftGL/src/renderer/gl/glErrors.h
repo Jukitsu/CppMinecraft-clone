@@ -7,10 +7,10 @@
 #define DEBUG
 #ifdef DEBUG
 #define ASSERT(x) if (!(x)) __debugbreak();
-#else
-#define ASSERT(x) if (!(x));
-#endif
 #define glCall(x) glClearLog(); x; ASSERT(glCatchError(__FUNCTION__, __FILE__, __LINE__, #x));
-
+#else
+#define ASSERT(x) if (!(x))
+#define glCall(x) x
+#endif
 void glClearLog();
 bool glCatchError(const char* function, const char* file, int lineno, const char* code);

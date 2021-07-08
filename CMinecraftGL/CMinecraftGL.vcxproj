@@ -20,7 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\renderer\Camera.cpp" />
+    <ClCompile Include="src\player\Camera.cpp" />
+    <ClCompile Include="src\player\Player.cpp" />
     <ClCompile Include="src\renderer\gl\glErrors.cpp" />
     <ClCompile Include="src\renderer\gl\ibo.cpp" />
     <ClCompile Include="src\renderer\gl\shader.cpp" />
@@ -33,13 +34,15 @@
     <None Include="res\shaders\vertex_shader.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\renderer\Camera.h" />
+    <ClInclude Include="src\player\Camera.h" />
+    <ClInclude Include="src\player\Player.h" />
     <ClInclude Include="src\renderer\gl\glErrors.h" />
     <ClInclude Include="src\renderer\gl\shader.h" />
     <ClInclude Include="src\renderer\gl\ibo.h" />
     <ClInclude Include="src\renderer\gl\vao.h" />
     <ClInclude Include="src\renderer\gl\vbo.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
+    <ClInclude Include="src\util\mth.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

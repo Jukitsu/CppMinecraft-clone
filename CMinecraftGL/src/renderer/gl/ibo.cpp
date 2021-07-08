@@ -15,7 +15,7 @@ void IndexBuffer::init() {
 	glCall (glGenBuffers(1, &id));
 }
 
-void IndexBuffer::sendIndices(const void* indices, GLuint size) {
+void IndexBuffer::sendIndices(const void *indices, GLuint size) {
 	glCall (glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id));
 	glCall (glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW));
 }

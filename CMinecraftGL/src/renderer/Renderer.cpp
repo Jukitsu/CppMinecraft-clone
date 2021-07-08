@@ -19,21 +19,21 @@ Renderer::Renderer() : vao(), vbos(), ibo(), is_bound(false), va_index(0)
 // This constructor is just here to initialize random stuff
 Renderer::~Renderer() {
 	delete vao;
-	for (VertexBuffer* vbo: vbos) {
+	for (VertexBuffer *vbo: vbos) {
 		delete vbo;
 	}
 	delete ibo;
 }
 void Renderer::init() {
 	vao->init();
-	for (VertexBuffer* vbo: vbos) {
+	for (VertexBuffer *vbo: vbos) {
 		vbo->init();
 	}
 	ibo->init();
 	std::cout << vao->id << std::endl;
 }
 
-void Renderer::sendData(GLfloat* data, GLint data_size, GLint data_dim, GLuint* indices, GLint index_count, GLuint attr_index) {
+void Renderer::sendData(GLfloat *data, GLint data_size, GLint data_dim, GLuint *indices, GLint index_count, GLuint attr_index) {
 	vao->bind();
 	VertexBuffer* vbo = vbos[attr_index];
 	vbo->sendData(data, data_size * sizeof(GLfloat), data_dim, attr_index);
