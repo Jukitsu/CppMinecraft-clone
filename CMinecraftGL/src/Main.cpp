@@ -124,15 +124,18 @@ int main(void)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        // Making the scene 3D, but doesnt work for now, uses identity matrix for now
         current_time = glfwGetTime();
 
         // Tick
 
         if (current_time - prev_time >= 1 / default_tps) {
+            // Event system I guess ?
             camera->rotate_yaw(glm::radians(1.0));
             prev_time = current_time;
         }
+
+        // 3D stuff
+
         camera->update_matrices();
         camera->load_matrices();
 
