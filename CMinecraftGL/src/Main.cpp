@@ -11,7 +11,6 @@
 #include "util/glm/glm.hpp"
 #include "util/glm/gtc/matrix_transform.hpp"
 #include "renderer/Renderer.h"
-#include "util/mth.h"
 #include "player/Camera.h"
 
 #define default_tps 60.0
@@ -91,11 +90,6 @@ int main(void)
 
     mainrenderer->sendData(vertices, 12, 3, indices, 6, 0);
 
-    // 3D matrices, gonna abstract it so its useless rn
-
-    glm::mat4 proj_matrix = glm::identity<glm::mat4>();
-    glm::mat4 mv_matrix = glm::identity<glm::mat4>();
-    glm::mat4 mvp_matrix = glm::identity<glm::mat4>();
     
     // Creating Shaders
 
