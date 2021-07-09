@@ -1,8 +1,4 @@
 #define GLEW_STATIC
-#include <GL/glew.h>
-#include <GL/glu.h>
-#include <GLFW/glfw3.h>
-#include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -81,22 +77,22 @@ void ShaderProgram::delete_program() {
     glCall (glDeleteProgram(id));
 }
 
-GLint ShaderProgram::find_uniform(const GLchar* name) {
+GLint ShaderProgram::find_uniform(const GLchar *name) {
     glCall (GLint location = glGetUniformLocation(id, name));
     return location;
 }
 
-void ShaderProgram::setUniform1f(const GLchar* name, GLfloat value) {
+void ShaderProgram::setUniform1f(const GLchar *name, GLfloat value) {
     GLint location = this->find_uniform(name);
     glCall (glUniform1f(location, value));
 }
 
-void ShaderProgram::setUniform4f(const GLchar* name, GLfloat i, GLfloat j, GLfloat k, GLfloat l) {
+void ShaderProgram::setUniform4f(const GLchar *name, GLfloat i, GLfloat j, GLfloat k, GLfloat l) {
     GLint location = this->find_uniform(name);
     glCall (glUniform4f(location, i, j, k, l));
 }
 
-void ShaderProgram::setUniformMat4f(const GLchar* name, const glm::mat4 &matrix) {
+void ShaderProgram::setUniformMat4f(const GLchar *name, const glm::mat4 &matrix) {
     GLint location = this->find_uniform(name);
     glCall (glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix)));
 }

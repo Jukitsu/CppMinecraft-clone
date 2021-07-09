@@ -1,14 +1,6 @@
-#define GLEW_STATIC
-#include <GL/glew.h>
-#include <GL/glu.h>
-#include <GLFW/glfw3.h>
-#include <iostream>
-#include "gl/vao.h"
-#include "gl/vbo.h"
-#include "gl/ibo.h"
 #include "Renderer.h"
 
-Renderer::Renderer() : vao(), vbos(), ibo(), is_bound(false), va_index(0) 
+Renderer::Renderer() : vao(), vbos(), ibo(), index_count(), is_bound(false), va_index(0) 
 {
 	vao = new VertexArray();
 	for (int i = 0; i < 1; i++) {
@@ -33,11 +25,13 @@ void Renderer::init() {
 	std::cout << vao->id << std::endl;
 }
 
-void Renderer::sendData(GLfloat *data, GLint data_size, GLint data_dim, GLuint *indices, GLint index_count, GLuint attr_index) {
+void Renderer::sendData(GLfloat *data, GLint data_size, GLint data_dim, GLuint *indices, GLint index_count, GLuint va_index) {
+	this->index_count = index_count;
 	vao->bind();
-	VertexBuffer* vbo = vbos[attr_index];
-	vbo->sendData(data, data_size * sizeof(GLfloat), data_dim, attr_index);
+	VertexBuffer *vbo = vbos[va_index];
+	vbo->sendData(data, data_size * sizeof(GLfloat));
 	vbo->bind();
+	vao->link_attrib(vbo, data_dim, va_index);
 	ibo->sendIndices(indices, index_count * sizeof(GLuint));
 	ibo->bind();
 }
@@ -60,7 +54,9 @@ int Renderer::draw() {
 		return -1;
 	}
 	glCall (glClear(GL_COLOR_BUFFER_BIT));
-	glCall (glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+	glCall (glClear(GL_DEPTH_BUFFER_BIT));
+	glCall (glEnable(GL_DEPTH_TEST));
+	glCall (glDrawElements(GL_TRIANGLES, this->index_count, GL_UNSIGNED_INT, nullptr));
 	return 0;
 }
 

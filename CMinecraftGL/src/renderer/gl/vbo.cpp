@@ -15,11 +15,9 @@ void VertexBuffer::init() {
 	glCall (glGenBuffers(1, &id));
 }
 
-void VertexBuffer::sendData(const void* data, GLuint size, GLint data_dim, GLuint va_index) {
+void VertexBuffer::sendData(const void* data, GLuint size) {
 	glCall (glBindBuffer(GL_ARRAY_BUFFER, id));
 	glCall (glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
-	glCall (glVertexAttribPointer(va_index, data_dim, GL_FLOAT, GL_FALSE, 0, 0));
-	glCall (glEnableVertexAttribArray(va_index));
 }
 
 void VertexBuffer::bind() {

@@ -12,7 +12,7 @@ public:
 	VertexBuffer();
 	~VertexBuffer();
 	void init();
-	void sendData(const void* data, GLuint size, GLint data_dim, GLuint va_index);
+	void sendData(const void* data, GLuint size);
 	void bind();
 	void unbind();
 };

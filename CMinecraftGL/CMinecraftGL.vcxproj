@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\blocks\Block.cpp" />
+    <ClCompile Include="src\blocks\models\cube.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\player\Camera.cpp" />
     <ClCompile Include="src\player\Player.cpp" />
@@ -34,6 +36,8 @@
     <None Include="res\shaders\vertex_shader.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\blocks\Block.h" />
+    <ClInclude Include="src\blocks\models\cube.h" />
     <ClInclude Include="src\player\Camera.h" />
     <ClInclude Include="src\player\Player.h" />
     <ClInclude Include="src\renderer\gl\glErrors.h" />

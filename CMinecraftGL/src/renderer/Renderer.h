@@ -15,6 +15,7 @@ private:
 	VertexArray* vao;
 	VertexBuffer* vbos[1];
 	IndexBuffer* ibo;
+	int index_count;
 	GLuint va_index;
 	bool is_bound;
 public:

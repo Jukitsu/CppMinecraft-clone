@@ -9,5 +9,5 @@ uniform vec4 overlay;
 uniform vec4 shading;
 
 void main(void) {
-	fragment_colour = (vec4(local_position / 2.0 + 0.5, 1.0) + color_on) * shading + overlay;
+	fragment_colour = (vec4(local_position / 2.0 + 0.5, 1.0) * color_on) * shading + overlay;
 }

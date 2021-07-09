@@ -12,9 +12,15 @@
 #include "util/glm/gtc/matrix_transform.hpp"
 #include "renderer/Renderer.h"
 #include "player/Camera.h"
+#include "blocks/models/cube.h"
 
 #define default_tps 60.0
 
+namespace GameElements {
+    Camera *camera;
+    ShaderProgram *shader_program;
+    Renderer *mainrenderer;
+};
 
 GLfloat vertices[12] = { // Vertex Positions
     -0.5, 0.5, 0.0,
@@ -35,6 +41,8 @@ std::string fragmentShaderFilepath = "res/shaders/fragment_shader.glsl";
 
 void on_resize(GLFWwindow *window, GLsizei width, GLsizei height) {
     glViewport(0, 0, width, height);
+    GameElements::camera->width = width;
+    GameElements::camera->height = height;
 }
 
 
@@ -55,14 +63,14 @@ void draw(GLFWwindow *window, Renderer *renderer) {
 
 int main(void)
 {
-    GLFWwindow* window;
+    GLFWwindow *window;
 
     /* Initialize the library */
     if (!glfwInit())
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(852, 480, "CMinecraft", nullptr, nullptr);
+    window = glfwCreateWindow(800, 800, "CMinecraft", nullptr, nullptr);
     if (!window)
     {
         glfwTerminate();
@@ -88,7 +96,7 @@ int main(void)
 
     // Buffering Data to the Graphics card
 
-    mainrenderer->sendData(vertices, 12, 3, indices, 6, 0);
+    mainrenderer->sendData(cube_vertex_pos, 72, 3, cube_indices, 36, 0);
 
     
     // Creating Shaders
@@ -106,7 +114,7 @@ int main(void)
     
     // Setting uniforms (debug testing)
 
-    shader_program.setUniform4f("color_on", 0.0f, 0.0f, 0.0f, 0.0f); // Uniform testing
+    shader_program.setUniform4f("color_on", 1.0f, 1.0f, 1.0f, 1.0f); // Uniform testing
     shader_program.setUniform4f("shading", 1.0f, 1.0f, 1.0f, 1.0f);
     shader_program.setUniform4f("overlay", 0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -115,16 +123,23 @@ int main(void)
     double prev_time = glfwGetTime();
     double current_time;
 
+    // Link game elements to the struct
+
+    GameElements::camera = camera;
+    GameElements::shader_program = &shader_program;
+    GameElements::mainrenderer = mainrenderer;
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+
         current_time = glfwGetTime();
 
         // Tick
 
         if (current_time - prev_time >= 1 / default_tps) {
             // Event system I guess ?
-            camera->rotate_yaw(glm::radians(1.0));
+            camera->rotate_yaw(glm::radians(0.0f));
             prev_time = current_time;
         }
 
