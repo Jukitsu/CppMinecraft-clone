@@ -82,18 +82,16 @@ GLint ShaderProgram::find_uniform(const GLchar *name) {
     return location;
 }
 
-void ShaderProgram::setUniform1f(const GLchar *name, GLfloat value) {
-    GLint location = this->find_uniform(name);
-    glCall (glUniform1f(location, value));
+
+void ShaderProgram::setUniform1i(GLint location, GLint value) {
+    glCall (glUniform1i(location, value));
 }
 
-void ShaderProgram::setUniform4f(const GLchar *name, GLfloat i, GLfloat j, GLfloat k, GLfloat l) {
-    GLint location = this->find_uniform(name);
+void ShaderProgram::setUniform4f(GLint location, GLfloat i, GLfloat j, GLfloat k, GLfloat l) {
     glCall (glUniform4f(location, i, j, k, l));
 }
 
-void ShaderProgram::setUniformMat4f(const GLchar *name, const glm::mat4 &matrix) {
-    GLint location = this->find_uniform(name);
+void ShaderProgram::setUniformMat4f(GLint location, const glm::mat4 &matrix) {
     glCall (glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix)));
 }
 

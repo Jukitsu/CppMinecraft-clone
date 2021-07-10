@@ -9,7 +9,7 @@
 
 class VertexArray {
 public:
-	VertexBuffer *vbos[1];
+	VertexBuffer *vbos[2];
 	GLuint id;
 	VertexArray();
 	~VertexArray();

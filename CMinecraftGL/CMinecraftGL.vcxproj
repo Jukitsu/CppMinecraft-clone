@@ -30,6 +30,7 @@
     <ClCompile Include="src\renderer\gl\vao.cpp" />
     <ClCompile Include="src\renderer\gl\vbo.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
+    <ClCompile Include="src\texture\texture_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\fragment_shader.glsl" />
@@ -46,6 +47,22 @@
     <ClInclude Include="src\renderer\gl\vao.h" />
     <ClInclude Include="src\renderer\gl\vbo.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
+    <ClInclude Include="src\texture\texture_manager.h" />
+    <ClInclude Include="src\util\stb\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\textures\cobblestone.png" />
+    <Image Include="res\textures\daisy.png" />
+    <Image Include="res\textures\dirt.png" />
+    <Image Include="res\textures\grass.png" />
+    <Image Include="res\textures\grass_side.png" />
+    <Image Include="res\textures\leaves.png" />
+    <Image Include="res\textures\log_side.png" />
+    <Image Include="res\textures\log_top.png" />
+    <Image Include="res\textures\planks.png" />
+    <Image Include="res\textures\rose.png" />
+    <Image Include="res\textures\sand.png" />
+    <Image Include="res\textures\stone.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

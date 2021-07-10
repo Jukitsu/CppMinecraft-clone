@@ -14,20 +14,15 @@
 
 class Camera {
 public:
-	glm::mat4 proj;
-	glm::mat4 view;
-	glm::mat4 model;
-	glm::mat4 mvp;
-	glm::vec3 input;
-	glm::vec3 position; 
-	GLsizei width;
-	GLsizei height;
+	glm::mat4 proj, view, model;
+	glm::vec3 input, position; 
+	GLint proj_loc, view_loc, model_loc;
+	GLsizei width, height;
 	ShaderProgram *shader_program;
-	GLdouble yaw;
-	GLdouble pitch;
+	GLdouble yaw, pitch;
 	Camera(ShaderProgram* shader_program, GLsizei width, GLsizei height);
 	~Camera();
-	void reset_matrices();
+	void update_dim(GLsizei width, GLsizei height);
 	void rotate_yaw(double angle);
 	void rotate_pitch(double angle);
 	void update_matrices();

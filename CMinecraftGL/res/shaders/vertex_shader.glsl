@@ -1,13 +1,16 @@
 #version 330
 
 layout(location = 0) in vec3 vertex_position; 
+layout(location = 1) in vec3 tex_coords;
 
 out vec3 local_position;
+out vec3 interpolated_tex_coords;
 
-uniform mat4 matrix;
+uniform mat4 proj, view, model;
 
 
 void main(void) {
 	local_position = vertex_position;
-	gl_Position = matrix * vec4(vertex_position, 1.0);
+	interpolated_tex_coords = tex_coords;
+	gl_Position = proj * view * model * vec4(vertex_position, 1.0);
 }

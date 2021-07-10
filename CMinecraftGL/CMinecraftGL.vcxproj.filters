@@ -48,6 +48,9 @@
     <ClCompile Include="src\blocks\models\cube.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\texture\texture_manager.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\vertex_shader.glsl" />
@@ -84,5 +87,49 @@
     <ClInclude Include="src\blocks\models\cube.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="src\texture\texture_manager.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\stb\stb_image.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\textures\cobblestone.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="res\textures\daisy.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="res\textures\dirt.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="res\textures\grass.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="res\textures\grass_side.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="res\textures\leaves.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="res\textures\log_side.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="res\textures\log_top.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="res\textures\planks.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="res\textures\rose.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="res\textures\sand.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="res\textures\stone.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
   </ItemGroup>
 </Project>

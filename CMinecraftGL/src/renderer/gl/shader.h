@@ -27,9 +27,9 @@ public:
 	void use();
 	void stop();
 	GLint find_uniform(const GLchar* name);
-	void setUniform1f(const GLchar* name, GLfloat value);
-	void setUniform4f(const GLchar* name, GLfloat i, GLfloat j, GLfloat k, GLfloat l);
-	void setUniformMat4f(const GLchar* name, const glm::mat4& matrix);
+	void setUniform1i(GLint location, GLint value);
+	void setUniform4f(GLint location, GLfloat i, GLfloat j, GLfloat k, GLfloat l);
+	void setUniformMat4f(GLint location, const glm::mat4& matrix);
 	void delete_program();
 };
 

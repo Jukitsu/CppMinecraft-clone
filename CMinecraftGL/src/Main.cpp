@@ -1,4 +1,5 @@
 #define GLEW_STATIC
+#define STB_IMAGE_IMPLEMENTATION
 #include <GL/glew.h>
 #include <GL/glu.h>
 #include <GLFW/glfw3.h>
@@ -13,36 +14,26 @@
 #include "renderer/Renderer.h"
 #include "player/Camera.h"
 #include "blocks/models/cube.h"
+#include "texture/texture_manager.h"
 
 #define default_tps 60.0
 
-namespace GameElements {
+namespace Game {
     Camera *camera;
     ShaderProgram *shader_program;
     Renderer *mainrenderer;
 };
 
-GLfloat vertices[12] = { // Vertex Positions
-    -0.5, 0.5, 0.0,
-    -0.5, -0.5, 0.0,
-    0.5, -0.5, 0.0,
-    0.5, 0.5, 0.0
-};
 
 
-GLuint indices[6] = { // Indices 
-    0, 1, 2,
-    0, 2, 3
-};
 
 // Filepath to the shaders
 std::string vertexShaderFilepath = "res/shaders/vertex_shader.glsl"; 
 std::string fragmentShaderFilepath = "res/shaders/fragment_shader.glsl";
 
 void on_resize(GLFWwindow *window, GLsizei width, GLsizei height) {
+    Game::camera->update_dim(width, height);
     glViewport(0, 0, width, height);
-    GameElements::camera->width = width;
-    GameElements::camera->height = height;
 }
 
 
@@ -50,6 +41,11 @@ void on_resize(GLFWwindow *window, GLsizei width, GLsizei height) {
 
 void draw(GLFWwindow *window, Renderer *renderer) {
     /* Render here */
+    glCall (glClearColor(0.2f, 0.5f, 1.0f, 1.0f));
+    glCall (glClear(GL_COLOR_BUFFER_BIT));
+    glCall (glClear(GL_DEPTH_BUFFER_BIT));
+    glCall (glEnable(GL_DEPTH_TEST));
+
     renderer->draw();
     /* Swap front and back buffers */
     glfwSwapBuffers(window);
@@ -61,7 +57,7 @@ void draw(GLFWwindow *window, Renderer *renderer) {
 
 
 
-int main(void)
+int main(int argv, char *argc[])
 {
     GLFWwindow *window;
 
@@ -70,7 +66,7 @@ int main(void)
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(800, 800, "CMinecraft", nullptr, nullptr);
+    window = glfwCreateWindow(852, 480, "CMinecraft", nullptr, nullptr);
     if (!window)
     {
         glfwTerminate();
@@ -87,16 +83,14 @@ int main(void)
         fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
     }
 
-    std::cout << glGetString(GL_VERSION) << std::endl;
+    std::cout << "OpenGL Version " << glGetString(GL_VERSION) << std::endl;
+    
 
     // Setting up a mainrenderer, its buffers and vertex array
 
     Renderer *mainrenderer = new Renderer();
     mainrenderer->init();
 
-    // Buffering Data to the Graphics card
-
-    mainrenderer->sendData(cube_vertex_pos, 72, 3, cube_indices, 36, 0);
 
     
     // Creating Shaders
@@ -107,6 +101,18 @@ int main(void)
     VertexShader.clear();
     FragmentShader.clear();
     shader_program.use();
+
+    // Loading and Managing Textures
+
+    TextureManager* texture_manager = new TextureManager(16, 16, &shader_program);
+    texture_manager->add_texture("res/textures/cobblestone.png", 0);
+    texture_manager->generate_mipmaps();
+    texture_manager->activate();
+
+    // Buffering Data to the Graphics card
+
+    mainrenderer->sendData(cube_vertex_pos, 72, 3, cube_indices, 36, 0);
+    mainrenderer->sendData(cube_tex_coords, 72, 3, cube_indices, 36, 1);
     
     // Setting Camera 
     
@@ -114,20 +120,21 @@ int main(void)
     
     // Setting uniforms (debug testing)
 
-    shader_program.setUniform4f("color_on", 1.0f, 1.0f, 1.0f, 1.0f); // Uniform testing
-    shader_program.setUniform4f("shading", 1.0f, 1.0f, 1.0f, 1.0f);
-    shader_program.setUniform4f("overlay", 0.0f, 0.0f, 0.0f, 0.0f);
+
+    shader_program.setUniform4f(shader_program.find_uniform("lighting"), 1.0f, 1.0f, 1.0f, 1.0f);
+    shader_program.setUniform4f(shader_program.find_uniform("shading"), 1.0f, 1.0f, 1.0f, 1.0f);
+    shader_program.setUniform4f(shader_program.find_uniform("overlay"), 0.0f, 0.0f, 0.0f, 0.0f);
 
     // FPS ig ?
 
     double prev_time = glfwGetTime();
     double current_time;
 
-    // Link game elements to the struct
+    // Link important stuff so we can access it elsewhere (not the best way to do it ngl)
 
-    GameElements::camera = camera;
-    GameElements::shader_program = &shader_program;
-    GameElements::mainrenderer = mainrenderer;
+    Game::camera = camera;
+    Game::shader_program = &shader_program;
+    Game::mainrenderer = mainrenderer;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -137,9 +144,9 @@ int main(void)
 
         // Tick
 
-        if (current_time - prev_time >= 1 / default_tps) {
+        if (current_time - prev_time >= 1 / default_tps || true) {
             // Event system I guess ?
-            camera->rotate_yaw(glm::radians(0.0f));
+            // Example: camera->rotate_yaw(glm::radians((double)(2 * ((int)current_time % 2) - 1)/5.0));
             prev_time = current_time;
         }
 
@@ -158,6 +165,7 @@ int main(void)
     shader_program.delete_program();
     delete mainrenderer;
     delete camera;
+    delete texture_manager;
     glfwTerminate();
     return 0;
 }

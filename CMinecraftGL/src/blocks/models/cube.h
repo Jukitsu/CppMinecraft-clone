@@ -5,5 +5,5 @@
 #include <GLFW/glfw3.h>
 
 GLfloat cube_vertex_pos[];
-
+GLfloat cube_tex_coords[];
 GLuint cube_indices[];

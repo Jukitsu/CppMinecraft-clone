@@ -1,9 +1,9 @@
 #include "Renderer.h"
 
-Renderer::Renderer() : vao(), vbos(), ibo(), index_count(), is_bound(false), va_index(0) 
+Renderer::Renderer() : vao(), vbos(), ibo(), index_count(), is_bound(false)
 {
 	vao = new VertexArray();
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 2; i++) {
 		vbos[i] = new VertexBuffer();
 	}
 	ibo = new IndexBuffer();
@@ -22,7 +22,6 @@ void Renderer::init() {
 		vbo->init();
 	}
 	ibo->init();
-	std::cout << vao->id << std::endl;
 }
 
 void Renderer::sendData(GLfloat *data, GLint data_size, GLint data_dim, GLuint *indices, GLint index_count, GLuint va_index) {
@@ -53,9 +52,6 @@ int Renderer::draw() {
 		std::cerr << "No vao is bound" << std::endl;
 		return -1;
 	}
-	glCall (glClear(GL_COLOR_BUFFER_BIT));
-	glCall (glClear(GL_DEPTH_BUFFER_BIT));
-	glCall (glEnable(GL_DEPTH_TEST));
 	glCall (glDrawElements(GL_TRIANGLES, this->index_count, GL_UNSIGNED_INT, nullptr));
 	return 0;
 }
