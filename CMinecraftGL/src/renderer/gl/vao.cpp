@@ -8,6 +8,7 @@ VertexArray::~VertexArray() {
 	glCall (glDeleteVertexArrays(1, &id));
 }
 
+
 void VertexArray::init() {
 	glCall (glGenVertexArrays(1, &id));
 }

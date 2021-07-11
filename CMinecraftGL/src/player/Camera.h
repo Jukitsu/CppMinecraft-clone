@@ -4,6 +4,7 @@
 #include <GL/glu.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <cmath>
 #include <util/glm/glm.hpp>
 #include "util/glm/gtc/matrix_transform.hpp"
 #include <util/glm/gtc/constants.hpp>
@@ -15,7 +16,8 @@
 class Camera {
 public:
 	glm::mat4 proj, view, model;
-	glm::vec3 input, position; 
+	glm::vec3 input;
+	glm::vec3 position; 
 	GLint proj_loc, view_loc, model_loc;
 	GLsizei width, height;
 	ShaderProgram *shader_program;
@@ -27,4 +29,7 @@ public:
 	void rotate_pitch(double angle);
 	void update_matrices();
 	void load_matrices();
+	void poll_input(glm::vec3 tvec);
+	void reset_input();
+	void update_pos(double delta_time);
 };

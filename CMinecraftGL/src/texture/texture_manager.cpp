@@ -8,8 +8,8 @@ TextureManager::TextureManager(GLsizei texture_width, GLsizei texture_height, Sh
 {
 	glCall (glGenTextures(1, &id));
 	glCall (glBindTexture(GL_TEXTURE_2D_ARRAY, id));
-	glCall (glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
-	glCall (glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+	glCall(glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+	glCall(glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
 	glCall (glTexImage3D(
 		GL_TEXTURE_2D_ARRAY, 0, GL_RGBA,
 		width, height, 32,

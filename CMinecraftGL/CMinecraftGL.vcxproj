@@ -40,6 +40,7 @@
     <ClInclude Include="src\blocks\Block.h" />
     <ClInclude Include="src\blocks\models\cube.h" />
     <ClInclude Include="src\player\Camera.h" />
+    <ClInclude Include="src\player\Controls.h" />
     <ClInclude Include="src\player\Player.h" />
     <ClInclude Include="src\renderer\gl\glErrors.h" />
     <ClInclude Include="src\renderer\gl\shader.h" />

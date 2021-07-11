@@ -29,12 +29,11 @@ GLuint Shader::_compileShader(GLuint type) {
     if (!result) {
         int length;
         glCall (glGetShaderiv(_id, GL_INFO_LOG_LENGTH, &length));
-        char* message = new char[length];
+        char *message = (char*)alloca(length * sizeof(char));
         glCall (glGetShaderInfoLog(_id, length, &length, message));
         std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader" <<
             std::endl;
         std::cout << message << std::endl;
-        delete[] message;
         glCall (glDeleteShader(_id));
         return 0;
     }
