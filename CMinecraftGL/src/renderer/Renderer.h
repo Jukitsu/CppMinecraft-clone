@@ -14,7 +14,7 @@
 class Renderer {
 private:
 	VertexArray* vao;
-	VertexBuffer* vbos[2];
+	VertexBuffer* vbo;
 	IndexBuffer* ibo;
 	int index_count;
 	bool is_bound;
@@ -24,6 +24,7 @@ public:
 	void init();
 	void sendData(GLfloat* data, GLint data_size, GLint data_dim, GLuint* indices, GLint index_count, GLuint va_index);
 	void bind_all();
+	void link_attrib(GLuint va_index, GLint data_dim, GLenum type, GLsizei stride, int offset);
 	void clear();
 	int draw();
 };

@@ -130,9 +130,9 @@ static void on_key_update(GLFWwindow* window, int key, int scancode, int action,
 static void draw(GLFWwindow *window, Renderer *renderer) {
     /* Render here */
     glCall (glClearColor(0.2f, 0.5f, 1.0f, 1.0f));
-    glCall (glClear(GL_COLOR_BUFFER_BIT));
-    glCall (glClear(GL_DEPTH_BUFFER_BIT));
+    glCall (glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     glCall (glEnable(GL_DEPTH_TEST));
+    glCall (glDisable(GL_CULL_FACE));
 
     renderer->draw();
 
@@ -210,9 +210,11 @@ int main(int argv, char *argc[])
 
     // Buffering Data to the Graphics card
 
-    mainrenderer->sendData(cube_vertex_pos, 72, 3, cube_indices, 36, 0);
-    mainrenderer->sendData(cube_tex_coords, 72, 3, cube_indices, 36, 1);
-    
+    mainrenderer->sendData(cube_vertex_data, 168, 3, cube_indices, 36, 0);
+    mainrenderer->link_attrib(0, 3, GL_FLOAT, 7 * sizeof(GLfloat), 0);
+    mainrenderer->link_attrib(1, 3, GL_FLOAT, 7 * sizeof(GLfloat), 3 * sizeof(GLfloat));
+    mainrenderer->link_attrib(2, 1, GL_FLOAT, 7 * sizeof(GLfloat), 6 * sizeof(GLfloat));
+
     // Setting Camera 
     
     Camera *camera = new Camera(&shader_program, 852, 480);

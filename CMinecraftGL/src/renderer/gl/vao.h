@@ -9,14 +9,13 @@
 
 class VertexArray {
 public:
-	VertexBuffer *vbos[2];
 	GLuint id;
 	VertexArray();
 	~VertexArray();
 	void init();
 	void bind();
 	void unbind();
-	void link_attrib(VertexBuffer* vbo, GLint data_dim, GLuint va_index);
+	void link_attrib(VertexBuffer* vbo, GLuint va_index, GLint data_dim, GLenum type, GLsizei stride, int offset);
 };
 
 
