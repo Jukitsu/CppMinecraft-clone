@@ -8,7 +8,7 @@ TextureManager::TextureManager(GLsizei texture_width, GLsizei texture_height, Sh
 {
 	glCall (glGenTextures(1, &id));
 	glCall (glBindTexture(GL_TEXTURE_2D_ARRAY, id));
-	glCall(glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+	glCall(glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
 	glCall(glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
 	glCall (glTexImage3D(
 		GL_TEXTURE_2D_ARRAY, 0, GL_RGBA,
@@ -32,7 +32,7 @@ void TextureManager::unbind() {
 void TextureManager::add_texture(const std::string &texture_path, GLint index) {
 	Image texture_image;
 	texture_image.image_data = stbi_load(texture_path.c_str(), 
-		&(texture_image.width), &(texture_image.height), &(texture_image.comp), 0);
+		&texture_image.width, &texture_image.height, &texture_image.comp, 0);
 	texture_images[index] = &texture_image;
 	bind();
 	glCall (glTexSubImage3D(

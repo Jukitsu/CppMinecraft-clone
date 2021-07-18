@@ -21,6 +21,7 @@
 
 
 
+
 namespace Game {
     Camera *camera;
     ShaderProgram *shader_program;
@@ -28,6 +29,7 @@ namespace Game {
     bool mouse_captured;
     double last_x_pos, last_y_pos;
 };
+
 
 
 
@@ -132,7 +134,7 @@ static void draw(GLFWwindow *window, Renderer *renderer) {
     glCall (glClearColor(0.2f, 0.5f, 1.0f, 1.0f));
     glCall (glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     glCall (glEnable(GL_DEPTH_TEST));
-    glCall (glDisable(GL_CULL_FACE));
+    glCall (glEnable(GL_CULL_FACE));
 
     renderer->draw();
 
@@ -196,7 +198,10 @@ int main(int argv, char *argc[])
 
     Shader VertexShader = Shader("res/shaders/vertex_shader.glsl", GL_VERTEX_SHADER);
     Shader FragmentShader = Shader("res/shaders/fragment_shader.glsl", GL_FRAGMENT_SHADER);
-    ShaderProgram shader_program = createShaderProgram(VertexShader, FragmentShader);
+    ShaderProgram shader_program;
+    shader_program.bindShader(VertexShader);
+    shader_program.bindShader(FragmentShader);
+    shader_program.compileProgram();
     VertexShader.clear();
     FragmentShader.clear();
     shader_program.use();
@@ -204,7 +209,7 @@ int main(int argv, char *argc[])
     // Loading and Managing Textures
 
     TextureManager *texture_manager = new TextureManager(16, 16, &shader_program);
-    texture_manager->add_texture("res/textures/cobblestone.png", 0);
+    texture_manager->add_texture("res/textures/stone.png", 0);
     texture_manager->generate_mipmaps();
     texture_manager->activate();
 
@@ -218,13 +223,7 @@ int main(int argv, char *argc[])
     // Setting Camera 
     
     Camera *camera = new Camera(&shader_program, 852, 480);
-    
-    // Setting uniforms (debug testing)
-
-
-    shader_program.setUniform4f(shader_program.find_uniform("lighting"), 1.0f, 1.0f, 1.0f, 1.0f);
-    shader_program.setUniform4f(shader_program.find_uniform("shading"), 1.0f, 1.0f, 1.0f, 1.0f);
-    shader_program.setUniform4f(shader_program.find_uniform("overlay"), 0.0f, 0.0f, 0.0f, 0.0f);
+   
 
     // FPS ig ?
 

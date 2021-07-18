@@ -20,7 +20,7 @@ std::string Shader::_parseShader(const std::string &filepath) {
 
 GLuint Shader::_compileShader(GLuint type) {
     GLuint _id = glCreateShader(type);
-    const char* src = shader_source.c_str();
+    const char *src = shader_source.c_str();
     glCall (glShaderSource(_id, 1, &src, nullptr));
     glCall (glCompileShader(_id));
 
@@ -94,10 +94,4 @@ void ShaderProgram::setUniformMat4f(GLint location, const glm::mat4 &matrix) {
     glCall (glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix)));
 }
 
-ShaderProgram createShaderProgram(Shader vertexShader, Shader fragmentShader) {
-    ShaderProgram program = ShaderProgram();
-    program.bindShader(vertexShader);
-    program.bindShader(fragmentShader);
-    program.compileProgram();
-    return program;
-}
+
