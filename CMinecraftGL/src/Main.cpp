@@ -130,19 +130,10 @@ static void on_key_update(GLFWwindow* window, int key, int scancode, int action,
 }
 
 static void draw(GLFWwindow *window, Renderer *renderer) {
-    /* Render here */
     glCall (glClearColor(0.2f, 0.5f, 1.0f, 1.0f));
     glCall (glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     glCall (glEnable(GL_DEPTH_TEST));
-    glCall (glEnable(GL_CULL_FACE));
-
     renderer->draw();
-
-    /* Swap front and back buffers */
-    glfwSwapBuffers(window);
-
-    /* Poll for and process events */
-    glfwPollEvents();
 }
 
 
@@ -150,7 +141,6 @@ static void draw(GLFWwindow *window, Renderer *renderer) {
 
 int main(int argv, char *argc[])
 {
-    Game::mouse_captured = false;
     GLFWwindow *window;
 
 
@@ -167,7 +157,7 @@ int main(int argv, char *argc[])
     }
 
     /* Set events callbacks*/
-    double delta_time;
+    Game::mouse_captured = false;
     glfwSetFramebufferSizeCallback(window, on_resize);
     glfwSetMouseButtonCallback(window, on_mouse_press);
     glfwSetKeyCallback(window, on_key_update);
@@ -188,53 +178,52 @@ int main(int argv, char *argc[])
     std::cout << "OpenGL Version " << glGetString(GL_VERSION) << std::endl;
     
 
-    // Setting up a mainrenderer, its buffers and vertex array
+    /* Setting up a mainrenderer, its buffersand vertex array */
+    Renderer mainrenderer;
+    mainrenderer.init();
 
-    Renderer *mainrenderer = new Renderer();
-    mainrenderer->init();
-
-    
-    // Creating Shaders
-
+    /* Creating Shaders */
     Shader VertexShader = Shader("res/shaders/vertex_shader.glsl", GL_VERTEX_SHADER);
     Shader FragmentShader = Shader("res/shaders/fragment_shader.glsl", GL_FRAGMENT_SHADER);
     ShaderProgram shader_program;
-    shader_program.bindShader(VertexShader);
-    shader_program.bindShader(FragmentShader);
-    shader_program.compileProgram();
+    shader_program.bind_shader(VertexShader);
+    shader_program.bind_shader(FragmentShader);
+    shader_program.compile();
     VertexShader.clear();
     FragmentShader.clear();
     shader_program.use();
 
-    // Loading and Managing Textures
+    /* Loading and Managing Textures */
 
-    TextureManager *texture_manager = new TextureManager(16, 16, &shader_program);
-    texture_manager->add_texture("res/textures/stone.png", 0);
-    texture_manager->generate_mipmaps();
-    texture_manager->activate();
+    TextureManager texture_manager(16, 16, &shader_program);
+    texture_manager.add_texture("res/textures/stone.png", 0);
+    texture_manager.generate_mipmaps();
+    texture_manager.activate();
 
-    // Buffering Data to the Graphics card
+    /* Buffering Data to the GPU */
 
-    mainrenderer->sendData(cube_vertex_data, 168, 3, cube_indices, 36, 0);
-    mainrenderer->link_attrib(0, 3, GL_FLOAT, 7 * sizeof(GLfloat), 0);
-    mainrenderer->link_attrib(1, 3, GL_FLOAT, 7 * sizeof(GLfloat), 3 * sizeof(GLfloat));
-    mainrenderer->link_attrib(2, 1, GL_FLOAT, 7 * sizeof(GLfloat), 6 * sizeof(GLfloat));
+    mainrenderer.sendData(cube_vertex_data, 168, 3, cube_indices, 36, 0);
+    mainrenderer.link_attrib(0, 3, GL_FLOAT, 7 * sizeof(GLfloat), 0);
+    mainrenderer.link_attrib(1, 3, GL_FLOAT, 7 * sizeof(GLfloat), 3 * sizeof(GLfloat));
+    mainrenderer.link_attrib(2, 1, GL_FLOAT, 7 * sizeof(GLfloat), 6 * sizeof(GLfloat));
+    mainrenderer.clear();
 
-    // Setting Camera 
+    /* Setting Camera */
     
-    Camera *camera = new Camera(&shader_program, 852, 480);
+    Camera camera(&shader_program, 852, 480);
    
 
     // FPS ig ?
 
+    double delta_time;
     double prev_time = glfwGetTime();
     double current_time;
 
-    // Link important stuff so we can access it elsewhere (not the best way to do it ngl)
+    /* Link important stuff so we can access it elsewhere (not the best way to do it ngl) */
 
-    Game::camera = camera;
+    Game::camera = &camera;
     Game::shader_program = &shader_program;
-    Game::mainrenderer = mainrenderer;
+    Game::mainrenderer = &mainrenderer;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -242,32 +231,33 @@ int main(int argv, char *argc[])
 
         current_time = glfwGetTime();
 
-        // Tick
+        // Tick 
 
         delta_time = current_time - prev_time;
-        // std::cout << 1/delta_time << " FPS" << std::endl;
+        // std::cout << (int)(1/delta_time) << " FPS" << std::endl;
         // Event system I guess ?
         // camera->rotate_yaw(glm::radians((double)(2 * ((int)current_time % 2) - 1)/5.0));
         prev_time = current_time;
 
-        camera->update_pos(delta_time);
+        camera.update_pos(delta_time);
 
-        // 3D stuff
+        /*3D stuff*/
 
-        camera->update_matrices();
-        camera->load_matrices();
+        camera.update_matrices();
+        camera.load_matrices();
 
-        // Bind the VAO and IBOs
-        mainrenderer->bind_all();
+        /*Bind the VAO and IBOs*/
+        mainrenderer.bind_all();
 
-        // Draw stuff
-        draw(window, mainrenderer);
+        /* Draw Call*/
+        draw(window, &mainrenderer);
+
+        /* Swap front and back buffers */
+        glfwSwapBuffers(window);
+
+        /* Poll for and process events */
+        glfwPollEvents();
     }
-    // Deallocate all
-    shader_program.delete_program();
-    delete mainrenderer;
-    delete camera;
-    delete texture_manager;
     glfwTerminate();
     return 0;
 }

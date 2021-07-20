@@ -22,15 +22,15 @@ class ShaderProgram {
 public:
 	GLuint id;
 	ShaderProgram();
-	void bindShader(Shader shader);
-	void compileProgram();
+	~ShaderProgram();
+	void bind_shader(Shader shader);
+	void compile();
 	void use();
 	void stop();
 	GLint find_uniform(const GLchar* name);
 	void setUniform1i(GLint location, GLint value);
 	void setUniform4f(GLint location, GLfloat i, GLfloat j, GLfloat k, GLfloat l);
 	void setUniformMat4f(GLint location, const glm::mat4& matrix);
-	void delete_program();
 };
 
 ShaderProgram createShaderProgram(Shader vertexShader, Shader fragmentShader);

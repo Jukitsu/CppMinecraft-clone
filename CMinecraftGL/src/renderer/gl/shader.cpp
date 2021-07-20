@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <memory.h>
 #include "shader.h"
 #include "util/glm/glm.hpp"
 #include "util/glm/gtc/type_ptr.hpp"
@@ -42,9 +43,7 @@ GLuint Shader::_compileShader(GLuint type) {
 }
 Shader::Shader(const std::string &shader_file_path, GLuint type)
     :shader_source(_parseShader(shader_file_path)), id(_compileShader(type))
-{
-
-}
+{}
 
 void Shader::clear() {
     glCall (glDeleteShader(id));
@@ -55,11 +54,17 @@ ShaderProgram::ShaderProgram()
     glCall (id = glCreateProgram());
 }
 
-void ShaderProgram::bindShader(Shader shader) {
+ShaderProgram::~ShaderProgram() {
+    stop();
+    glCall (glDeleteProgram(id));
+}
+
+void ShaderProgram::bind_shader(Shader shader) {
 	glCall (glAttachShader(id, shader.id));
 }
 
-void ShaderProgram::compileProgram() {
+
+void ShaderProgram::compile() {
 	glCall (glLinkProgram(id));
 	glCall (glValidateProgram(id));
 }
@@ -72,9 +77,6 @@ void ShaderProgram::stop() {
     glCall (glUseProgram(0));
 }
 
-void ShaderProgram::delete_program() {
-    glCall (glDeleteProgram(id));
-}
 
 GLint ShaderProgram::find_uniform(const GLchar *name) {
     glCall (GLint location = glGetUniformLocation(id, name));

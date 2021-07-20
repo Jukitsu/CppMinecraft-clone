@@ -13,9 +13,9 @@
 
 class Renderer {
 private:
-	VertexArray* vao;
-	VertexBuffer* vbo;
-	IndexBuffer* ibo;
+	VertexArray vao;
+	VertexBuffer vbo;
+	IndexBuffer ibo;
 	int index_count;
 	bool is_bound;
 public:

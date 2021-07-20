@@ -1,45 +1,37 @@
 #include "Renderer.h"
 
 Renderer::Renderer() : vao(), vbo(), ibo(), index_count(), is_bound(false)
-{
-	vao = new VertexArray();
-	vbo = new VertexBuffer();
-	ibo = new IndexBuffer();
-}
+{}
 // This constructor is just here to initialize random stuff
-Renderer::~Renderer() {
-	delete vao;
-	delete vbo;
-	delete ibo;
-}
+Renderer::~Renderer() {}
 void Renderer::init() {
-	vao->init();
-	vbo->init();
-	ibo->init();
+	vao.init();
+	vbo.init();
+	ibo.init();
 }
 
 void Renderer::sendData(GLfloat *data, GLint data_size, GLint data_dim, GLuint *indices, GLint index_count, GLuint va_index) {
 	this->index_count = index_count;
-	vao->bind();
-	vbo->sendData(data, data_size * sizeof(GLfloat));
-	ibo->sendIndices(indices, index_count * sizeof(GLuint));
-	ibo->bind();
+	vao.bind();
+	vbo.sendData(data, data_size * sizeof(GLfloat));
+	ibo.sendIndices(indices, index_count * sizeof(GLuint));
+	ibo.bind();
 }
 
 void Renderer::link_attrib(GLuint va_index, GLint data_dim, GLenum type, GLsizei stride, int offset) {
-	vao->link_attrib(vbo, va_index, data_dim, type, stride, offset);
+	vao.link_attrib(&vbo, va_index, data_dim, type, stride, offset);
 }
 
 void Renderer::bind_all() {
 	is_bound = true;
-	vao->bind();
-	ibo->bind();
+	vao.bind();
+	ibo.bind();
 }
 
 void Renderer::clear() {
 	is_bound = false;
-	glCall (glBindVertexArray(0));
-	glCall (glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+	ibo.unbind();
+	vao.unbind();
 }
 
 int Renderer::draw() {

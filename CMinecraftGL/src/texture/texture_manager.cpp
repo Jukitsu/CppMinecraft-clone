@@ -18,6 +18,7 @@ TextureManager::TextureManager(GLsizei texture_width, GLsizei texture_height, Sh
 }
 
 TextureManager::~TextureManager() {
+	unbind();
 	glCall (glDeleteTextures(1, &id));
 }
 

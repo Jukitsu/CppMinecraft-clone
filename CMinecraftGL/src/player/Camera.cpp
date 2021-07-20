@@ -3,6 +3,8 @@
 
 const double pi = glm::pi<double>();
 
+
+
 Camera::Camera(ShaderProgram *shader_program, GLsizei width, GLsizei height)
 	:shader_program(shader_program), input(0, 0, 0), position(0.0f, 0.0f, -3.0f),
 	yaw(pi/2), pitch(0.0),
@@ -70,3 +72,4 @@ void Camera::load_matrices() {
 	shader_program->setUniformMat4f(view_loc, view);
 	shader_program->setUniformMat4f(model_loc, model);
 }
+
