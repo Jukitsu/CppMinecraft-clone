@@ -45,7 +45,7 @@ Shader::Shader(const std::string &shader_file_path, GLuint type)
     :shader_source(_parseShader(shader_file_path)), id(_compileShader(type))
 {}
 
-void Shader::clear() {
+Shader::~Shader() {
     glCall (glDeleteShader(id));
 }
 

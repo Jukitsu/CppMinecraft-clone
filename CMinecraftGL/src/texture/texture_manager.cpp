@@ -17,6 +17,8 @@ TextureManager::TextureManager(GLsizei texture_width, GLsizei texture_height, Sh
 	sampler_location = shader_program->find_uniform("texture_array_sampler");
 }
 
+
+
 TextureManager::~TextureManager() {
 	unbind();
 	glCall (glDeleteTextures(1, &id));
