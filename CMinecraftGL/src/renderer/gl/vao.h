@@ -13,8 +13,8 @@ public:
 	VertexArray();
 	~VertexArray();
 	void init();
-	void bind();
-	void unbind();
+	void bind() const;
+	void unbind() const;
 	void link_attrib(VertexBuffer* vbo, GLuint va_index, GLint data_dim, GLenum type, GLsizei stride, int offset);
 };
 

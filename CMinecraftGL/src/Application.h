@@ -18,6 +18,7 @@
 
 
 
+
 static void on_resize(GLFWwindow* window, GLsizei width, GLsizei height);
 static void on_mouse_press(GLFWwindow* window, int button, int action, int mods);
 static void on_cursor_move(GLFWwindow* window, double xpos, double ypos);
@@ -32,12 +33,10 @@ private:
     Camera camera;
     GLsizei width, height;
     bool vsync;
-    double delta_time, prev_time, current_time;
 public:
     Application(GLsizei width, GLsizei height, bool vsync);
     ~Application();
-    void init();
     void draw();
     void run();  
-    int stop();
+    
 };

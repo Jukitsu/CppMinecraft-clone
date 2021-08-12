@@ -14,4 +14,4 @@
 #define glCall(x) x
 #endif
 void glClearLog();
-bool glCatchError(const char* function, const char* file, int lineno, const char* code);
+bool glCatchError(const char *function, const char *file, int lineno, const char *code);

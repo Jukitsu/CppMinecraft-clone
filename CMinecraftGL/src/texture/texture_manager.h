@@ -22,11 +22,12 @@ public:
 	GLuint id;
 	GLsizei width, height;
 	Image *texture_images[32];
-	TextureManager(GLsizei texture_width, GLsizei texture_height, ShaderProgram* program);
+	TextureManager();
+	TextureManager(GLsizei texture_width, GLsizei texture_height, ShaderProgram *program);
 	~TextureManager();
-	void bind();
-	void unbind();
-	void generate_mipmaps();
+	void bind() const;
+	void unbind() const;
+	void generate_mipmaps() const;
 	void add_texture(const std::string &texture_path, GLint index);
 	void activate();
 };

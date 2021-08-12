@@ -16,15 +16,11 @@
 #include "blocks/models/cube.h"
 #include "texture/texture_manager.h"
 
-
 #define sensitivity 0.004
-
-
-
 namespace Game {
-    Camera *camera;
-    ShaderProgram *shader_program;
-    Renderer *mainrenderer;
+    Camera* camera;
+    ShaderProgram* shader_program;
+    Renderer* mainrenderer;
     bool mouse_captured;
     double last_x_pos, last_y_pos;
 };
@@ -34,7 +30,7 @@ namespace Game {
 
 
 // Filepath to the shaders
-std::string vertexShaderFilepath = "res/shaders/vertex_shader.glsl"; 
+std::string vertexShaderFilepath = "res/shaders/vertex_shader.glsl";
 std::string fragmentShaderFilepath = "res/shaders/fragment_shader.glsl";
 
 static void on_mouse_press(GLFWwindow* window, int button, int action, int mods)
@@ -50,10 +46,10 @@ static void on_mouse_press(GLFWwindow* window, int button, int action, int mods)
                 glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             }
         }
-    }    
+    }
 }
 
-static void on_resize(GLFWwindow *window, GLsizei width, GLsizei height) {
+static void on_resize(GLFWwindow* window, GLsizei width, GLsizei height) {
     Game::camera->update_dim(width, height);
     glViewport(0, 0, width, height);
 }
@@ -64,7 +60,7 @@ static void on_cursor_move(GLFWwindow* window, double xpos, double ypos) {
     }
     double dx, dy;
     dx = Game::last_x_pos - xpos,
-    dy = Game::last_y_pos - ypos;
+        dy = Game::last_y_pos - ypos;
     Game::camera->rotate_yaw(-dx * sensitivity);
     Game::camera->rotate_pitch(-dy * sensitivity);
     Game::last_x_pos = xpos;
@@ -128,19 +124,22 @@ static void on_key_update(GLFWwindow* window, int key, int scancode, int action,
     Game::camera->poll_input(glm::vec3(dx, dy, dz));
 }
 
-static void draw(GLFWwindow *window, Renderer *renderer) {
-    glCall (glClearColor(0.2f, 0.5f, 1.0f, 1.0f));
-    glCall (glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    glCall (glEnable(GL_DEPTH_TEST));
+static void draw(GLFWwindow* window, Renderer* renderer) {
+    glCall(glClearColor(0.2f, 0.5f, 1.0f, 1.0f));
+    glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    glCall(glEnable(GL_DEPTH_TEST));
     renderer->draw();
 }
 
-
-
-
-int main(int argv, char *argc[])
+template <typename T>
+inline static void LogSizeof(const T& obj, const char* objname)
 {
-    GLFWwindow *window;
+    std::cout << "Size of " << objname << ": " << sizeof(obj) << " bytes\n";
+}
+
+int main(int argv, char* argc[])
+{
+    GLFWwindow* window;
 
 
     /* Initialize the library */
@@ -161,7 +160,7 @@ int main(int argv, char *argc[])
     glfwSetMouseButtonCallback(window, on_mouse_press);
     glfwSetKeyCallback(window, on_key_update);
     glfwSetCursorPosCallback(window, on_cursor_move);
-    
+
 
 
 
@@ -175,24 +174,33 @@ int main(int argv, char *argc[])
     }
 
     std::cout << "OpenGL Version " << glGetString(GL_VERSION) << std::endl;
-    
+
 
     /* Setting up a mainrenderer, its buffersand vertex array */
     Renderer mainrenderer;
+    LogSizeof(mainrenderer, "Main Renderer");
     mainrenderer.init();
 
     /* Creating Shaders */
-    Shader VertexShader = Shader("res/shaders/vertex_shader.glsl", GL_VERTEX_SHADER);
-    Shader FragmentShader = Shader("res/shaders/fragment_shader.glsl", GL_FRAGMENT_SHADER);
     ShaderProgram shader_program;
-    shader_program.bind_shader(VertexShader);
-    shader_program.bind_shader(FragmentShader);
+    LogSizeof(shader_program, "Shader Program");
+
+    {
+        Shader VertexShader("res/shaders/vertex_shader.glsl", GL_VERTEX_SHADER);
+        Shader FragmentShader("res/shaders/fragment_shader.glsl", GL_FRAGMENT_SHADER);
+
+        shader_program.bind_shader(std::move(VertexShader));
+        shader_program.bind_shader(std::move(FragmentShader));
+    } // Use stack deallocation to clear shaders
+
     shader_program.compile();
     shader_program.use();
+    
 
     /* Loading and Managing Textures */
 
     TextureManager texture_manager(16, 16, &shader_program);
+    LogSizeof(texture_manager, "Texture Manager");
     texture_manager.add_texture("res/textures/stone.png", 0);
     texture_manager.generate_mipmaps();
     texture_manager.activate();
@@ -206,13 +214,14 @@ int main(int argv, char *argc[])
     mainrenderer.clear();
 
     /* Setting Camera */
-    
+
     Camera camera(&shader_program, 852, 480);
-   
+    LogSizeof(camera, "Camera");
+
 
     // FPS ig ?
-
-    double delta_time;
+    double prevdelta_time;
+    double delta_time = 0;
     double prev_time = glfwGetTime();
     double current_time;
 
@@ -229,9 +238,9 @@ int main(int argv, char *argc[])
         current_time = glfwGetTime();
 
         // Tick 
-
+        prevdelta_time = delta_time;
         delta_time = current_time - prev_time;
-        std::cout << (int)(1/delta_time) << " FPS" << std::endl;
+        // std::cout << (int)(1 / delta_time) << " FPS" << std::endl;
         // Event system I guess ?
         // camera->rotate_yaw(glm::radians((double)(2 * ((int)current_time % 2) - 1)/5.0));
         prev_time = current_time;
@@ -259,4 +268,3 @@ int main(int argv, char *argc[])
     glfwTerminate();
     return 0;
 }
-

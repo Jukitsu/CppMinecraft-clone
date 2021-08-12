@@ -22,14 +22,15 @@ public:
 	GLsizei width, height;
 	ShaderProgram *shader_program;
 	GLdouble yaw, pitch;
-	Camera(ShaderProgram* shader_program, GLsizei width, GLsizei height);
+	Camera();
+	Camera(ShaderProgram *shader_program, GLsizei width, GLsizei height);
 	~Camera();
 	void update_dim(GLsizei width, GLsizei height);
 	void rotate_yaw(double angle);
 	void rotate_pitch(double angle);
 	void update_matrices();
 	void load_matrices();
-	void poll_input(glm::vec3 tvec);
+	void poll_input(const glm::vec3 &tvec);
 	void reset_input();
 	void update_pos(double delta_time);
 };

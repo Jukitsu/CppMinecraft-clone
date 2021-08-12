@@ -22,7 +22,7 @@ public:
 	Renderer();
 	~Renderer();
 	void init();
-	void sendData(GLfloat* data, GLint data_size, GLint data_dim, GLuint* indices, GLint index_count, GLuint va_index);
+	void sendData(const GLfloat *data, GLint data_size, GLint data_dim, const GLuint *indices, GLint index_count, GLuint va_index);
 	void bind_all();
 	void link_attrib(GLuint va_index, GLint data_dim, GLenum type, GLsizei stride, int offset);
 	void clear();

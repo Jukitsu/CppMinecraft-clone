@@ -3,7 +3,7 @@
 
 const double pi = glm::pi<double>();
 
-
+Camera::Camera(){}
 
 Camera::Camera(ShaderProgram *shader_program, GLsizei width, GLsizei height)
 	:shader_program(shader_program), input(0, 0, 0), position(0.0f, 0.0f, -3.0f),
@@ -58,7 +58,7 @@ void Camera::update_matrices(){
 	view = glm::translate(view, position);
 }
 
-void Camera::poll_input(glm::vec3 tvec) {
+void Camera::poll_input(const glm::vec3 &tvec) {
 	input += tvec;
 }
 

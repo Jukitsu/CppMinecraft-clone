@@ -11,9 +11,10 @@ class Shader {
 private:
 	GLuint _compileShader(GLuint type);
 	std::string _parseShader(const std::string &filepath);
-	const std::string shader_source;
+	std::string shader_source;
 public:
 	GLuint id;
+	Shader(Shader &&shader) noexcept;
 	Shader(const std::string &shader_file_path, GLuint type);
 	~Shader();
 };
@@ -23,7 +24,7 @@ public:
 	GLuint id;
 	ShaderProgram();
 	~ShaderProgram();
-	void bind_shader(Shader shader);
+	void bind_shader(Shader &&shader);
 	void compile();
 	void use();
 	void stop();

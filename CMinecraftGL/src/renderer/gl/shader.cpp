@@ -30,11 +30,12 @@ GLuint Shader::_compileShader(GLuint type) {
     if (!result) {
         int length;
         glCall (glGetShaderiv(_id, GL_INFO_LOG_LENGTH, &length));
-        char *message = (char*)alloca(length * sizeof(char));
+        char *message = new char[length];
         glCall (glGetShaderInfoLog(_id, length, &length, message));
         std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader" <<
             std::endl;
         std::cout << message << std::endl;
+        delete[] message;
         glCall (glDeleteShader(_id));
         return 0;
     }
@@ -44,6 +45,12 @@ GLuint Shader::_compileShader(GLuint type) {
 Shader::Shader(const std::string &shader_file_path, GLuint type)
     :shader_source(_parseShader(shader_file_path)), id(_compileShader(type))
 {}
+
+Shader::Shader(Shader &&shader) noexcept
+    :id(shader.id), shader_source(std::move(shader.shader_source))
+{
+    shader.id = 0;
+}
 
 Shader::~Shader() {
     glCall (glDeleteShader(id));
@@ -59,7 +66,7 @@ ShaderProgram::~ShaderProgram() {
     glCall (glDeleteProgram(id));
 }
 
-void ShaderProgram::bind_shader(Shader shader) {
+void ShaderProgram::bind_shader(Shader &&shader) {
 	glCall (glAttachShader(id, shader.id));
 }
 

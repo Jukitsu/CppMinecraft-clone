@@ -13,11 +13,11 @@ void VertexArray::init() {
 	glCall (glGenVertexArrays(1, &id));
 }
 
-void VertexArray::bind() {
+void VertexArray::bind() const {
 	glCall (glBindVertexArray(id));
 }
 
-void VertexArray::unbind() {
+void VertexArray::unbind() const {
 	glCall (glBindVertexArray(0));
 }
 

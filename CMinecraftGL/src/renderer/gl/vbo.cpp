@@ -20,11 +20,11 @@ void VertexBuffer::sendData(const void* data, GLuint size) {
 	glCall (glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
 }
 
-void VertexBuffer::bind() {
+void VertexBuffer::bind() const {
 	glCall (glBindBuffer(GL_ARRAY_BUFFER, id));
 }
 
-void VertexBuffer::unbind() {
+void VertexBuffer::unbind() const {
 	glCall (glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
 

@@ -1,4 +1,27 @@
+#if 0
 #include "Application.h"
+
+#define GLEW_STATIC
+#define STB_IMAGE_IMPLEMENTATION
+#include <GL/glew.h>
+#include <GL/glu.h>
+#include <GLFW/glfw3.h>
+#include <iostream>
+#include <math.h>
+#include "renderer/gl/vbo.h"
+#include "renderer/gl/ibo.h"
+#include "renderer/gl/vao.h"
+#include "renderer/gl/shader.h"
+#include "util/glm/glm.hpp"
+#include "util/glm/gtc/matrix_transform.hpp"
+#include "renderer/Renderer.h"
+#include "player/Camera.h"
+#include "blocks/models/cube.h"
+#include "texture/texture_manager.h"
+
+
+#define sensitivity 0.004
+
 
 namespace AppElements {
     Camera* camera;
@@ -6,20 +29,20 @@ namespace AppElements {
     Renderer* mainrenderer;
     bool mouse_captured;
     double last_x_pos, last_y_pos;
-    double sensitivity = 0.004;
 };
+
 
 static void on_mouse_press(GLFWwindow* window, int button, int action, int mods)
 {
+    using namespace AppElements;
     if (action == GLFW_PRESS && glfwGetWindowAttrib(window, GLFW_HOVERED)) {
         switch (button) {
         case GLFW_MOUSE_BUTTON_LEFT:
-            if (!AppElements::mouse_captured) {
-                AppElements::mouse_captured = true;
-                glfwSetCursorPos(window, (double)AppElements::camera->width / 2, 
-                    (double)AppElements::camera->height / 2);
-                AppElements::last_x_pos = (double)AppElements::camera->width / 2;
-                AppElements::last_y_pos = (double)AppElements::camera->height / 2;
+            if (!mouse_captured) {
+                mouse_captured = true;
+                glfwSetCursorPos(window, (double)camera->width / 2, (double)camera->height / 2);
+                last_x_pos = (double)camera->width / 2;
+                last_y_pos = (double)camera->height / 2;
                 glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             }
         }
@@ -27,33 +50,36 @@ static void on_mouse_press(GLFWwindow* window, int button, int action, int mods)
 }
 
 static void on_resize(GLFWwindow* window, GLsizei width, GLsizei height) {
-    AppElements::camera->update_dim(width, height);
+    using namespace AppElements;
+    camera->update_dim(width, height);
     glViewport(0, 0, width, height);
 }
 
 static void on_cursor_move(GLFWwindow* window, double xpos, double ypos) {
-    if (!AppElements::mouse_captured) {
+    using namespace AppElements;
+    if (!mouse_captured) {
         return; // Short circuit
     }
     double dx, dy;
-    dx = AppElements::last_x_pos - xpos,
-        dy = AppElements::last_y_pos - ypos;
-    AppElements::camera->rotate_yaw(-dx * AppElements::sensitivity);
-    AppElements::camera->rotate_pitch(-dy * AppElements::sensitivity);
-    AppElements::last_x_pos = xpos;
-    AppElements::last_y_pos = ypos;
+    dx = last_x_pos - xpos,
+        dy = last_y_pos - ypos;
+    camera->rotate_yaw(-dx * sensitivity);
+    camera->rotate_pitch(-dy * sensitivity);
+    last_x_pos = xpos;
+    last_y_pos = ypos;
 }
 
 static void on_key_update(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    using namespace AppElements;
     int dx, dy, dz;
     dx = 0; dy = 0; dz = 0;
-    if (AppElements::mouse_captured) {
+    if (mouse_captured) {
         if (action == GLFW_PRESS) {
             switch (key) {
             case GLFW_KEY_ESCAPE:
-                AppElements::mouse_captured = false;
+                mouse_captured = false;
                 glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-                AppElements::camera->reset_input();
+                camera->reset_input();
                 break;
             case GLFW_KEY_W:
                 dz = 1;
@@ -98,24 +124,30 @@ static void on_key_update(GLFWwindow* window, int key, int scancode, int action,
             }
         }
     }
-    AppElements::camera->poll_input(glm::vec3(dx, dy, dz));
+    camera->poll_input(glm::vec3(dx, dy, dz));
 }
 
-Application::Application(GLsizei width, GLsizei height, bool vsync)
-    :mainrenderer(), texture_manager(0, 0, nullptr),
-    camera(nullptr, 0, 0), width(width), height(height),
-    delta_time(), current_time(), prev_time(), vsync(),
-    window(nullptr)
+static void glfwError(int id, const char* description)
 {
+    std::cout << "Error " << id << ': ' << description << std::endl;
+}
+
+Application::~Application(){}
+
+
+Application::Application(GLsizei width, GLsizei height, bool vsync)
+    :width(width), height(height), vsync(vsync)
+{
+    glfwSetErrorCallback(glfwError);
     /* Initialize the library */
     if (!glfwInit())
-        throw std::runtime_error("Failed to initialize library");
+        throw std::runtime_error("Failed to initialize glfw");
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(width, height, "CMinecraft", nullptr, nullptr);
+    window = glfwCreateWindow(852, 480, "CMinecraft", nullptr, nullptr);
     if (!window)
     {
-        std::cerr << "Failed to create window";
+        std::cout << "Failed to create window" << std::endl;;
         glfwTerminate();
         throw std::runtime_error("Failed to create window");
     }
@@ -132,7 +164,7 @@ Application::Application(GLsizei width, GLsizei height, bool vsync)
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
-    glfwSwapInterval((int)vsync); // Set to 1 for Vsync, reduces overall electricity, cpu and gpu usage
+    glfwSwapInterval(vsync ? 1 : 0); // Set to 1 for Vsync, reduces overall electricity, cpu and gpu usage
 
     GLenum err = glewInit();
     if (err != GLEW_OK) {
@@ -160,28 +192,20 @@ Application::Application(GLsizei width, GLsizei height, bool vsync)
     texture_manager.activate();
 
     /* Buffering Data to the GPU */
+
     mainrenderer.sendData(cube_vertex_data, 168, 3, cube_indices, 36, 0);
     mainrenderer.link_attrib(0, 3, GL_FLOAT, 7 * sizeof(GLfloat), 0);
     mainrenderer.link_attrib(1, 3, GL_FLOAT, 7 * sizeof(GLfloat), 3 * sizeof(GLfloat));
     mainrenderer.link_attrib(2, 1, GL_FLOAT, 7 * sizeof(GLfloat), 6 * sizeof(GLfloat));
     mainrenderer.clear();
 
-    /* Setting Camera */
-    camera = Camera(&shader_program, 852, 480);
-
-
-    // FPS ig ?
-
-    prev_time = glfwGetTime();
 
     /* Link important stuff so we can access it elsewhere (not the best way to do it ngl) */
+
     AppElements::camera = &camera;
     AppElements::shader_program = &shader_program;
     AppElements::mainrenderer = &mainrenderer;
-}
 
-Application::~Application() {
-    glfwTerminate();
 }
 
 void Application::draw() {
@@ -191,12 +215,12 @@ void Application::draw() {
     mainrenderer.draw();
 }
 
-int Application::stop() {
-    glfwTerminate();
-    return 0;
-}
+void Application::run(){
 
-void Application::run() {
+    double delta_time;
+    double prev_time = glfwGetTime();
+    double current_time;
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -229,5 +253,10 @@ void Application::run() {
 
         /* Poll for and process events */
         glfwPollEvents();
+
     }
+    glfwTerminate();
 }
+
+#endif
+
