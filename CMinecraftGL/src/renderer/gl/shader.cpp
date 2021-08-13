@@ -52,7 +52,7 @@ Shader::Shader(Shader &&shader) noexcept
     shader.id = 0;
 }
 
-Shader::~Shader() {
+Shader::~Shader() noexcept {
     glCall (glDeleteShader(id));
 }
 
@@ -61,7 +61,7 @@ ShaderProgram::ShaderProgram()
     glCall (id = glCreateProgram());
 }
 
-ShaderProgram::~ShaderProgram() {
+ShaderProgram::~ShaderProgram() noexcept {
     stop();
     glCall (glDeleteProgram(id));
 }

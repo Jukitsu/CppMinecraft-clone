@@ -16,14 +16,14 @@ public:
 	GLuint id;
 	Shader(Shader &&shader) noexcept;
 	Shader(const std::string &shader_file_path, GLuint type);
-	~Shader();
+	~Shader() noexcept;
 };
 
 class ShaderProgram {
 public:
 	GLuint id;
 	ShaderProgram();
-	~ShaderProgram();
+	~ShaderProgram() noexcept;
 	void bind_shader(Shader &&shader);
 	void compile();
 	void use();

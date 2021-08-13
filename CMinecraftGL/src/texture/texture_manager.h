@@ -7,7 +7,7 @@
 #include "renderer/gl/glErrors.h"
 #include "renderer/gl/shader.h"
 #include "util/stb/stb_image.h"
-
+#define TEX_ARRAY_SIZE 32
 
 struct Image {
 	GLubyte *image_data;
@@ -21,10 +21,10 @@ public:
 	ShaderProgram *shader_program;
 	GLuint id;
 	GLsizei width, height;
-	Image *texture_images[32];
+	Image texture_images[TEX_ARRAY_SIZE];
 	TextureManager();
 	TextureManager(GLsizei texture_width, GLsizei texture_height, ShaderProgram *program);
-	~TextureManager();
+	~TextureManager() noexcept;
 	void bind() const;
 	void unbind() const;
 	void generate_mipmaps() const;

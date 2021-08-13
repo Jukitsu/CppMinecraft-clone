@@ -25,6 +25,7 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\player\Camera.cpp" />
     <ClCompile Include="src\player\Player.cpp" />
+    <ClCompile Include="src\renderer\Mesh.cpp" />
     <ClCompile Include="src\renderer\gl\glErrors.cpp" />
     <ClCompile Include="src\renderer\gl\ibo.cpp" />
     <ClCompile Include="src\renderer\gl\shader.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="src\player\Camera.h" />
     <ClInclude Include="src\player\Controls.h" />
     <ClInclude Include="src\player\Player.h" />
+    <ClInclude Include="src\renderer\Mesh.h" />
     <ClInclude Include="src\renderer\gl\glErrors.h" />
     <ClInclude Include="src\renderer\gl\shader.h" />
     <ClInclude Include="src\renderer\gl\ibo.h" />

@@ -20,10 +20,8 @@ TextureManager::TextureManager(GLsizei texture_width, GLsizei texture_height, Sh
 
 
 
-TextureManager::~TextureManager() {
+TextureManager::~TextureManager() noexcept {
 	unbind();
-	for (Image *image : texture_images)
-		delete image;
 	glCall (glDeleteTextures(1, &id));
 }
 
@@ -36,11 +34,10 @@ void TextureManager::unbind() const {
 }
 
 void TextureManager::add_texture(const std::string &texture_path, GLint index) {
-	Image *texture_image = new Image;
+	Image *texture_image = texture_images + (index % TEX_ARRAY_SIZE);
 	texture_image->image_data = stbi_load(texture_path.c_str(), 
 		&texture_image->width, &texture_image->height,
 		&texture_image->comp, 0);
-	texture_images[index] = texture_image;
 	bind();
 	glCall (glTexSubImage3D(
 		GL_TEXTURE_2D_ARRAY, 0,

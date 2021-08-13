@@ -15,6 +15,7 @@
 #include "player/Camera.h"
 #include "blocks/models/cube.h"
 #include "texture/texture_manager.h"
+#include "renderer/Mesh.h"
 
 #define sensitivity 0.004
 namespace Game {
@@ -173,10 +174,16 @@ int main(int argv, char **argc)
         fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
     }
 
-    std::cout << "OpenGL Version " << glGetString(GL_VERSION) << std::endl;
+    std::cout << "OpenGL Version " << glGetString(GL_VERSION) << std::endl;    
+    
+    /* Creating a mesh */
+    Mesh mesh;
+    mesh.push(cube_vertex_data, 168u);
+    mesh.push_indices(cube_indices, 36u);
+    LogSizeof(mesh, "Mesh");
 
 
-    /* Setting up a mainrenderer, its buffersand vertex array */
+    /* Setting up a mainrenderer, its buffers and vertex array */
     Renderer mainrenderer;
     LogSizeof(mainrenderer, "Main Renderer");
     mainrenderer.init();
@@ -199,18 +206,19 @@ int main(int argv, char **argc)
 
     /* Loading and Managing Textures */
 
-    TextureManager texture_manager(16, 16, &shader_program);
+    TextureManager texture_manager(16, 16, &shader_program); // To be allocated dynamically in the near future
     LogSizeof(texture_manager, "Texture Manager");
     texture_manager.add_texture("res/textures/stone.png", 0);
+    texture_manager.add_texture("res/textures/grass.png", 1);
     texture_manager.generate_mipmaps();
     texture_manager.activate();
 
     /* Buffering Data to the GPU */
 
-    mainrenderer.sendData(cube_vertex_data, 168u, cube_indices, 36u);
-    mainrenderer.link_attrib(0u, 3u, GL_FLOAT, 7 * sizeof(GLfloat), 0);
-    mainrenderer.link_attrib(1u, 3u, GL_FLOAT, 7 * sizeof(GLfloat), 3 * sizeof(GLfloat));
-    mainrenderer.link_attrib(2u, 1u, GL_FLOAT, 7 * sizeof(GLfloat), 6 * sizeof(GLfloat));
+    mainrenderer.sendData(mesh);
+    mainrenderer.link_attrib(0u, &mesh.vertex_positions_layout);
+    mainrenderer.link_attrib(1u, &mesh.tex_coords_layout);
+    mainrenderer.link_attrib(2u, &mesh.shading_values_layout);
     mainrenderer.clear();
 
     /* Setting Camera */

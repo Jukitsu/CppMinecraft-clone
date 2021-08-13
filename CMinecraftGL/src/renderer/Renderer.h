@@ -1,5 +1,4 @@
 #pragma once
-#define GLEW_STATIC
 #include <GL/glew.h>
 #include <GL/glu.h>
 #include "gl/vao.h"
@@ -7,6 +6,7 @@
 #include "gl/ibo.h"
 #include <GLFW/glfw3.h>
 #include "gl/glErrors.h"
+#include "Mesh.h"
 
 
 
@@ -20,13 +20,11 @@ private:
 	mutable bool is_bound;
 public:
 	Renderer();
-	~Renderer();
+	~Renderer() noexcept;
 	void init();
-	void sendData(const GLfloat *data, size_t data_size,
-		const GLuint *indices, size_t index_count);
+	void sendData(const Mesh &mesh);
 	void bind_all() const;
-	void link_attrib(GLuint va_index, unsigned short data_dim, 
-		GLenum type, GLsizei stride, int offset);
-	void clear();
+	void link_attrib(GLuint va_index, BufferLayout *layout);
+	void clear() const;
 	int draw();
 };
