@@ -207,15 +207,15 @@ int main(int argv, char* argc[])
 
     /* Buffering Data to the GPU */
 
-    mainrenderer.sendData(cube_vertex_data, 168, 3, cube_indices, 36, 0);
-    mainrenderer.link_attrib(0, 3, GL_FLOAT, 7 * sizeof(GLfloat), 0);
-    mainrenderer.link_attrib(1, 3, GL_FLOAT, 7 * sizeof(GLfloat), 3 * sizeof(GLfloat));
-    mainrenderer.link_attrib(2, 1, GL_FLOAT, 7 * sizeof(GLfloat), 6 * sizeof(GLfloat));
+    mainrenderer.sendData(cube_vertex_data, 168u, cube_indices, 36u);
+    mainrenderer.link_attrib(0u, 3u, GL_FLOAT, 7 * sizeof(GLfloat), 0);
+    mainrenderer.link_attrib(1u, 3u, GL_FLOAT, 7 * sizeof(GLfloat), 3 * sizeof(GLfloat));
+    mainrenderer.link_attrib(2u, 1u, GL_FLOAT, 7 * sizeof(GLfloat), 6 * sizeof(GLfloat));
     mainrenderer.clear();
 
     /* Setting Camera */
 
-    Camera camera(&shader_program, 852, 480);
+    Camera camera(&shader_program, 852u, 480u);
     LogSizeof(camera, "Camera");
 
 

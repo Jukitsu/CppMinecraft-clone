@@ -16,15 +16,17 @@ private:
 	VertexArray vao;
 	VertexBuffer vbo;
 	IndexBuffer ibo;
-	int index_count;
-	bool is_bound;
+	size_t index_count;
+	mutable bool is_bound;
 public:
 	Renderer();
 	~Renderer();
 	void init();
-	void sendData(const GLfloat *data, GLint data_size, GLint data_dim, const GLuint *indices, GLint index_count, GLuint va_index);
-	void bind_all();
-	void link_attrib(GLuint va_index, GLint data_dim, GLenum type, GLsizei stride, int offset);
+	void sendData(const GLfloat *data, size_t data_size,
+		const GLuint *indices, size_t index_count);
+	void bind_all() const;
+	void link_attrib(GLuint va_index, unsigned short data_dim, 
+		GLenum type, GLsizei stride, int offset);
 	void clear();
 	int draw();
 };

@@ -10,7 +10,8 @@ void Renderer::init() {
 	ibo.init();
 }
 
-void Renderer::sendData(const GLfloat *data, GLint data_size, GLint data_dim, const GLuint *indices, GLint index_count, GLuint va_index) {
+void Renderer::sendData(const GLfloat* data, size_t data_size,
+	const GLuint* indices, size_t index_count) {
 	this->index_count = index_count;
 	vao.bind();
 	vbo.sendData(data, data_size * sizeof(GLfloat));
@@ -18,11 +19,12 @@ void Renderer::sendData(const GLfloat *data, GLint data_size, GLint data_dim, co
 	ibo.sendIndices(indices, index_count * sizeof(GLuint));
 }
 
-void Renderer::link_attrib(GLuint va_index, GLint data_dim, GLenum type, GLsizei stride, int offset) {
+void Renderer::link_attrib(GLuint va_index, unsigned short data_dim, 
+	GLenum type, GLsizei stride, int offset) {
 	vao.link_attrib(&vbo, va_index, data_dim, type, stride, offset);
 }
 
-void Renderer::bind_all() {
+void Renderer::bind_all() const {
 	is_bound = true;
 	vao.bind();
 	ibo.bind();

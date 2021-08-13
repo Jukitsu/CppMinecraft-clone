@@ -14,7 +14,7 @@ public:
 	~IndexBuffer();
 	void init();
 	void sendIndices(const void *indices, GLuint size);
-	void bind();
-	void unbind();
+	void bind() const;
+	void unbind() const;
 };
 
