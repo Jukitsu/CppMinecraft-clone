@@ -19,7 +19,7 @@ void Renderer::sendData(const Mesh &mesh)
 }
 
 
-void Renderer::link_attrib(GLuint va_index, BufferLayout *layout)
+void Renderer::link_attrib(GLubyte va_index, BufferLayout *layout)
 {
 	vao.link_attrib(&vbo, va_index, layout->dim, GL_FLOAT, layout->stride, layout->offset);
 }
@@ -43,7 +43,7 @@ int Renderer::draw() {
 		std::cerr << "No vao is bound" << std::endl;
 		return -1;
 	}
-	glCall (glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, nullptr));
+	glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_SHORT, nullptr);
 	return 0;
 }
 

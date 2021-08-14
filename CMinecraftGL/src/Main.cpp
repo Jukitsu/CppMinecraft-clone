@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <math.h>
+#include "renderer/gl/glErrors.h"
 #include "renderer/gl/vbo.h"
 #include "renderer/gl/ibo.h"
 #include "renderer/gl/vao.h"
@@ -126,17 +127,18 @@ static void on_key_update(GLFWwindow *window, int key, int scancode, int action,
 }
 
 static void draw(GLFWwindow *window, Renderer *renderer) {
-    glCall(glClearColor(0.2f, 0.5f, 1.0f, 1.0f));
-    glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    glCall(glEnable(GL_DEPTH_TEST));
+    glClearColor(0.2f, 0.5f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
     renderer->draw();
 }
 
 template <typename T>
 inline static void LogSizeof(const T &obj, const char *objname)
 {
-    std::cout << "Size of " << objname << ": " << sizeof(obj) << " bytes\n";
+    std::cout << "[DEBUG] " << "Size of " << objname << ": " << sizeof(obj) << " bytes\n";
 }
+
 
 int main(int argv, char **argc)
 {
@@ -171,10 +173,13 @@ int main(int argv, char **argc)
 
     GLenum err = glewInit();
     if (err != GLEW_OK) {
-        fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+        std::cerr << "Error: " << glewGetErrorString(err) << "\n";
     }
 
-    std::cout << "OpenGL Version " << glGetString(GL_VERSION) << std::endl;    
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback(GLDebugMsgCallback, nullptr);
+
+    std::cout << "OpenGL Version " << glGetString(GL_VERSION) << "\n";    
     
     /* Creating a mesh */
     Mesh mesh;
@@ -186,12 +191,10 @@ int main(int argv, char **argc)
     /* Setting up a mainrenderer, its buffers and vertex array */
     Renderer mainrenderer;
     LogSizeof(mainrenderer, "Main Renderer");
-    mainrenderer.init();
 
     /* Creating Shaders */
     ShaderProgram shader_program;
     LogSizeof(shader_program, "Shader Program");
-
     {
         Shader VertexShader("res/shaders/vertex_shader.glsl", GL_VERTEX_SHADER);
         Shader FragmentShader("res/shaders/fragment_shader.glsl", GL_FRAGMENT_SHADER);
@@ -199,13 +202,14 @@ int main(int argv, char **argc)
         shader_program.bind_shader(std::move(VertexShader));
         shader_program.bind_shader(std::move(FragmentShader));
     } // Use stack deallocation to clear shaders
-
     shader_program.compile();
     shader_program.use();
-    
+
+    /* Creating the Camera */
+    Camera camera(&shader_program, 852u, 480u);
+    LogSizeof(camera, "Camera");
 
     /* Loading and Managing Textures */
-
     TextureManager texture_manager(16, 16, &shader_program); // To be allocated dynamically in the near future
     LogSizeof(texture_manager, "Texture Manager");
     texture_manager.add_texture("res/textures/stone.png", 0);
@@ -214,18 +218,12 @@ int main(int argv, char **argc)
     texture_manager.activate();
 
     /* Buffering Data to the GPU */
-
+    mainrenderer.init();
     mainrenderer.sendData(mesh);
     mainrenderer.link_attrib(0u, &mesh.vertex_positions_layout);
     mainrenderer.link_attrib(1u, &mesh.tex_coords_layout);
     mainrenderer.link_attrib(2u, &mesh.shading_values_layout);
     mainrenderer.clear();
-
-    /* Setting Camera */
-
-    Camera camera(&shader_program, 852u, 480u);
-    LogSizeof(camera, "Camera");
-
 
     // FPS ig ?
     double prevdelta_time;
@@ -234,7 +232,6 @@ int main(int argv, char **argc)
     double current_time;
 
     /* Link important stuff so we can access it elsewhere (not the best way to do it ngl) */
-
     Game::camera = &camera;
     Game::shader_program = &shader_program;
     Game::mainrenderer = &mainrenderer;

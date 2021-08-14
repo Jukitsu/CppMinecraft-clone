@@ -21,12 +21,10 @@
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\blocks\Block.cpp" />
-    <ClCompile Include="src\blocks\models\cube.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\player\Camera.cpp" />
     <ClCompile Include="src\player\Player.cpp" />
     <ClCompile Include="src\renderer\Mesh.cpp" />
-    <ClCompile Include="src\renderer\gl\glErrors.cpp" />
     <ClCompile Include="src\renderer\gl\ibo.cpp" />
     <ClCompile Include="src\renderer\gl\shader.cpp" />
     <ClCompile Include="src\renderer\gl\vao.cpp" />

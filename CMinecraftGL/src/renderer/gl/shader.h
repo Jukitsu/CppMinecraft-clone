@@ -21,16 +21,16 @@ public:
 
 class ShaderProgram {
 public:
-	GLuint id;
+	GLubyte id;
 	ShaderProgram();
 	~ShaderProgram() noexcept;
 	void bind_shader(Shader &&shader);
 	void compile();
 	void use();
 	void stop();
-	GLint find_uniform(const GLchar *name);
-	void setUniform1i(GLint location, GLint value);
-	void setUniform4f(GLint location, GLfloat i, GLfloat j, GLfloat k, GLfloat l);
-	void setUniformMat4f(GLint location, const glm::mat4 &matrix);
+	GLubyte find_uniform(const GLchar *name);
+	void setUniform1i(GLubyte location, GLint value);
+	void setUniform4f(GLubyte location, GLfloat i, GLfloat j, GLfloat k, GLfloat l);
+	void setUniformMat4f(GLubyte location, const glm::mat4 &matrix);
 };
 

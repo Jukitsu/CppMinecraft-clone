@@ -24,7 +24,7 @@ public:
 	void init();
 	void sendData(const Mesh &mesh);
 	void bind_all() const;
-	void link_attrib(GLuint va_index, BufferLayout *layout);
+	void link_attrib(GLubyte va_index, BufferLayout *layout);
 	void clear() const;
 	int draw();
 };

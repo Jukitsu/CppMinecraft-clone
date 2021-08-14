@@ -6,19 +6,18 @@
 
 struct BufferLayout
 {
-	BufferLayout(unsigned short dim, unsigned short offset);
-	unsigned short dim;
-	short offset;
+	BufferLayout(unsigned char dim, unsigned char offset);
+	unsigned char dim;
+	unsigned char offset;
 	int stride;
 };
-
 
 
 class Mesh
 {
 public:
 	std::vector<float> mesh_data;
-	std::vector<unsigned int> mesh_indices;
+	std::vector<unsigned short> mesh_indices;
 	GLsizei stride;
 	BufferLayout vertex_positions_layout;
 	BufferLayout tex_coords_layout;
@@ -26,5 +25,5 @@ public:
 	Mesh();
 	~Mesh() noexcept;
 	void push(const float *data, size_t size);
-	void push_indices(const unsigned int* indices, size_t size);
+	void push_indices(const unsigned short* indices, size_t size);
 };

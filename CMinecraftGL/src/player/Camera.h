@@ -18,7 +18,7 @@ public:
 	glm::mat4 proj, view, model;
 	glm::vec3 input;
 	glm::vec3 position; 
-	GLint proj_loc, view_loc, model_loc;
+	GLubyte proj_loc, view_loc, model_loc;
 	GLsizei width, height;
 	ShaderProgram *shader_program;
 	GLdouble yaw, pitch;

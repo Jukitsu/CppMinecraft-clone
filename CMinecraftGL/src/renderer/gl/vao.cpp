@@ -5,26 +5,26 @@ VertexArray::VertexArray():id(){}
 
 
 VertexArray::~VertexArray() {
-	glCall (glDeleteVertexArrays(1, &id));
+	glDeleteVertexArrays(1, &id);
 }
 
 
 void VertexArray::init() {
-	glCall (glGenVertexArrays(1, &id));
+	glGenVertexArrays(1, &id);
 }
 
 void VertexArray::bind() const {
-	glCall (glBindVertexArray(id));
+	glBindVertexArray(id);
 }
 
 void VertexArray::unbind() const {
-	glCall (glBindVertexArray(0));
+	glBindVertexArray(0);
 }
 
-void VertexArray::link_attrib(VertexBuffer *vbo, GLuint va_index, 
-	unsigned short data_dim, GLenum type, GLsizei stride, int offset) {
+void VertexArray::link_attrib(VertexBuffer *vbo, GLubyte va_index, 
+	GLubyte data_dim, GLenum type, GLsizei stride, GLubyte offset) {
 	bind();
 	vbo->bind();
-	glCall (glVertexAttribPointer(va_index, data_dim, GL_FLOAT, GL_FALSE, stride, (const void*)offset));
-	glCall (glEnableVertexAttribArray(va_index));
+	glVertexAttribPointer((GLuint)va_index, (GLint)data_dim, GL_FLOAT, GL_FALSE, stride, (const void*)offset);
+	glEnableVertexAttribArray(va_index);
 }

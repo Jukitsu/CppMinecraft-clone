@@ -1,7 +1,7 @@
 #include "Mesh.h"
 #include <iostream>
 
-BufferLayout::BufferLayout(unsigned short dim, unsigned short offset)
+BufferLayout::BufferLayout(unsigned char dim, unsigned char offset)
 	:dim(dim), offset(offset * sizeof(float)), stride()
 {
 }
@@ -30,8 +30,8 @@ void Mesh::push(const float *data, size_t size)
 		mesh_data.push_back(data[i]);
 }
 
-void Mesh::push_indices(const unsigned int* indices, size_t size)
+void Mesh::push_indices(const unsigned short *indices, size_t size)
 {
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned short i = 0; i < size; i++)
 		mesh_indices.push_back(indices[i]);
 }

@@ -33,9 +33,6 @@
     <ClCompile Include="src\renderer\Renderer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\gl\glErrors.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\player\Camera.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -43,9 +40,6 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\blocks\Block.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\blocks\models\cube.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\texture\texture_manager.cpp">

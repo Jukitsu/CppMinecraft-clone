@@ -17,7 +17,7 @@ struct Image {
 
 class TextureManager {
 public:
-	GLint sampler_location;
+	GLubyte sampler_location;
 	ShaderProgram *shader_program;
 	GLuint id;
 	GLsizei width, height;

@@ -15,8 +15,8 @@ public:
 	void init();
 	void bind() const;
 	void unbind() const;
-	void link_attrib(VertexBuffer *vbo, GLuint va_index, 
-		unsigned short data_dim, GLenum type, GLsizei stride, int offset);
+	void link_attrib(VertexBuffer *vbo, GLubyte va_index, 
+		GLubyte data_dim, GLenum type, GLsizei stride, GLubyte offset);
 };
 
 

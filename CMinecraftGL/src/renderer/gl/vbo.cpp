@@ -8,24 +8,24 @@
 VertexBuffer::VertexBuffer():id(){}
 
 VertexBuffer::~VertexBuffer() {
-	glCall (glDeleteBuffers(1, &id));
+	glDeleteBuffers(1, &id);
 }
 
 void VertexBuffer::init() {
-	glCall (glGenBuffers(1, &id));
+	glGenBuffers(1, &id);
 }
 
 void VertexBuffer::sendData(const void* data, GLuint size) {
-	glCall (glBindBuffer(GL_ARRAY_BUFFER, id));
-	glCall (glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
+	glBindBuffer(GL_ARRAY_BUFFER, id);
+	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 }
 
 void VertexBuffer::bind() const {
-	glCall (glBindBuffer(GL_ARRAY_BUFFER, id));
+	glBindBuffer(GL_ARRAY_BUFFER, id);
 }
 
 void VertexBuffer::unbind() const {
-	glCall (glBindBuffer(GL_ARRAY_BUFFER, 0));
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 
