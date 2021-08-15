@@ -105,3 +105,6 @@ inline void APIENTRY GLDebugMsgCallback(GLenum source, GLenum type, GLuint id,
         << _severity << " severity, from "
         << _source << ": \n" << msg << '\n';
 }
+
+
+

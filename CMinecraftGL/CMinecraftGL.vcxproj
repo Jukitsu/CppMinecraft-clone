@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\blocks\Block.cpp" />
+    <ClCompile Include="src\chunk\ChunkManager.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\player\Camera.cpp" />
     <ClCompile Include="src\player\Player.cpp" />
@@ -35,14 +35,19 @@
   <ItemGroup>
     <None Include="res\shaders\fragment_shader.glsl" />
     <None Include="res\shaders\vertex_shader.glsl" />
+    <None Include="src\chunk\Chunk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\blocks\Block.h" />
     <ClInclude Include="src\blocks\models\cube.h" />
+    <ClInclude Include="src\blocks\models\models.h" />
+    <ClInclude Include="src\chunk\Chunk.h" />
+    <ClInclude Include="src\chunk\ChunkManager.h" />
     <ClInclude Include="src\player\Camera.h" />
     <ClInclude Include="src\player\Controls.h" />
     <ClInclude Include="src\player\Player.h" />
+    <ClInclude Include="src\renderer\gl\geometry.h" />
     <ClInclude Include="src\renderer\Mesh.h" />
     <ClInclude Include="src\renderer\gl\glErrors.h" />
     <ClInclude Include="src\renderer\gl\shader.h" />
@@ -51,6 +56,7 @@
     <ClInclude Include="src\renderer\gl\vbo.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\texture\texture_manager.h" />
+    <ClInclude Include="src\utility.h" />
     <ClInclude Include="src\util\stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>

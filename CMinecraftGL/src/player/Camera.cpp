@@ -3,7 +3,7 @@
 
 const double pi = glm::pi<double>();
 
-Camera::Camera(){}
+
 
 Camera::Camera(ShaderProgram *shader_program, GLsizei width, GLsizei height)
 	:shader_program(shader_program), input(0, 0, 0), position(0.0f, 0.0f, -3.0f),
@@ -21,20 +21,18 @@ Camera::Camera(ShaderProgram *shader_program, GLsizei width, GLsizei height)
 
 Camera::~Camera() {}
 
-void Camera::rotate_yaw(double angle){
-	yaw += angle;
-	yaw = glm::mod(yaw, 2.0 * pi);
+inline void Camera::rotate_yaw(double angle){
+	yaw = glm::mod(yaw + angle, 2.0 * pi);
 }
 
-void Camera::rotate_pitch(double angle) {
-	pitch += angle;
-	pitch = std::max(-pi / 2, std::min(pi / 2, pitch));
+inline void Camera::rotate_pitch(double angle) {
+	pitch = std::max(-pi / 2, std::min(pi / 2, pitch + angle));
 }
 
 void Camera::update_dim(GLsizei width, GLsizei height) {
 	this->width = width;
 	this->height = height;
-	std::cout << "Resized " << width << " * " << height << std::endl;
+	std::cout << "Resized " << width << " * " << height << '\n';
 }
 
 void Camera::update_pos(double delta_time) {
@@ -58,16 +56,16 @@ void Camera::update_matrices(){
 	view = glm::translate(view, position);
 }
 
-void Camera::poll_input(const glm::vec3 &tvec) {
+inline void Camera::poll_input(const glm::vec3 &tvec) {
 	input += tvec;
 }
 
-void Camera::reset_input() {
+inline void Camera::reset_input() {
 	input = glm::vec3(0, 0, 0);
 }
 
 
-void Camera::load_matrices() {
+inline void Camera::load_matrices() {
 	shader_program->setUniformMat4f(proj_loc, proj);
 	shader_program->setUniformMat4f(view_loc, view);
 	shader_program->setUniformMat4f(model_loc, model);

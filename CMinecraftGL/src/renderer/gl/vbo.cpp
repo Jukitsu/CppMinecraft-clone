@@ -5,27 +5,35 @@
 #include <GLFW/glfw3.h>
 
 
-VertexBuffer::VertexBuffer():id(){}
+VertexBuffer::VertexBuffer():id(), is_bound(false){}
 
 VertexBuffer::~VertexBuffer() {
 	glDeleteBuffers(1, &id);
 }
 
-void VertexBuffer::init() {
+inline void VertexBuffer::init() {
 	glGenBuffers(1, &id);
 }
 
-void VertexBuffer::sendData(const void* data, GLuint size) {
-	glBindBuffer(GL_ARRAY_BUFFER, id);
+inline void VertexBuffer::bufferData(const void *data, GLuint size)
+{
 	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 }
 
-void VertexBuffer::bind() const {
-	glBindBuffer(GL_ARRAY_BUFFER, id);
+inline void VertexBuffer::bind() const {
+	if (!is_bound)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, id);
+		is_bound = true;
+	}
 }
 
-void VertexBuffer::unbind() const {
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+inline void VertexBuffer::unbind() const {
+	if (is_bound)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		is_bound = false;
+	}
 }
 
 

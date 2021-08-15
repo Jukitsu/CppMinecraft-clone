@@ -9,19 +9,19 @@ VertexArray::~VertexArray() {
 }
 
 
-void VertexArray::init() {
+inline void VertexArray::init() {
 	glGenVertexArrays(1, &id);
 }
 
-void VertexArray::bind() const {
+inline void VertexArray::bind() const {
 	glBindVertexArray(id);
 }
 
-void VertexArray::unbind() const {
+inline void VertexArray::unbind() const {
 	glBindVertexArray(0);
 }
 
-void VertexArray::link_attrib(VertexBuffer *vbo, GLubyte va_index, 
+inline void VertexArray::link_attrib(VertexBuffer *vbo, GLubyte va_index,
 	GLubyte data_dim, GLenum type, GLsizei stride, GLubyte offset) {
 	bind();
 	vbo->bind();

@@ -8,19 +8,25 @@ IndexBuffer::~IndexBuffer() {
 	glDeleteBuffers(1, &id);
 }
 
-void IndexBuffer::init() {
+inline void IndexBuffer::init() {
 	glGenBuffers(1, &id);
 }
 
-void IndexBuffer::sendIndices(const void *indices, GLuint size) {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+inline void IndexBuffer::bufferIndices(const void *indices, GLuint size) {
+	bind();
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
 }
 
-void IndexBuffer::bind() const {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+inline void IndexBuffer::bind() const {
+	if (!is_bound) {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+		is_bound = true;
+	}
 }
 
-void IndexBuffer::unbind() const{
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+inline void IndexBuffer::unbind() const {
+	if (is_bound) {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		is_bound = false;
+	}
 }

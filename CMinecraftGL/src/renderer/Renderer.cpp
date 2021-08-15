@@ -4,46 +4,43 @@ Renderer::Renderer() : vao(), vbo(), ibo(), index_count(), is_bound(false)
 {}
 // This constructor is just here to initialize random stuff
 Renderer::~Renderer() noexcept {}
-void Renderer::init() {
+inline void Renderer::init() {
 	vao.init();
 	vbo.init();
 	ibo.init();
 }
 
-void Renderer::sendData(const Mesh &mesh)
+
+inline void Renderer::bufferData(const Mesh &mesh)
 {
 	vao.bind();
-	vbo.sendData(mesh.mesh_data.data(), mesh.mesh_data.size() * sizeof(GLfloat));
-	ibo.sendIndices(mesh.mesh_indices.data(), mesh.mesh_indices.size() * sizeof(GLuint));
-	index_count = mesh.mesh_indices.size();
+	vbo.bufferData(mesh.vertices.data(), mesh.current_vertex_data_size * sizeof(GLfloat));
+	ibo.bufferIndices(mesh.indices.data(), mesh.index_count * sizeof(GLushort));
+	index_count = mesh.index_count;
 }
 
-
-void Renderer::link_attrib(GLubyte va_index, BufferLayout *layout)
+inline void Renderer::bind_layout()
 {
-	vao.link_attrib(&vbo, va_index, layout->dim, GL_FLOAT, layout->stride, layout->offset);
+	vao.link_attrib(&vbo, 0, 3, GL_FLOAT, sizeof(Vertex), offsetof(Vertex, position));
+	vao.link_attrib(&vbo, 1, 3, GL_BYTE, sizeof(Vertex), offsetof(Vertex, tex_coords));
+	vao.link_attrib(&vbo, 2, 1, GL_UNSIGNED_BYTE, sizeof(Vertex), offsetof(Vertex, shading_value));
 }
 
 
-void Renderer::bind_all() const {
+inline void Renderer::bind_all() const {
 	is_bound = true;
 	vao.bind();
 	ibo.bind();
 }
 
-void Renderer::clear() const {
+inline void Renderer::clear() const {
 	is_bound = false;
 	ibo.unbind();
 	vbo.unbind();
 	vao.unbind();
 }
 
-int Renderer::draw() {
-	if (!is_bound) {
-		std::cerr << "No vao is bound" << std::endl;
-		return -1;
-	}
+inline void Renderer::draw() const {
 	glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_SHORT, nullptr);
-	return 0;
 }
 

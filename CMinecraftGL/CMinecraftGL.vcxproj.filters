@@ -39,9 +39,6 @@
     <ClCompile Include="src\player\Player.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\blocks\Block.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\texture\texture_manager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -51,10 +48,14 @@
     <ClCompile Include="src\renderer\Mesh.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\chunk\ChunkManager.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\vertex_shader.glsl" />
     <None Include="res\shaders\fragment_shader.glsl" />
+    <None Include="src\chunk\Chunk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\renderer\gl\vbo.h">
@@ -100,6 +101,21 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer\Mesh.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\gl\geometry.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utility.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\chunk\Chunk.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\chunk\ChunkManager.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\blocks\models\models.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

@@ -47,7 +47,7 @@ void TextureManager::add_texture(const std::string &texture_path, GLint index) {
 		texture_image->image_data);
 	stbi_image_free(texture_image->image_data);
 }
- 
+
 void TextureManager::generate_mipmaps() const {
 	bind();
 	glGenerateMipmap(GL_TEXTURE_2D_ARRAY);

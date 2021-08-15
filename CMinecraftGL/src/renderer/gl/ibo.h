@@ -10,10 +10,11 @@
 class IndexBuffer {
 public:
 	GLuint id;
+	mutable bool is_bound;
 	IndexBuffer();
 	~IndexBuffer();
 	void init();
-	void sendIndices(const void *indices, GLuint size);
+	void bufferIndices(const void* indices, GLuint size);
 	void bind() const;
 	void unbind() const;
 };

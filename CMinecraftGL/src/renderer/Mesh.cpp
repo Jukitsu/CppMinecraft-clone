@@ -1,37 +1,37 @@
 #include "Mesh.h"
-#include <iostream>
 
-BufferLayout::BufferLayout(unsigned char dim, unsigned char offset)
-	:dim(dim), offset(offset * sizeof(float)), stride()
-{
-}
 
 Mesh::Mesh()
-	:vertex_positions_layout(3u, 0u),
-	tex_coords_layout(3u, 3u),
-	shading_values_layout(1u, 6u)
+	:current_vertex_data_size(0), index_count(0)
 {
-	stride = (vertex_positions_layout.dim
-		+ tex_coords_layout.dim
-		+ shading_values_layout.dim) * sizeof(float);
-
-	vertex_positions_layout.stride = stride;
-	tex_coords_layout.stride = stride;
-	shading_values_layout.stride = stride;
+	vertices.reserve(CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 6 * 2);
+	indices.reserve(CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 6 * 3);
 }
 
 Mesh::~Mesh() noexcept
 {
-
-}
-void Mesh::push(const float *data, size_t size)
-{
-	for (unsigned int i = 0; i < size; i++)
-		mesh_data.push_back(data[i]);
 }
 
-void Mesh::push_indices(const unsigned short *indices, size_t size)
+void Mesh::generate_mesh(Chunk *chunk)
 {
-	for (unsigned short i = 0; i < size; i++)
-		mesh_indices.push_back(indices[i]);
+	
+
+			
 }
+
+
+void Mesh::push_quad(Quad &&quad, unsigned long quad_count)
+{
+	for (unsigned char i = 0; i < 4; i++)
+	{
+		Vertex &vertex = quad.vertices[i];
+		push_vertex(std::move(vertex), quad_indices[i] + 4 * quad_count);
+	}
+}
+
+inline void Mesh::push_vertex(Vertex &&vertex, unsigned long index)
+{
+	vertices.emplace_back(vertex);
+	indices.push_back(index);
+}
+

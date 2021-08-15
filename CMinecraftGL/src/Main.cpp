@@ -17,6 +17,8 @@
 #include "blocks/models/cube.h"
 #include "texture/texture_manager.h"
 #include "renderer/Mesh.h"
+#include "blocks/models/models.h"
+#include "blocks/Block.h"
 
 #define sensitivity 0.004
 namespace Game {
@@ -179,14 +181,7 @@ int main(int argv, char **argc)
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(GLDebugMsgCallback, nullptr);
 
-    std::cout << "OpenGL Version " << glGetString(GL_VERSION) << "\n";    
-    
-    /* Creating a mesh */
-    Mesh mesh;
-    mesh.push(cube_vertex_data, 168u);
-    mesh.push_indices(cube_indices, 36u);
-    LogSizeof(mesh, "Mesh");
-
+    std::cout << "OpenGL Version " << glGetString(GL_VERSION) << "\n";  
 
     /* Setting up a mainrenderer, its buffers and vertex array */
     Renderer mainrenderer;
@@ -209,20 +204,29 @@ int main(int argv, char **argc)
     Camera camera(&shader_program, 852u, 480u);
     LogSizeof(camera, "Camera");
 
-    /* Loading and Managing Textures */
+    /* Loading and Managing Textures and Models*/
+    Cube cube_model;
+    LogSizeof(cube_model, "Cube Model");
+
     TextureManager texture_manager(16, 16, &shader_program); // To be allocated dynamically in the near future
     LogSizeof(texture_manager, "Texture Manager");
-    texture_manager.add_texture("res/textures/stone.png", 0);
-    texture_manager.add_texture("res/textures/grass.png", 1);
+    
+    Block grass(&texture_manager, "Stone Block", 1, &cube_model, "res/textures/stone.png");
+    Block stone(&texture_manager, "Cobblestone Block", 2, &cube_model, "res/textures/cobblestone.png");
+    Block cobblestone(&texture_manager, "Grass Block", 3, &cube_model, "res/textures/grass.png");
+
     texture_manager.generate_mipmaps();
     texture_manager.activate();
 
+    /* Creating a mesh */
+    Mesh mesh;
+    LogSizeof(mesh, "Mesh");
+    mesh.push_quads(cobblestone.quads, 168u);
+
     /* Buffering Data to the GPU */
     mainrenderer.init();
-    mainrenderer.sendData(mesh);
-    mainrenderer.link_attrib(0u, &mesh.vertex_positions_layout);
-    mainrenderer.link_attrib(1u, &mesh.tex_coords_layout);
-    mainrenderer.link_attrib(2u, &mesh.shading_values_layout);
+    mainrenderer.bufferData(mesh);
+    mainrenderer.bind_layout();
     mainrenderer.clear();
 
     // FPS ig ?

@@ -22,9 +22,9 @@ public:
 	Renderer();
 	~Renderer() noexcept;
 	void init();
-	void sendData(const Mesh &mesh);
+	void bufferData(const Mesh &mesh);
 	void bind_all() const;
-	void link_attrib(GLubyte va_index, BufferLayout *layout);
+	void bind_layout();
 	void clear() const;
-	int draw();
+	void draw() const;
 };
