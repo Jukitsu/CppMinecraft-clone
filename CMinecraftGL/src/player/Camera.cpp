@@ -49,19 +49,19 @@ void Camera::update_pos(double delta_time) {
 
 void Camera::update_matrices(){
 	proj = glm::perspective(glm::radians(70.0f), (float)width / height, 0.1f, 500.0f);
-	view = glm::mat4(1.0f);
-	model = glm::mat4(1.0f); // Debug and Test Purpose: should be static (identity Matrix)
-	view = glm::rotate(view, (float)(-(pitch)), -glm::vec3(1.0f, 0.0f, 0.0f));;
-	view = glm::rotate(view, (float)(-(yaw - pi/2)), -glm::vec3(0.0f, 1.0f, 0.0f));
+	view = Matrix4f(1.0f);
+	model = Matrix4f(1.0f); // Debug and Test Purpose: should be static (identity Matrix)
+	view = glm::rotate(view, (float)(-(pitch)), (Vector3D)(-EAST));
+	view = glm::rotate(view, (float)(-(yaw - pi/2)), (Vector3D)(-UP));
 	view = glm::translate(view, position);
 }
 
-inline void Camera::poll_input(const glm::vec3 &tvec) {
+inline void Camera::poll_input(const Vector3D &tvec) {
 	input += tvec;
 }
 
 inline void Camera::reset_input() {
-	input = glm::vec3(0, 0, 0);
+	input = Vector3D(0, 0, 0);
 }
 
 

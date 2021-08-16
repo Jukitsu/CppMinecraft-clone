@@ -159,6 +159,7 @@ int main(int argv, char **argc)
         return -1;
     }
 
+
     /* Set events callbacks*/
     Game::mouse_captured = false;
     glfwSetFramebufferSizeCallback(window, on_resize);

@@ -2,10 +2,9 @@
 
 
 Mesh::Mesh()
-	:current_vertex_data_size(0), index_count(0)
 {
-	vertices.reserve(CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 6 * 2);
-	indices.reserve(CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 6 * 3);
+	vertices.reserve(CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 6 * 3); // Reduce realloc()
+	indices.reserve(CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 6 * 4);
 }
 
 Mesh::~Mesh() noexcept
@@ -14,18 +13,30 @@ Mesh::~Mesh() noexcept
 
 void Mesh::generate_mesh(Chunk *chunk)
 {
-	
+	for (unsigned int local_x = 0; local_x < CHUNK_WIDTH; local_x++)
+		for (unsigned int local_y = 0; local_y < CHUNK_HEIGHT; local_y++)
+			for (unsigned int local_z = 0; local_z < CHUNK_HEIGHT; local_z++)
+			{
+				BlockID block = chunk->get_block(local_x, local_y, local_z);
+				if (!block)
+					continue;
 
-			
+				/* Continue writing stuff here */
+
+			}
 }
 
+void Mesh::push_face(Direction& direction)
+{
+	/* Use this->push_quad(quad, count ?)*/
+}
 
 void Mesh::push_quad(Quad &&quad, unsigned long quad_count)
 {
 	for (unsigned char i = 0; i < 4; i++)
 	{
 		Vertex &vertex = quad.vertices[i];
-		push_vertex(std::move(vertex), quad_indices[i] + 4 * quad_count);
+		push_vertex(std::move(vertex), quad_indices[i] + 4 * quad_count); // This code does not make sense
 	}
 }
 

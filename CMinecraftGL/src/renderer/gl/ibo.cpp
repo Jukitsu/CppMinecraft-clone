@@ -1,7 +1,6 @@
 #include "ibo.h"
 
 
-
 IndexBuffer::IndexBuffer():id(){}
 
 IndexBuffer::~IndexBuffer() {

@@ -1,5 +1,7 @@
 #include "Renderer.h"
 
+
+/*------------Some kind of renderer API------------*/
 Renderer::Renderer() : vao(), vbo(), ibo(), index_count(), is_bound(false)
 {}
 // This constructor is just here to initialize random stuff

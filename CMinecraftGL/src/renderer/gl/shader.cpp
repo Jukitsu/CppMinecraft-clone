@@ -7,6 +7,7 @@
 #include "util/glm/glm.hpp"
 #include "util/glm/gtc/type_ptr.hpp"
 
+/*------------Shader Parser and compiler------------*/
 
 std::string Shader::_parseShader(const std::string &filepath) {
     std::ifstream stream(filepath);
@@ -55,6 +56,8 @@ Shader::Shader(Shader &&shader) noexcept
 Shader::~Shader() noexcept {
     glDeleteShader(id);
 }
+
+/*------------Shader Program------------*/
 
 ShaderProgram::ShaderProgram() 
 {

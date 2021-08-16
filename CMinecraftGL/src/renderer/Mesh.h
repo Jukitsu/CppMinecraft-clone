@@ -16,12 +16,11 @@ class Mesh
 {
 public:
 	std::vector<Vertex> vertices;
-	unsigned long current_vertex_data_size;
 	std::vector<unsigned long> indices;
-	unsigned long index_count;
 	Mesh();
 	~Mesh() noexcept;
 	void generate_mesh(Chunk *chunk);
+	void push_face(Direction &direction);
 	void push_quad(Quad &&quad, unsigned long quad_count);
 	void push_quads(Quad *quad, unsigned long quad_count);
 	void push_vertex(Vertex &&vertex, unsigned long index);

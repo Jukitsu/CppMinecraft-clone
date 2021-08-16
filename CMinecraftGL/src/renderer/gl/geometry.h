@@ -2,7 +2,6 @@
 #include <array>
 
 
-
 struct Vertex
 {
 	float position[3];
