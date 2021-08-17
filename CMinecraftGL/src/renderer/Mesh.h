@@ -20,7 +20,7 @@ public:
 	Mesh();
 	~Mesh() noexcept;
 	void generate_mesh(Chunk *chunk);
-	void push_face(Direction &direction);
+	void push_face(unsigned char face_number);
 	void push_quad(Quad &&quad, unsigned long quad_count);
 	void push_quads(Quad *quad, unsigned long quad_count);
 	void push_vertex(Vertex &&vertex, unsigned long index);

@@ -13,6 +13,9 @@ Mesh::~Mesh() noexcept
 
 void Mesh::generate_mesh(Chunk *chunk)
 {
+	unsigned int quad_count = 0;
+	vertices.clear();
+	indices.clear();
 	for (unsigned int local_x = 0; local_x < CHUNK_WIDTH; local_x++)
 		for (unsigned int local_y = 0; local_y < CHUNK_HEIGHT; local_y++)
 			for (unsigned int local_z = 0; local_z < CHUNK_HEIGHT; local_z++)
@@ -26,9 +29,10 @@ void Mesh::generate_mesh(Chunk *chunk)
 			}
 }
 
-void Mesh::push_face(Direction& direction)
+void Mesh::push_face(unsigned char face_number)
 {
 	/* Use this->push_quad(quad, count ?)*/
+	push_quad()
 }
 
 void Mesh::push_quad(Quad &&quad, unsigned long quad_count)
