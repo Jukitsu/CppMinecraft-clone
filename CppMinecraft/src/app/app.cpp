@@ -61,11 +61,14 @@ namespace Application
 
         camera = new Scene::Camera(player, shader_program, 852, 480);
         
-        block_types.emplace_back(texture_manager, "Stone", 0, &models.cube, "res/textures/stone.png");
+        block_types.emplace_back(texture_manager, "Stone", 0,
+            &models.cube, "res/textures/stone.png");
         std::cout << mesh.pushBlock(block_types[0], glm::vec3(0.0f, 0.0f, 0.0f), 0) << '\n';
 
         renderer->bufferData(mesh);
         renderer->bindLayout();
+        texture_manager->generateMipmaps();
+        texture_manager->activate();
         Application::link_player(player, camera);
     }
 

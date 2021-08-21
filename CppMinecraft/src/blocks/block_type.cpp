@@ -12,7 +12,7 @@ namespace Blocks
 	{
 		quads = new Quad[model->get_quad_number()];
 		memcpy(quads, model->get_quads(), model->get_quad_number() * sizeof(Quad));
-		int tex_id = id; // Temporary
+		float tex_id = id; // Temporary
 		texture_manager->addTexture(texture_filepath, tex_id);
 		for (unsigned char i = 0; i < model->get_quad_number(); i++)
 		{
@@ -22,10 +22,17 @@ namespace Blocks
 			}
 		}
 	}
+	BlockType::BlockType(const BlockType& other)
+		:name(other.name), id(other.id), texture_manager(other.texture_manager), model(other.model)
+	{
+		quads = new Quad[other.get_quad_number()];
+		memcpy(quads, other.get_quads(), other.get_quad_number() * sizeof(Quad));
+	}
 	BlockType::~BlockType() noexcept
 	{
 		delete[] quads;
 	}
+
 	const Quad* BlockType::get_quads() const
 	{
 		return quads;

@@ -27,10 +27,13 @@ namespace Texturing
 			index, texture_image->image_data);
 		stbi_image_free(texture_image->image_data);
 	}
-
 	void TextureManager::generateMipmaps() const
 	{
 		texture_array.generateMipmaps();
 	}
-
+	void TextureManager::activate() const
+	{
+		texture_array.activate();
+		shader_program->setUniform1i(sampler_location, 0);
+	}
 }

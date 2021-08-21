@@ -18,8 +18,9 @@ namespace Blocks
 		unsigned int id;
 		BlockType(Texturing::TextureManager* texture_manager, const char* name,
 			unsigned int id, Models::Model* model, const std::string& texture_filepath);
-
+		BlockType(const BlockType& other);
 		~BlockType() noexcept;
+
 		const Geometry::Quad* get_quads() const;
 		unsigned int get_quad_number() const;
 	};
