@@ -2,9 +2,12 @@
 
 namespace Application
 {
+    using std::make_shared;
+    using std::make_unique;
+
     App::App(unsigned int width, unsigned int height, bool vsync)
-        :shader_program(), renderer(), width(width), height(height), vsync(vsync), window(nullptr),
-        mesh(6), texture_manager()
+        :shader_program(), width(width), height(height), vsync(vsync), window(nullptr),
+        texture_manager()
     {
         /* Initialize the library */
         if (!glfwInit())
@@ -52,31 +55,21 @@ namespace Application
         }
         shader_program->compile();
         shader_program->use();
-
-        renderer = new Rendering::Renderer;
-
-        texture_manager = new Texturing::TextureManager(16, 16, shader_program);
-
+      
         player = new Entity::Player(glm::vec3(0.0, 0.0, -0.3));
 
         camera = new Scene::Camera(player, shader_program, 852, 480);
         
-        block_types.emplace_back(texture_manager, "Stone", 0,
-            &models.cube, "res/textures/stone.png");
-        std::cout << mesh.pushBlock(block_types[0], glm::vec3(0.0f, 0.0f, 0.0f), 0) << '\n';
+        texture_manager = make_shared<Texturing::TextureManager>(16, 16, shader_program);
 
-        renderer->bufferData(mesh);
-        renderer->bindLayout();
-        texture_manager->generateMipmaps();
-        texture_manager->activate();
+        world = make_unique<World::World>(texture_manager);
+
         Application::link_player(player, camera);
     }
 
     App::~App() noexcept
     {
         delete shader_program;
-        delete renderer;
-        delete texture_manager;
         delete player;
         delete camera;
     }
@@ -88,11 +81,10 @@ namespace Application
 
     inline void App::draw()
     {
-        renderer->bindAll();
         glClearColor(0.25f, 0.6f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
-        renderer->draw();
+        world->render();
     }
 
     void App::run()

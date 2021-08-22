@@ -21,7 +21,6 @@ namespace Rendering
 		void bufferData(const Mesh& mesh);
 		void bindAll() const;
 		void bindLayout();
-		void clear() const;
 		void draw() const;
 	};
 }

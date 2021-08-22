@@ -6,9 +6,11 @@ namespace Blocks
 	using namespace Geometry;
 	using namespace Models;
 
-	BlockType::BlockType(TextureManager* texture_manager, const char* name,
-		unsigned int id, Model* model, const std::string& texture_filepath)
-		:name(name), id(id), texture_manager(texture_manager), model(model)
+	BlockType::BlockType(std::shared_ptr<TextureManager> texture_manager, const char* name,
+		unsigned int id, Model* model, const std::string& texture_filepath,
+		bool is_transparent)
+		:name(name), id(id), texture_manager(texture_manager), model(model),
+		is_transparent(is_transparent)
 	{
 		quads = new Quad[model->get_quad_number()];
 		memcpy(quads, model->get_quads(), model->get_quad_number() * sizeof(Quad));
@@ -28,11 +30,12 @@ namespace Blocks
 		quads = new Quad[other.get_quad_number()];
 		memcpy(quads, other.get_quads(), other.get_quad_number() * sizeof(Quad));
 	}
+	
 	BlockType::~BlockType() noexcept
 	{
 		delete[] quads;
 	}
-
+	
 	const Quad* BlockType::get_quads() const
 	{
 		return quads;

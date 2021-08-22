@@ -25,6 +25,8 @@
     <ClCompile Include="src\abstractgl\vertex_array.cpp" />
     <ClCompile Include="src\blocks\block_type.cpp" />
     <ClCompile Include="src\blocks\models\models.cpp" />
+    <ClCompile Include="src\world\chunk\chunk.cpp" />
+    <ClCompile Include="src\world\chunk\chunk_manager.cpp" />
     <ClCompile Include="src\entity\entity.cpp" />
     <ClCompile Include="src\entity\player.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -34,11 +36,14 @@
     <ClCompile Include="src\texture\texture_manager.cpp" />
     <ClCompile Include="src\app\callbacks.cpp" />
     <ClCompile Include="src\app\app.cpp" />
+    <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\abstractgl\buffers.h" />
     <ClInclude Include="src\blocks\block_type.h" />
     <ClInclude Include="src\blocks\models\models.h" />
+    <ClInclude Include="src\world\chunk\chunk.h" />
+    <ClInclude Include="src\world\chunk\chunk_manager.h" />
     <ClInclude Include="src\entity\entity.h" />
     <ClInclude Include="src\entity\player.h" />
     <ClInclude Include="src\scene\camera.h" />
@@ -52,6 +57,7 @@
     <ClInclude Include="src\texture\texture_manager.h" />
     <ClInclude Include="src\app\callbacks.h" />
     <ClInclude Include="src\app\app.h" />
+    <ClInclude Include="src\world\world.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\cobblestone.png" />

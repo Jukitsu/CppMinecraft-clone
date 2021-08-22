@@ -17,7 +17,7 @@ namespace Rendering
 		std::vector<unsigned int> mesh_indices;
 	public:
 		Mesh(unsigned long max_quads);
-		~Mesh();
+		~Mesh() noexcept;
 		const std::vector<Geometry::Vertex>& getVertexData() const;
 		const std::vector<unsigned int>& getIndices() const;
 	private:

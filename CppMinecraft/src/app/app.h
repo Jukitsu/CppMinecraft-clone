@@ -13,20 +13,19 @@
 #include "texture/texture_manager.h"
 #include "entity/player.h"
 #include "scene/camera.h"
+#include "world/world.h"
 #include "callbacks.h"
+
 
 namespace Application
 {
 	class App
 	{
-		Rendering::Mesh mesh;
-		Rendering::Renderer* renderer;
 		AbstractGL::ShaderProgram* shader_program;
-		Texturing::TextureManager* texture_manager;
 		Entity::Player* player;
 		Scene::Camera* camera;
-		Blocks::Models::BlockModels models;
-		std::vector<Blocks::BlockType> block_types;
+		std::shared_ptr<Texturing::TextureManager> texture_manager;
+		std::shared_ptr<World::World> world;
 		GLFWwindow* window;
 		unsigned int width, height;
 		bool vsync;
