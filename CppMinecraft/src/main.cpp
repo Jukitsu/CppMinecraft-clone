@@ -10,6 +10,7 @@
 #define sensitivity 0.004
 
 #define DEBUG
+#undef DEBUG
 #ifdef DEBUG
 long long heap_allocation;
 void* operator new(size_t size)

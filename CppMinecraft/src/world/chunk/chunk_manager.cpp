@@ -15,7 +15,7 @@ namespace World
 			for (unsigned int z = 0; z < 2; z++)
 			{
 				glm::vec3 chunk_position{ x, 0, z };
-				ChunkPtr current_chunk = std::make_shared<Chunk>(std::move(chunk_position), block_types);
+				ChunkPtr current_chunk = std::make_shared<Chunk>(chunk_position, block_types);
 
 				for (unsigned int i = 0; i < CHUNK_WIDTH; i++)
 					for (unsigned int j = 0; j < CHUNK_HEIGHT; j++)
@@ -26,11 +26,10 @@ namespace World
 							else
 								current_chunk->setBlock({ i, j, k }, (std::rand() % 3) ? 1 : 1);
 						}
-				chunks[((int)chunk_position.x << 16) ||
-					((int)chunk_position.z)] = current_chunk;
+				chunks.emplace_back(current_chunk);
 			}
 		}
-		for (auto& [_, chunk] : chunks)
+		for (auto& chunk : chunks)
 		{
 			chunk->update_mesh();
 		}
@@ -42,7 +41,7 @@ namespace World
 
 	void ChunkManager::renderChunks()
 	{
-		for (auto& [_, chunk] : chunks)
+		for (auto& chunk : chunks)
 		{
 			chunk->draw();
 		}

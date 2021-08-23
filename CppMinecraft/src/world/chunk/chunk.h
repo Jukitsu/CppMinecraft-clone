@@ -26,7 +26,7 @@ namespace World
 		Rendering::Renderer chunk_renderer;
 		unsigned int ***blocks;
 	public:
-		Chunk(glm::vec3&& cpos, std::shared_ptr<std::vector<Blocks::BlockType>> block_types);
+		Chunk(const glm::vec3& cpos, std::shared_ptr<std::vector<Blocks::BlockType>> block_types);
 		Chunk(const Chunk& other); // Avoid copying chunks, its expensive af
 		~Chunk() noexcept;
 

@@ -5,7 +5,7 @@ namespace World
 	using namespace Blocks;
 	using BlockTypesPtr = std::shared_ptr<std::vector<Blocks::BlockType>>;
 
-	Chunk::Chunk(glm::vec3&& cpos, BlockTypesPtr block_types)
+	Chunk::Chunk(const glm::vec3& cpos, BlockTypesPtr block_types)
 		:position(cpos), mesh(CHUNK_WIDTH* CHUNK_HEIGHT* CHUNK_LENGTH * 6), block_types(block_types)
 	{
 		blocks = new unsigned int** [CHUNK_WIDTH];

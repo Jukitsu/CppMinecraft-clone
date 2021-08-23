@@ -12,7 +12,7 @@ namespace World
 	class ChunkManager
 	{
 		std::shared_ptr<std::vector<Blocks::BlockType>> block_types;
-		std::map<int, std::shared_ptr<Chunk>> chunks;
+		std::vector<std::shared_ptr<Chunk>> chunks;
 	public:
 		ChunkManager(const std::shared_ptr<std::vector<Blocks::BlockType>>& block_types);
 		~ChunkManager() noexcept;

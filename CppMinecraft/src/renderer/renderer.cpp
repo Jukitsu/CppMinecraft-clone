@@ -22,10 +22,9 @@ namespace Rendering
 		vbo.bufferData(mesh.getVertexData().size() * sizeof(Vertex));
 		vbo.bufferSubData(mesh.getVertexData().data(),
 			mesh.getVertexData().size() * sizeof(Vertex), 0);
-		std::cout << mesh.getVertexData().size() << '\n';
+		std::cout << "Size of bufferSubData: " << mesh.getVertexData().size() << '\n';
 		ibo.bufferData(mesh.getIndices().data(),
 			mesh.getIndices().size() * sizeof(unsigned int));
-		std::cout << mesh.getIndices().size() << '\n';
 		index_count = mesh.getIndices().size();
 	}
 
