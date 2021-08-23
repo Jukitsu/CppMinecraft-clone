@@ -10,6 +10,8 @@ namespace World
 		:texture_manager(texture_manager)
 	{
 		block_types = std::make_shared<std::vector<Blocks::BlockType>>();
+		block_types->emplace_back(texture_manager, "Air", 0,
+			&models.cube, "res/textures/cobblestone.png", true);
 		block_types->emplace_back(texture_manager, "Stone", 1,
 			&models.cube, "res/textures/stone.png", false);
 		block_types->emplace_back(texture_manager, "Grass", 2,

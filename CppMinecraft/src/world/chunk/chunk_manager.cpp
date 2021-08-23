@@ -10,10 +10,11 @@ namespace World
 	ChunkManager::ChunkManager(const BlockTypesPtr& block_types)
 		:block_types(block_types)
 	{
-		for (unsigned int x = 0; x < 8; x++)
-			for (unsigned int z = 0; z < 8; z++)
+		for (unsigned int x = 0; x < 2; x++)
+		{
+			for (unsigned int z = 0; z < 2; z++)
 			{
-				glm::vec3 chunk_position{ x - 4, -1, z - 4 };
+				glm::vec3 chunk_position{ x, 0, z };
 				ChunkPtr current_chunk = std::make_shared<Chunk>(std::move(chunk_position), block_types);
 
 				for (unsigned int i = 0; i < CHUNK_WIDTH; i++)
@@ -21,14 +22,14 @@ namespace World
 						for (unsigned int k = 0; k < CHUNK_LENGTH; k++)
 						{
 							if (j > 13)
-								current_chunk->setBlock({ i, j, k }, (std::rand() % 2) ? 0 : 2);
+								current_chunk->setBlock({ i, j, k }, (std::rand() % 2) ? 2 : 2);
 							else
-								current_chunk->setBlock({ i, j, k }, (std::rand() % 3) ? 0 : 1);
+								current_chunk->setBlock({ i, j, k }, (std::rand() % 3) ? 1 : 1);
 						}
 				chunks[((int)chunk_position.x << 16) ||
-					((int)chunk_position.y << 8) || 
 					((int)chunk_position.z)] = current_chunk;
 			}
+		}
 		for (auto& [_, chunk] : chunks)
 		{
 			chunk->update_mesh();
@@ -38,6 +39,7 @@ namespace World
 	{
 
 	}
+
 	void ChunkManager::renderChunks()
 	{
 		for (auto& [_, chunk] : chunks)

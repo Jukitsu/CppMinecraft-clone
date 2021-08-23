@@ -3,6 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <iostream>
+#include <memory>
 
 #include "app/app.h"
 
@@ -14,14 +15,19 @@ long long heap_allocation;
 void* operator new(size_t size)
 {
     heap_allocation += size;
-    std::cout << "Current usage of the heap: "
-        << heap_allocation << " bytes\n";
-    return malloc(size);
+    void* ptr = malloc(size);
+    if (!ptr)
+        throw std::bad_alloc();
+    std::cout << "Allocated " << size << " bytes on the heap\n"
+    << "Current usage of the heap: "
+    << heap_allocation << " bytes\n";
+    return ptr;
 }
 void operator delete(void* _Block, size_t size)
 {
     heap_allocation -= size;
-    std::cout << "Current usage of the heap: "
+    std::cout << "Freeing " << size << " bytes on the heap\n"
+        << "Current usage of the heap: "
         << heap_allocation << " bytes\n";
     free(_Block);
 }

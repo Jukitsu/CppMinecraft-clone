@@ -34,6 +34,11 @@ namespace Rendering
 		mesh_indices.push_back(index);
 	}
 	
+	void Mesh::clear()
+	{
+		mesh_data.clear();
+		mesh_indices.clear();
+	}
 	void Mesh::pushQuad(const Quad& quad, unsigned int current_quad_count)
 	{
 		for (const Vertex& vertex : quad.vertices)
@@ -49,11 +54,19 @@ namespace Rendering
 		const glm::vec3& pos, unsigned int current_quad_count)
 		/* Returns the new quad count*/
 	{
-		const Quad* current_quad;
 		for (unsigned int i = 0; i < block_type.get_quad_number(); i++)
 		{
-			current_quad = block_type.get_quads() + i % block_type.get_quad_number();
-			pushQuad(*current_quad, current_quad_count);
+			Quad current_quad;
+			memcpy(&current_quad, 
+				block_type.get_quads() + i % block_type.get_quad_number(), 
+				sizeof(Quad));
+			for (Vertex& vertex : current_quad.vertices)
+			{
+				vertex.position[0] += pos.x;
+				vertex.position[1] += pos.y;
+				vertex.position[2] += pos.z;
+			}
+			pushQuad(current_quad, current_quad_count);
 			current_quad_count++;
 		}
 		return current_quad_count;

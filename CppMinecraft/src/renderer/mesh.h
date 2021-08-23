@@ -24,6 +24,7 @@ namespace Rendering
 		inline void pushVertex(const Geometry::Vertex& vertex);
 		inline void pushIndex(unsigned int index);
 	public:
+		void clear();
 		void pushQuad(const Geometry::Quad& quad, unsigned int current_quad_count);
 		unsigned int pushBlock(const Blocks::BlockType& block_type,
 			const glm::vec3& pos, unsigned int current_quad_count);

@@ -24,6 +24,6 @@ namespace Blocks
 		BlockType(const BlockType& other);
 		~BlockType() noexcept;
 		const Geometry::Quad* get_quads() const;
-		unsigned int get_quad_number() const;
+		constexpr unsigned int get_quad_number() const;
 	};
 }

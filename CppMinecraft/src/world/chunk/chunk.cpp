@@ -33,6 +33,7 @@ namespace World
 	}
 	Chunk::~Chunk()
 	{
+		std::cout << "Freeing Chunk Data" << '\n';
 		if (blocks)
 		{
 			for (unsigned int i = 0; i < CHUNK_LENGTH; i++)
@@ -63,6 +64,7 @@ namespace World
 	}
 	void Chunk::update_mesh()
 	{
+		mesh.clear();
 		int block;
 		unsigned int current_quad_count = 0;
 		for (unsigned int lx = 0; lx < CHUNK_WIDTH; lx++)
@@ -72,11 +74,13 @@ namespace World
 					block = blocks[lx][ly][lz]; // get the block number of the block at that local position
 					if (!block)
 						continue;
-
 					const BlockType& block_type = (*block_types)[block]; // get the block type
 					current_quad_count = mesh.pushBlock(block_type, 
-						position + glm::vec3(lx, ly, lz), current_quad_count);
+						16.0f*position + glm::vec3(lx, ly, lz), current_quad_count);
 				}
+		if (current_quad_count * 6 != mesh.getIndices().size())
+			std::cout << "Invalid mesh" << '\n';
+		std::cout << "Quad count: " << current_quad_count << '\n';
 		chunk_renderer.bufferData(mesh);
 		chunk_renderer.bindLayout();
 	}

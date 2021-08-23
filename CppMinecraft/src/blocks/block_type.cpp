@@ -40,7 +40,7 @@ namespace Blocks
 	{
 		return quads;
 	}
-	unsigned int BlockType::get_quad_number() const
+	constexpr unsigned int BlockType::get_quad_number() const
 	{
 		return model->get_quad_number();
 	}
