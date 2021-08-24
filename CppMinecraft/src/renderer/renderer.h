@@ -14,13 +14,13 @@ namespace Rendering
 		AbstractGL::VertexBuffer vbo;
 		AbstractGL::IndexBuffer ibo;
 		AbstractGL::ShaderProgram* shader_program;
-		size_t index_count;
 	public:
 		Renderer();
 		~Renderer() noexcept;
-		void bufferData(const Mesh& mesh);
+		void allocateBuffers(const Mesh& mesh);
+		void bufferBatch(const Mesh& mesh);
 		void bindAll() const;
 		void bindLayout();
-		void draw() const;
+		void draw(unsigned int index_count) const;
 	};
 }

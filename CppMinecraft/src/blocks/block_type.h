@@ -16,11 +16,12 @@ namespace Blocks
 		std::shared_ptr<Texturing::TextureManager> texture_manager;
 	public:
 		bool is_transparent;
+		bool is_cube;
 		const char* name;
 		unsigned int id;
 		BlockType(std::shared_ptr<Texturing::TextureManager> texture_manager, const char* name,
 			unsigned int id, Models::Model* model, const std::string& texture_filepath,
-			bool is_transparent);
+			bool is_transparent, bool is_cube);
 		BlockType(const BlockType& other);
 		~BlockType() noexcept;
 		const Geometry::Quad* get_quads() const;

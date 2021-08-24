@@ -6,10 +6,13 @@ namespace Rendering
 	using namespace Geometry;
 	using namespace Blocks;
 
-	Mesh::Mesh(unsigned long max_quads)
+	Mesh::Mesh(unsigned long max_quads, unsigned int* indices)
+		:max_quads(max_quads), mesh_indices(indices),
+		current_index_count(0)
 	{
-		mesh_data.reserve(max_quads * 4);
-		mesh_indices.reserve(max_quads * 6);
+		max_vertex_count = max_quads * 4;
+		max_index_count = max_quads * 6;
+		mesh_data.reserve(max_vertex_count);
 	}
 	Mesh::~Mesh() noexcept
 	{
@@ -20,24 +23,28 @@ namespace Rendering
 	{
 		return mesh_data;
 	}
-	const vector<unsigned int>& Mesh::getIndices() const
+	unsigned int* Mesh::getIndices() const
 	{
 		return mesh_indices;
+	}
+	unsigned int Mesh::getMaxIndexCount() const
+	{
+		return max_index_count;
+	}
+	unsigned int Mesh::getMaxVertexCount() const
+	{
+		return max_vertex_count;
 	}
 
 	inline void Mesh::pushVertex(const Vertex& vertex)
 	{
 		mesh_data.push_back(vertex);
 	}
-	inline void Mesh::pushIndex(unsigned int index)
-	{
-		mesh_indices.push_back(index);
-	}
 	
 	void Mesh::clear()
 	{
 		mesh_data.clear();
-		mesh_indices.clear();
+		current_index_count = 0;
 	}
 	void Mesh::pushQuad(const Quad& quad, unsigned int current_quad_count)
 	{
@@ -45,29 +52,29 @@ namespace Rendering
 		{
 			pushVertex(vertex);
 		}
-		for (unsigned int i = 0; i < 6; i++)
-		{
-			pushIndex(quad_indices[i] + 4 * current_quad_count);
-		}
+		current_index_count += 6;
 	}
 	unsigned int Mesh::pushBlock(const BlockType& block_type, 
-		const glm::vec3& pos, unsigned int current_quad_count)
+		const glm::vec3& pos, unsigned int current_quad_count, const BatchInfo& batch_info)
 		/* Returns the new quad count*/
 	{
+		bool* batch_info_array = (bool*)&batch_info;
 		for (unsigned int i = 0; i < block_type.get_quad_number(); i++)
 		{
-			Quad current_quad;
-			memcpy(&current_quad, 
-				block_type.get_quads() + i % block_type.get_quad_number(), 
-				sizeof(Quad));
-			for (Vertex& vertex : current_quad.vertices)
+			if (batch_info_array[i < 6 ? i : 0])
 			{
-				vertex.position[0] += pos.x;
-				vertex.position[1] += pos.y;
-				vertex.position[2] += pos.z;
+				Quad current_quad;
+				memcpy(&current_quad,
+					block_type.get_quads() + i % block_type.get_quad_number(),
+					sizeof(Quad));
+				for (Vertex& vertex : current_quad.vertices)
+				{
+					vertex.position[0] += pos.x;
+					vertex.position[1] += pos.y;
+					vertex.position[2] += pos.z;
+				}
+				pushQuad(current_quad, current_quad_count);
 			}
-			pushQuad(current_quad, current_quad_count);
-			current_quad_count++;
 		}
 		return current_quad_count;
 	}

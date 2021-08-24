@@ -8,6 +8,7 @@
 #include "renderer/renderer.h"
 #include "renderer/mesh.h"
 #include "blocks/block_type.h"
+#include "renderer/batch_info.h"
 
 
 
@@ -26,7 +27,8 @@ namespace World
 		Rendering::Renderer chunk_renderer;
 		unsigned int ***blocks;
 	public:
-		Chunk(const glm::vec3& cpos, std::shared_ptr<std::vector<Blocks::BlockType>> block_types);
+		Chunk(const glm::vec3& cpos, std::shared_ptr<std::vector<Blocks::BlockType>> block_types, 
+			unsigned int* chunk_indices);
 		Chunk(const Chunk& other); // Avoid copying chunks, its expensive af
 		~Chunk() noexcept;
 

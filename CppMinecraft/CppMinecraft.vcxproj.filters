@@ -40,6 +40,7 @@
     <ClInclude Include="src\world\chunk\chunk.h" />
     <ClInclude Include="src\world\chunk\chunk_manager.h" />
     <ClInclude Include="src\world\world.h" />
+    <ClInclude Include="src\renderer\batch_info.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\cobblestone.png" />

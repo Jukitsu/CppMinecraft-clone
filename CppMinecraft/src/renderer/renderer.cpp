@@ -6,7 +6,7 @@ namespace Rendering
 	using namespace AbstractGL;
 	
 	Renderer::Renderer()
-		:vao(), vbo(), ibo(), shader_program(), index_count(0)
+		:vao(), vbo(), ibo(), shader_program()
 	{
 
 	}
@@ -16,16 +16,19 @@ namespace Rendering
 
 	}
 
-	void Renderer::bufferData(const Mesh& mesh)
+	void Renderer::allocateBuffers(const Mesh& mesh)
 	{
 		vao.bind();
-		vbo.bufferData(mesh.getVertexData().size() * sizeof(Vertex));
+		vbo.bufferData(mesh.getMaxVertexCount() * sizeof(Vertex));
+		ibo.bufferData(mesh.getIndices(),
+			mesh.getMaxIndexCount() * sizeof(unsigned int));
+	}
+
+	void Renderer::bufferBatch(const Mesh& mesh)
+	{
+		vao.bind();
 		vbo.bufferSubData(mesh.getVertexData().data(),
 			mesh.getVertexData().size() * sizeof(Vertex), 0);
-		std::cout << "Size of bufferSubData: " << mesh.getVertexData().size() << '\n';
-		ibo.bufferData(mesh.getIndices().data(),
-			mesh.getIndices().size() * sizeof(unsigned int));
-		index_count = mesh.getIndices().size();
 	}
 
 	void Renderer::bindLayout()
@@ -42,7 +45,7 @@ namespace Rendering
 		ibo.bind();
 	}
 
-	void Renderer::draw() const
+	void Renderer::draw(unsigned int index_count) const
 	{
 		vao.bind();
 		ibo.bind();

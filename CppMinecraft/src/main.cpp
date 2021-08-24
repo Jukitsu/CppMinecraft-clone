@@ -10,7 +10,6 @@
 #define sensitivity 0.004
 
 #define DEBUG
-#undef DEBUG
 #ifdef DEBUG
 long long heap_allocation;
 void* operator new(size_t size)
@@ -36,8 +35,11 @@ void operator delete(void* _Block, size_t size)
 
 int main(void)
 {
-    Application::App app(852, 480, true);
-    app.init();
-    app.run();
+    {
+        Application::App app(852, 480, true);
+        app.init();
+        app.run();
+    }
+    std::cin.get();
     return 0;
 }

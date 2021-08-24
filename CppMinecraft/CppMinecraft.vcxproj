@@ -42,6 +42,7 @@
     <ClInclude Include="src\abstractgl\buffers.h" />
     <ClInclude Include="src\blocks\block_type.h" />
     <ClInclude Include="src\blocks\models\models.h" />
+    <ClInclude Include="src\renderer\batch_info.h" />
     <ClInclude Include="src\world\chunk\chunk.h" />
     <ClInclude Include="src\world\chunk\chunk_manager.h" />
     <ClInclude Include="src\entity\entity.h" />

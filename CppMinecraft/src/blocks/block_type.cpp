@@ -8,9 +8,9 @@ namespace Blocks
 
 	BlockType::BlockType(std::shared_ptr<TextureManager> texture_manager, const char* name,
 		unsigned int id, Model* model, const std::string& texture_filepath,
-		bool is_transparent)
+		bool is_transparent, bool is_cube)
 		:name(name), id(id), texture_manager(texture_manager), model(model),
-		is_transparent(is_transparent)
+		is_transparent(is_transparent), is_cube(is_cube)
 	{
 		quads = new Quad[model->get_quad_number()];
 		memcpy(quads, model->get_quads(), model->get_quad_number() * sizeof(Quad));
