@@ -9,7 +9,15 @@
 
 #define sensitivity 0.004
 
-#define DEBUG
+inline void setCtrReport()
+{
+    _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
+    _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDOUT);
+    _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
+    _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDOUT);
+    _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_FILE);
+    _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDOUT);
+}
 #ifdef DEBUG
 long long heap_allocation;
 void* operator new(size_t size)
@@ -33,13 +41,16 @@ void operator delete(void* _Block, size_t size)
 }
 #endif 
 
+
 int main(void)
 {
+    setCtrReport();
     {
         Application::App app(852, 480, true);
         app.init();
         app.run();
     }
+    _CrtDumpMemoryLeaks();
     std::cin.get();
     return 0;
 }

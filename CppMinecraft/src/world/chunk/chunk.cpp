@@ -1,10 +1,10 @@
 #include "chunk.h"
 
 namespace World
-{
+{	
 
 	using namespace Blocks;
-	using BlockTypesPtr = std::shared_ptr<std::vector<Blocks::BlockType>>;
+	using BlockTypesPtr = std::array<Blocks::BlockType*, BLOCK_COUNT>*;
 
 	Chunk::Chunk(const glm::vec3& cpos, BlockTypesPtr block_types, unsigned int* chunk_indices)
 		:position(cpos), mesh(CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 6, 
@@ -66,7 +66,7 @@ namespace World
 	}
 	bool Chunk::isOpaqueBlock(int blockid) const
 	{
-		return !(*block_types)[blockid].is_transparent;
+		return !(*block_types)[blockid]->is_transparent;
 	}
 	bool Chunk::isOpaqueAt(const glm::vec3& pos) const
 	{
@@ -85,7 +85,7 @@ namespace World
 					block = blocks[lx][ly][lz]; // get the block number of the block at that local position
 					if (!block)
 						continue;
-					const BlockType& block_type = (*block_types)[block]; // get the block type
+					const BlockType& block_type = *(*block_types)[block]; // get the block type
 					BatchInfo batch_info = {true, true, true, true, true, true};
 					if (block_type.is_cube)
 					{
@@ -93,8 +93,8 @@ namespace World
 						batch_info.renderWest = !isOpaqueAt(pos + glm::vec3(-1, 0, 0));
 						batch_info.renderUp = !isOpaqueAt(pos + glm::vec3(0, 1, 0));
 						batch_info.renderDown = !isOpaqueAt(pos + glm::vec3(0, -1, 0));
-						batch_info.renderNorth = !isOpaqueAt(pos + glm::vec3(0, 0, -1));
-						batch_info.renderSouth = !isOpaqueAt(pos + glm::vec3(0, 0, 1));
+						batch_info.renderNorth = !isOpaqueAt(pos + glm::vec3(0, 0, 1));
+						batch_info.renderSouth = !isOpaqueAt(pos + glm::vec3(0, 0, -1));
 					}
 					current_quad_count = mesh.pushBlock(block_type, 
 							16.0f*position + glm::vec3(lx, ly, lz), current_quad_count, batch_info);

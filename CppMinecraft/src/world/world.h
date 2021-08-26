@@ -14,7 +14,7 @@ namespace World
 	{
 		Blocks::Models::BlockModels models;
 		std::shared_ptr<Texturing::TextureManager> texture_manager;
-		std::shared_ptr<std::vector<Blocks::BlockType>> block_types;
+		std::array<Blocks::BlockType*, BLOCK_COUNT> block_types;
 		std::unique_ptr<ChunkManager> chunk_manager;
 	public:
 		World(const std::shared_ptr<Texturing::TextureManager>& texture_manager);

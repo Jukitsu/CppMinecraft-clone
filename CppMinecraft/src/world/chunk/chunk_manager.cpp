@@ -6,8 +6,8 @@
 namespace World
 {
 	using ChunkPtr = std::shared_ptr<Chunk>;
-	using BlockTypesPtr = std::shared_ptr<std::vector<Blocks::BlockType>>;
-	ChunkManager::ChunkManager(const BlockTypesPtr& block_types)
+	using BlockTypesPtr = std::array<Blocks::BlockType*, BLOCK_COUNT>*;
+	ChunkManager::ChunkManager(BlockTypesPtr block_types)
 		:block_types(block_types)
 	{
 		max_chunk_index_count = CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 6 * 6;
@@ -38,6 +38,7 @@ namespace World
 							else
 								current_chunk->setBlock({ i, j, k }, (std::rand() % 3) ? 1 : 1);
 						}
+				current_chunk->setBlock({ 0, 0, 0 }, 2);
 				chunks.emplace_back(current_chunk);
 			}
 		}
