@@ -46,11 +46,12 @@ int main(void)
 {
     setCtrReport();
     {
-        Application::App app(852, 480, true);
-        app.init();
-        app.run();
+        /* Pretty straightforward stuff */
+        Application::App app(852, 480, true); 
+        app.init(); 
+        app.run(); 
     }
-    _CrtDumpMemoryLeaks();
+    _CrtDumpMemoryLeaks(); // Memory leak detection
     std::cin.get();
     return 0;
 }

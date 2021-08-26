@@ -33,7 +33,7 @@ namespace Application
 		App(unsigned int width, unsigned int height, bool vsync);
 		~App() noexcept;
 		void init();
-		inline void update();
+		inline void update(float delta_time);
 		inline void draw();
 		void run();
 	};

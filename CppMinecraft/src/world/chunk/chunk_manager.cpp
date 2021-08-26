@@ -5,11 +5,18 @@
 
 namespace World
 {
+	/* Chunk Manager
+	* Wrapper that holds the existing Chunks 
+	* and the chunk universal indices
+	* Contains the World generator for now
+	*/
 	using ChunkPtr = std::shared_ptr<Chunk>;
 	using BlockTypesPtr = std::array<Blocks::BlockType*, BLOCK_COUNT>*;
+
 	ChunkManager::ChunkManager(BlockTypesPtr block_types)
 		:block_types(block_types)
 	{
+		/* Create the chunk universal indices */
 		max_chunk_index_count = CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 6 * 6;
 		chunk_indices = new unsigned int[max_chunk_index_count];
 		for (unsigned int nquad = 0; nquad < max_chunk_index_count / 6; nquad++)
@@ -21,6 +28,7 @@ namespace World
 			chunk_indices[nquad * 6 + 4] = 4 * nquad + 2;
 			chunk_indices[nquad * 6 + 5] = 4 * nquad + 3;
 		}
+		/* World generation */
 		for (unsigned int x = 0; x < 2; x++)
 		{
 			for (unsigned int z = 0; z < 2; z++)
@@ -38,10 +46,10 @@ namespace World
 							else
 								current_chunk->setBlock({ i, j, k }, (std::rand() % 3) ? 1 : 1);
 						}
-				current_chunk->setBlock({ 0, 0, 0 }, 2);
 				chunks.emplace_back(current_chunk);
 			}
 		}
+		/* Batch the chunk meshes */
 		for (auto& chunk : chunks)
 		{
 			chunk->update_mesh();
@@ -52,7 +60,7 @@ namespace World
 		std::cout << "Freeing Chunk Manager Data\n";
 		delete[] chunk_indices;
 	}
-
+	/* Pretty straightforward stuff too */
 	void ChunkManager::renderChunks()
 	{
 		for (auto& chunk : chunks)

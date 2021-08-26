@@ -3,13 +3,18 @@
 
 namespace World
 {
+	/* World Manager
+	* Contains some really basic stuff, such as the 
+	* Chunk Manager and the block models
+	*/
 	using namespace Texturing;
 	using BlockTypesPtr = std::array<Blocks::BlockType*, BLOCK_COUNT>;
 
 	World::World(const std::shared_ptr<TextureManager>& texture_manager)
 		:texture_manager(texture_manager)
 	{
-		std::cout << "Initialising the block models\n";
+		/* Initializing the block models */
+		std::cout << "Initializing the block models\n";
 		block_types[0] = new Blocks::BlockType(texture_manager, "Air", 0,
 			&models.cube, "res/textures/cobblestone.png", true, false);
 		block_types[1] = new Blocks::BlockType(texture_manager, "Stone", 1,

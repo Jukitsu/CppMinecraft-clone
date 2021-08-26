@@ -1,5 +1,9 @@
 #include "app.h"
 
+#ifdef _DEBUG
+#define _GL_DEBUG
+#endif
+
 namespace Application
 {
     using std::make_shared;
@@ -7,17 +11,21 @@ namespace Application
 
     App::App(unsigned int width, unsigned int height, bool vsync)
         :shader_program(), width(width), height(height), vsync(vsync), window(nullptr),
-        texture_manager()
+        texture_manager(), camera(), player()
     {
         /* Initialize the library */
         if (!glfwInit())
+        {
+            std::cerr << "Failed to initialize GLFW\n";
             throw std::runtime_error("Failed to initialize GLFW");
+        }
 
         /* Create a windowed mode window and its OpenGL context */
         window = glfwCreateWindow(width, height, "CMinecraft", nullptr, nullptr);
         if (!window)
         {
             glfwTerminate();
+            std::cerr << "Failed to create a GLFW window\n";
             throw std::runtime_error("Failed to create a GLFW window");
         }
 
@@ -33,19 +41,24 @@ namespace Application
         glfwMakeContextCurrent(window);
         glfwSwapInterval(vsync ? 1 : 0); // Set to 1 for Vsync, reduces overall electricity, cpu and gpu usage
 
-        GLenum err = glewInit();
+        /* Initialize glew */
+        GLenum err = glewInit(); 
         if (err != GLEW_OK) {
-            std::cerr << "Error: " << glewGetErrorString(err) << '\n';
+            std::cerr << "Error initializing GLEW: " << glewGetErrorString(err) << '\n';
+            throw std::runtime_error("Error initializing GLEW");
         }
 
+#ifdef _GL_DEBUG
+        /* Enable Debug output */
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(GLDebugMsgCallback, nullptr);
-
+#endif
         std::cout << "OpenGL Version " << glGetString(GL_VERSION) << '\n';
     }
     
     void App::init()
     {
+        /* Initialize shaders */
         shader_program = new AbstractGL::ShaderProgram;
         {
             AbstractGL::Shader vs("res/shaders/vertex_shader.glsl", GL_VERTEX_SHADER),
@@ -55,15 +68,16 @@ namespace Application
         }
         shader_program->compile();
         shader_program->use();
-      
-        player = new Entity::Player(glm::vec3(0.0, 0.0, -0.3));
 
+        /* Create the player, camera and texture manager*/
+        player = new Entity::Player(glm::vec3(0.0, 0.0, -0.3));
         camera = new Scene::Camera(player, shader_program, 852, 480);
-        
         texture_manager = make_shared<Texturing::TextureManager>(16, 16, shader_program);
 
+        /* Create the World */
         world = make_unique<World::World>(texture_manager);
 
+        /* Link some elements for the callbacks */
         Application::link_player(player, camera);
     }
 
@@ -74,18 +88,22 @@ namespace Application
         delete camera;
     }
 
-    inline void App::update()
+    inline void App::update(float delta_time)
     {
+        /* Update the Camera */
+        camera->update(delta_time);
         draw();
     }
 
     inline void App::draw()
     {
+        /* Clear some stuff here*/
         glClearColor(0.25f, 0.6f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
-        world->render();
+        /* Draw Calls */
+        world->render(); // Render the world
     }
 
     void App::run()
@@ -95,27 +113,16 @@ namespace Application
         float delta_time;
         while (!glfwWindowShouldClose(window))
         {
-
+            /* FPS stuff*/
             current_time = glfwGetTime();
-
-            // Tick 
             delta_time = current_time - prev_time;
             // std::cout << (int)(1 / delta_time) << " FPS" << std::endl;
             // Event system I guess ?
             // camera->rotate_yaw(glm::radians((double)(2 * ((int)current_time % 2) - 1)/5.0));
             prev_time = current_time;
 
-            // camera.update_pos(delta_time);
-
-            /*3D stuff*/
-
-            camera->update(delta_time);
-
-            /*Bind the VAO and IBOs*/
-            // mainrenderer.bind_all();
-
-            /* Draw Call*/
-            update();
+            /* Update the Application*/
+            update(delta_time);
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
@@ -124,6 +131,7 @@ namespace Application
             glfwPollEvents();
 
         }
+        /* Terminate the Application*/
         glfwTerminate();
     }
 }
