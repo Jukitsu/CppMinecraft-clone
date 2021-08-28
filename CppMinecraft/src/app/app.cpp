@@ -70,15 +70,15 @@ namespace Application
         shader_program->use();
 
         /* Create the player, camera and texture manager*/
-        player = new Entity::Player(glm::vec3(0.0, 0.0, -0.3));
+        player = new Entity::Player(glm::vec3(-16, -32, -16));
         camera = new Scene::Camera(player, shader_program, 852, 480);
         texture_manager = make_shared<Texturing::TextureManager>(16, 16, shader_program);
 
         /* Create the World */
-        world = make_unique<World::World>(texture_manager);
+        world = new World::World(texture_manager);
 
         /* Link some elements for the callbacks */
-        Application::link_player(player, camera);
+        Application::link_elements(player, camera, world);
     }
 
     App::~App() noexcept
@@ -86,6 +86,7 @@ namespace Application
         delete shader_program;
         delete player;
         delete camera;
+        delete world;
     }
 
     inline void App::update(float delta_time)

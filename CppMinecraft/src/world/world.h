@@ -15,11 +15,15 @@ namespace World
 		Blocks::Models::BlockModels models;
 		std::shared_ptr<Texturing::TextureManager> texture_manager;
 		std::array<Blocks::BlockType*, BLOCK_COUNT> block_types;
-		std::unique_ptr<ChunkManager> chunk_manager;
 	public:
+		std::unique_ptr<ChunkManager> chunk_manager;
 		World(const std::shared_ptr<Texturing::TextureManager>& texture_manager);
 		~World() noexcept;
 
-		void render();
+		void render()
+		{
+			chunk_manager->updateChunkMeshQueue();
+			chunk_manager->renderChunks();
+		}
 	};
 }

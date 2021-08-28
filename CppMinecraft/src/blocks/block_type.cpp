@@ -19,17 +19,22 @@ namespace Blocks
 		is_transparent(is_transparent), is_cube(is_cube)
 	{
 		/* Load the models and copy them (the copy is necessary though for textures) */
-		quads = new Quad[model->get_quad_number()];
-		memcpy(quads, model->get_quads(), model->get_quad_number() * sizeof(Quad));
-		float tex_id = id; // Temporary
-		texture_manager->addTexture(texture_filepath, tex_id);
-		for (unsigned char i = 0; i < model->get_quad_number(); i++)
+		if (model->get_quad_number())
 		{
-			for (Vertex& vertex : quads[i].vertices)
+			quads = new Quad[model->get_quad_number()];
+			memcpy(quads, model->get_quads(), model->get_quad_number() * sizeof(Quad));
+			float tex_id = id; // Temporary
+			texture_manager->addTexture(texture_filepath, tex_id);
+			for (unsigned char i = 0; i < model->get_quad_number(); i++)
 			{
-				vertex.tex_index = tex_id;
+				for (Vertex& vertex : quads[i].vertices)
+				{
+					vertex.tex_index = tex_id;
+				}
 			}
 		}
+		else
+			quads = nullptr;
 	}
 	/* Copy constructor (I will try to avoid using them) */
 	BlockType::BlockType(const BlockType& other)

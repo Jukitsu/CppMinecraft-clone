@@ -6,13 +6,34 @@ namespace AbstractGL
 	class VertexBuffer
 	{
 		GLuint id;
-		const static VertexBuffer* bound;
+		static const VertexBuffer* bound;
 	public:
-		VertexBuffer();
-		~VertexBuffer() noexcept;
-		void bufferData(GLuint size);
-		void bufferSubData(const void* data, GLuint size, unsigned int offset);
-		void bind() const;
+		VertexBuffer()
+		{
+			glGenBuffers(1, &id);
+		}
+		~VertexBuffer() noexcept
+		{
+			glDeleteBuffers(1, &id);
+		}
+		void bufferData(GLuint size)
+		{
+			bind();
+			glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+		}
+		void bufferSubData(const void* data, GLuint size, unsigned int offset)
+		{
+			bind();
+			glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+		}
+		void bind() const
+		{
+			if (bound != this)
+			{
+				glBindBuffer(GL_ARRAY_BUFFER, id);
+				bound = this;
+			}
+		}
 	};
 
 	class IndexBuffer 
@@ -20,10 +41,27 @@ namespace AbstractGL
 		GLuint id;
 		const static IndexBuffer* bound;
 	public:
-		IndexBuffer();
-		~IndexBuffer() noexcept;
-		void bufferData(const void* data, GLuint size);
-		void bind() const;
+		IndexBuffer()
+		{
+			glGenBuffers(1, &id);
+		}
+		~IndexBuffer() noexcept
+		{
+			glDeleteBuffers(1, &id);
+		}
+		void bufferData(const void* data, GLuint size)
+		{
+			bind();
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+		}
+		void bind() const
+		{
+			if (bound != this)
+			{
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+				bound = this;
+			}
+		}
 	};
 
 }

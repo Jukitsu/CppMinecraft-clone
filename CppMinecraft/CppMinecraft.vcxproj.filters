@@ -4,18 +4,12 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\app\app.cpp" />
     <ClCompile Include="src\app\callbacks.cpp" />
-    <ClCompile Include="src\renderer\renderer.cpp" />
     <ClCompile Include="src\renderer\mesh.cpp" />
-    <ClCompile Include="src\abstractgl\buffers.cpp" />
+    <ClCompile Include="src\abstractgl\caches.cpp" />
     <ClCompile Include="src\abstractgl\shader.cpp" />
     <ClCompile Include="src\abstractgl\texture_array.cpp" />
-    <ClCompile Include="src\abstractgl\vertex_array.cpp" />
     <ClCompile Include="src\texture\texture_manager.cpp" />
-    <ClCompile Include="src\scene\camera.cpp" />
-    <ClCompile Include="src\entity\player.cpp" />
-    <ClCompile Include="src\entity\entity.cpp" />
     <ClCompile Include="src\blocks\block_type.cpp" />
-    <ClCompile Include="src\blocks\models\models.cpp" />
     <ClCompile Include="src\world\chunk\chunk.cpp" />
     <ClCompile Include="src\world\chunk\chunk_manager.cpp" />
     <ClCompile Include="src\world\world.cpp" />
@@ -25,7 +19,6 @@
     <ClInclude Include="src\renderer\geometry.h" />
     <ClInclude Include="src\abstractgl\shader.h" />
     <ClInclude Include="src\abstractgl\texture_array.h" />
-    <ClInclude Include="src\abstractgl\vertex_array.h" />
     <ClInclude Include="src\app\app.h" />
     <ClInclude Include="src\app\callbacks.h" />
     <ClInclude Include="src\OpenGL.h" />
@@ -41,6 +34,7 @@
     <ClInclude Include="src\world\chunk\chunk_manager.h" />
     <ClInclude Include="src\world\world.h" />
     <ClInclude Include="src\renderer\batch_info.h" />
+    <ClInclude Include="src\abstractgl\vertex_array.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\cobblestone.png" />

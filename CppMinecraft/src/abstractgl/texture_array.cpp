@@ -2,7 +2,6 @@
 
 namespace AbstractGL
 {
-	const TextureArray* TextureArray::bound = nullptr;
 	TextureArray::TextureArray(GLsizei texture_width, GLsizei texture_height, GLsizei array_size)
 	{
 		glGenTextures(1, &id);
@@ -14,10 +13,7 @@ namespace AbstractGL
 			texture_width, texture_height, array_size,
 			0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 	}
-	TextureArray::~TextureArray() noexcept
-	{
-		glDeleteTextures(1, &id);
-	}
+	
 
 	void TextureArray::addTextureData(GLsizei width, 
 		GLsizei height, int index, GLubyte* data)
@@ -30,21 +26,5 @@ namespace AbstractGL
 			GL_RGBA, GL_UNSIGNED_BYTE,
 			data);
 	}
-	void TextureArray::bind() const
-	{
-		if (bound != this)
-		{
-			glBindTexture(GL_TEXTURE_2D_ARRAY, id);
-			bound = this;
-		}
-	}
-	void TextureArray::activate() const
-	{
-		glActiveTexture(GL_TEXTURE0);
-		bind();
-	}
-	void TextureArray::generateMipmaps() const {
-		bind();
-		glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
-	}
+	
 }

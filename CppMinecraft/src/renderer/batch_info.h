@@ -6,6 +6,6 @@ struct BatchInfo
 	bool renderWest;
 	bool renderUp;
 	bool renderDown;
-	bool renderNorth;
 	bool renderSouth;
+	bool renderNorth;
 };

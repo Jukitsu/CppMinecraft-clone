@@ -19,33 +19,11 @@ namespace Rendering
 
 	}
 
-	const vector<Vertex>& Mesh::getVertexData() const
-	{
-		return mesh_data;
-	}
-	unsigned int* Mesh::getIndices() const
-	{
-		return mesh_indices;
-	}
-	unsigned int Mesh::getMaxIndexCount() const
-	{
-		return max_index_count;
-	}
-	unsigned int Mesh::getMaxVertexCount() const
-	{
-		return max_vertex_count;
-	}
-
 	inline void Mesh::pushVertex(const Vertex& vertex)
 	{
 		mesh_data.push_back(vertex);
 	}
 	
-	void Mesh::clear()
-	{
-		mesh_data.clear();
-		current_index_count = 0;
-	}
 	void Mesh::pushQuad(const Quad& quad, unsigned int current_quad_count)
 	{
 		for (const Vertex& vertex : quad.vertices)

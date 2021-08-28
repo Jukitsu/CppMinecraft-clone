@@ -105,13 +105,15 @@ namespace Application
 
     static Entity::Player* playerptr;
     static Scene::Camera* cameraptr;
+    static World::World* worldptr;
     static bool mouse_captured;
     static float last_x_pos, last_y_pos;
 
-    void link_player(Entity::Player* player, Scene::Camera* camera)
+    void link_elements(Entity::Player* player, Scene::Camera* camera, World::World* world)
     {
         playerptr = player;
         cameraptr = camera;
+        worldptr = world;
     }
 
     void on_mouse_press(GLFWwindow* window, int button, int action, int mods)
@@ -163,6 +165,9 @@ namespace Application
                     break;
                 case GLFW_KEY_LEFT_SHIFT:
                     dy = 1;
+                    break;
+                case GLFW_KEY_F3:
+                    worldptr->chunk_manager->reloadChunkMesh();
                     break;
                 }
             }

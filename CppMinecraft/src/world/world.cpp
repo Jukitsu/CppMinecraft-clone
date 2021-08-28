@@ -16,7 +16,7 @@ namespace World
 		/* Initializing the block models */
 		std::cout << "Initializing the block models\n";
 		block_types[0] = new Blocks::BlockType(texture_manager, "Air", 0,
-			&models.cube, "res/textures/cobblestone.png", true, false);
+			&models.air, "res/textures/cobblestone.png", true, false);
 		block_types[1] = new Blocks::BlockType(texture_manager, "Stone", 1,
 			&models.cube, "res/textures/stone.png", false, true);
 		block_types[2] = new Blocks::BlockType(texture_manager, "Grass", 2,
@@ -32,8 +32,4 @@ namespace World
 			delete block_type;
 	}
 
-	void World::render()
-	{
-		chunk_manager->renderChunks();
-	}
 }

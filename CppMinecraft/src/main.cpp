@@ -18,6 +18,8 @@ inline void setCtrReport()
     _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_FILE);
     _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDOUT);
 }
+
+
 #ifdef DEBUG
 long long heap_allocation;
 void* operator new(size_t size)
@@ -47,7 +49,7 @@ int main(void)
     setCtrReport();
     {
         /* Pretty straightforward stuff */
-        Application::App app(852, 480, true); 
+        Application::App app(852, 480, false); 
         app.init(); 
         app.run(); 
     }

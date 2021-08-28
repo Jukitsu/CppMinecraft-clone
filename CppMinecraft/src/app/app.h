@@ -25,7 +25,7 @@ namespace Application
 		Entity::Player* player;
 		Scene::Camera* camera;
 		std::shared_ptr<Texturing::TextureManager> texture_manager;
-		std::shared_ptr<World::World> world;
+		World::World* world;
 		GLFWwindow* window;
 		unsigned int width, height;
 		bool vsync;

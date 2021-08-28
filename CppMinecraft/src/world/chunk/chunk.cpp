@@ -55,44 +55,18 @@ namespace World
 			}
 			delete[] blocks;
 		}
-	}
-	/* Encapsulation stuff */
-	int Chunk::getBlock(const glm::vec3& pos) const
-	{
-		int x = pos.x, y = pos.y, z = pos.z;
-		if ((x >= 0) && (y >= 0) && (z >= 0))
-			if ((x < CHUNK_WIDTH) && (y < CHUNK_HEIGHT) && (z < CHUNK_LENGTH))
-				return blocks[x][y][z];
-		return 0;
-	}
-	void Chunk::setBlock(const glm::vec3& pos, int blockid)
-	{
-		unsigned int x = pos.x, y = pos.y, z = pos.z;
-		if ((x >= 0) && (y >= 0) && (z >= 0))
-			if ((x < CHUNK_WIDTH) && (y < CHUNK_HEIGHT) && (z < CHUNK_LENGTH))
-				blocks[x][y][z] = blockid;
-	}
-	/* Some stuff to make easier batching*/
-	bool Chunk::isOpaqueBlock(int blockid) const
-	{
-		return !(*block_types)[blockid]->is_transparent;
-	}
-	bool Chunk::isOpaqueAt(const glm::vec3& pos) const
-	{
-		return isOpaqueBlock(getBlock(pos));
-	}
-
+	}	
+	
 	/* Chunk mesh batcher*/
-	void Chunk::update_mesh()
+	void Chunk::generate_mesh()
 	{
-		mesh.clear(); // To remove
-		int block;
+		unsigned int block;
 		unsigned int current_quad_count = 0;
 		for (unsigned int lx = 0; lx < CHUNK_WIDTH; lx++)
 			for (unsigned int ly = 0; ly < CHUNK_HEIGHT; ly++)
 				for (unsigned int lz = 0; lz < CHUNK_LENGTH; lz++)
 				{
-					glm::vec3 pos(lx, ly, lz);
+					glm::vec3 lpos(lx, ly, lz);
 					block = blocks[lx][ly][lz]; // get the block number of the block at that local position
 					if (!block)
 						continue;
@@ -101,26 +75,23 @@ namespace World
 					/* Face culling */
 					if (block_type.is_cube)
 					{
-						batch_info.renderEast = !isOpaqueAt(pos + glm::vec3(1, 0, 0));
-						batch_info.renderWest = !isOpaqueAt(pos + glm::vec3(-1, 0, 0));
-						batch_info.renderUp = !isOpaqueAt(pos + glm::vec3(0, 1, 0));
-						batch_info.renderDown = !isOpaqueAt(pos + glm::vec3(0, -1, 0));
-						batch_info.renderNorth = !isOpaqueAt(pos + glm::vec3(0, 0, 1));
-						batch_info.renderSouth = !isOpaqueAt(pos + glm::vec3(0, 0, -1));
+						batch_info.renderEast = !isOpaqueAt(lpos + glm::vec3(1, 0, 0));
+						batch_info.renderWest = !isOpaqueAt(lpos + glm::vec3(-1, 0, 0));
+						batch_info.renderUp = !isOpaqueAt(lpos + glm::vec3(0, 1, 0));
+						batch_info.renderDown = !isOpaqueAt(lpos + glm::vec3(0, -1, 0));
+						batch_info.renderNorth = !isOpaqueAt(lpos + glm::vec3(0, 0, -1));
+						batch_info.renderSouth = !isOpaqueAt(lpos + glm::vec3(0, 0, 1));
 					}
 					/* Push the block quads in the mesh */
 					current_quad_count = mesh.pushBlock(block_type, 
-							16.0f*position + glm::vec3(lx, ly, lz), current_quad_count, batch_info);
+						glm::vec3(position.x * CHUNK_WIDTH, 
+							position.y * CHUNK_HEIGHT,
+							position.z * CHUNK_LENGTH) + lpos,
+						current_quad_count, batch_info);
 				}
 		/* Batch the mesh vertex data */
 		chunk_renderer.bufferBatch(mesh);
 		chunk_renderer.bindLayout();
 	}
-	void Chunk::draw()
-	{
-		/* Bind the VAO, VBO and IBOs*/
-		chunk_renderer.bindAll();
-		/* Draw call */
-		chunk_renderer.draw(mesh.current_index_count);
-	}
+	
 }
