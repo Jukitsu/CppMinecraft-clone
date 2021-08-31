@@ -10,31 +10,40 @@
 #include "blocks/block_type.h"
 #include "renderer/batch_info.h"
 
+#include "constants.h"
 
-
+#include "chunk_math.h"
 
 namespace World
 {
-	constexpr int CHUNK_WIDTH = 16;
-	constexpr int CHUNK_HEIGHT = 32;
-	constexpr int CHUNK_LENGTH = 16;
-
-	constexpr int BLOCK_COUNT = 3;
 
 	class Chunk
 	{
-		glm::vec3 position;
+		glm::vec2 position;
 		std::array<Blocks::BlockType*, BLOCK_COUNT>* block_types;
 		Rendering::Renderer chunk_renderer;
 		unsigned int ***blocks;
 	public:
+		struct _neighbourChunks
+		{
+			Chunk* east;
+			Chunk* west;
+			Chunk* south;
+			Chunk* north;
+		} neighbour_chunks;
+
 		Rendering::Mesh mesh;
 
-		Chunk(const glm::vec3& cpos, std::array<Blocks::BlockType*, BLOCK_COUNT>* block_types,
+		Chunk(const glm::vec2& cpos, std::array<Blocks::BlockType*, BLOCK_COUNT>* block_types,
 			unsigned int* chunk_indices);
 		Chunk(const Chunk& other); // Avoid copying chunks, its expensive af
 		~Chunk() noexcept;
 
+
+		const glm::vec2& getPos()
+		{
+			return position;
+		}
 		int getBlock(const glm::vec3& pos) const
 		{
 			int x = pos.x, y = pos.y, z = pos.z;
@@ -59,6 +68,12 @@ namespace World
 		{
 			return isOpaqueBlock(getBlock(pos));
 		}
+	private:
+		inline bool isOutOfChunk(const glm::vec3& local_pos);
+		inline bool canRenderFacing(const glm::vec3& facing_pos);
+		bool _canRenderFacingNeighbour(const glm::vec3& facing_pos);
+
+	public:
 		void generate_mesh();
 
 		void draw()

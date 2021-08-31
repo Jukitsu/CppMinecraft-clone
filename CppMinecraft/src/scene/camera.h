@@ -63,7 +63,7 @@ namespace Scene
 			model = glm::mat4(1.0f);
 			view = glm::rotate(view, (float)(-(player->getPitch())), -glm::vec3(1.0f, 0.0f, 0.0f));
 			view = glm::rotate(view, (float)(-(player->getYaw() - pi / 2)), -glm::vec3(0.0f, 1.0f, 0.0f));
-			view = glm::translate(view, player->getPos());
+			view = glm::translate(view, -player->getPos());
 		}
 		void load_matrices()
 		{

@@ -35,6 +35,8 @@
     <ClInclude Include="src\world\world.h" />
     <ClInclude Include="src\renderer\batch_info.h" />
     <ClInclude Include="src\abstractgl\vertex_array.h" />
+    <ClInclude Include="src\world\chunk\constants.h" />
+    <ClInclude Include="src\world\chunk\chunk_math.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\cobblestone.png" />

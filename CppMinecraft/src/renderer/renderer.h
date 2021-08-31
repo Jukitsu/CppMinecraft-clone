@@ -35,7 +35,6 @@ namespace Rendering
 		void allocateBuffers(const Mesh& mesh)
 		{
 			vao.bind();
-			vbo.bufferData(mesh.getMaxVertexCount() * sizeof(Geometry::Vertex));
 			ibo.bufferData(mesh.getIndices(),
 				mesh.getMaxIndexCount() * sizeof(unsigned int));
 		}
@@ -43,8 +42,8 @@ namespace Rendering
 		void bufferBatch(const Mesh& mesh)
 		{
 			vao.bind();
-			vbo.bufferSubData(mesh.getVertexData().data(),
-				mesh.getVertexData().size() * sizeof(Geometry::Vertex), 0);
+			vbo.bufferData(mesh.getVertexData().data(),
+				mesh.getVertexData().size() * sizeof(Geometry::Vertex));
 		}
 		/* Bind the Vertex Attributes to the VAOs with the specified layout:
 		* posX, posY, posZ, texX, texY, texZ, shading_value

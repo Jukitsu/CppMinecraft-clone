@@ -70,7 +70,7 @@ namespace Application
         shader_program->use();
 
         /* Create the player, camera and texture manager*/
-        player = new Entity::Player(glm::vec3(-16, -32, -16));
+        player = new Entity::Player(glm::vec3(16, 32, 16));
         camera = new Scene::Camera(player, shader_program, 852, 480);
         texture_manager = make_shared<Texturing::TextureManager>(16, 16, shader_program);
 
@@ -102,7 +102,9 @@ namespace Application
         glClearColor(0.25f, 0.6f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
+#ifndef _DEBUG
         glEnable(GL_CULL_FACE);
+#endif
         /* Draw Calls */
         world->render(); // Render the world
     }

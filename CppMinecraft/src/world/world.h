@@ -7,6 +7,7 @@
 #include "abstractgl/shader.h"
 #include "blocks/block_type.h"
 #include "chunk/chunk_manager.h"
+#include "chunk/chunk_math.h"
 
 namespace World
 {
@@ -19,7 +20,7 @@ namespace World
 		std::unique_ptr<ChunkManager> chunk_manager;
 		World(const std::shared_ptr<Texturing::TextureManager>& texture_manager);
 		~World() noexcept;
-
+		void setBlock(const glm::vec3& pos, int block);
 		void render()
 		{
 			chunk_manager->updateChunkMeshQueue();

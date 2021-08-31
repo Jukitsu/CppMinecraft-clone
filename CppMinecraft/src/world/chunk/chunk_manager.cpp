@@ -29,34 +29,55 @@ namespace World
 			chunk_indices[nquad * 6 + 5] = 4 * nquad + 3;
 		}
 		/* World generation */
-		std::cout << "Generating world and loading chunks\n";
-		for (int z = 0; z < 8; z++)
-			for (int x = 0; x < 8; x++)
 		{
-			glm::vec3 chunk_position{ x, 0, -z };
-			ChunkPtr current_chunk = std::make_shared<Chunk>(chunk_position, 
-				block_types, chunk_indices);
-
-			for (unsigned int i = 0; i < CHUNK_WIDTH; i++)
-				for (unsigned int j = 0; j < CHUNK_HEIGHT; j++)
-					for (unsigned int k = 0; k < CHUNK_LENGTH; k++)
+			std::cout << "Generating world and loading chunks\n";
+			Chunk* west_chunk;
+			Chunk* north_chunk;
+			for (int x = 0; x < RENDER_DISTANCE; x++)
+				for (int z = 0; z < RENDER_DISTANCE; z++)
+				{
+					glm::vec2 chunk_position{ x, z };
+					Chunk* current_chunk = new Chunk(chunk_position,
+						block_types, chunk_indices);
+					for (unsigned int i = 0; i < CHUNK_WIDTH; i++)
+						for (unsigned int j = 0; j < CHUNK_HEIGHT; j++)
+							for (unsigned int k = 0; k < CHUNK_LENGTH; k++)
+							{
+								if (j == (CHUNK_HEIGHT - 1))
+									current_chunk->setBlock({ i, j, k }, (std::rand() % 6) ? 2 : 2);
+								else if (j > (CHUNK_HEIGHT - 3))
+									current_chunk->setBlock({ i, j, k }, (std::rand() % 6) ? 3 : 3);
+								else
+									current_chunk->setBlock({ i, j, k }, (std::rand() % 6) ? 1 : 1);
+							}
+					chunks[x][z] = current_chunk;
+					pushToChunkMeshQueue(current_chunk);
+					if (z > 0)
 					{
-						if (j > (CHUNK_HEIGHT - 3))
-							current_chunk->setBlock({ i, j, k }, (std::rand() % 2) ? 0 : 2);
-						else
-							current_chunk->setBlock({ i, j, k }, (std::rand() % 3) ? 0 : 1);
+						north_chunk = chunks[x][z - 1];
+						current_chunk->neighbour_chunks.north = north_chunk;
+						north_chunk->neighbour_chunks.south = current_chunk;
 					}
-			chunks.emplace_back(current_chunk);
-		}
-		for (auto& chunk : chunks)
-		{
-			chunk_mesh_loading_queue.push(chunk);
+					if (x > 0)
+					{
+						west_chunk = chunks[x - 1][z];
+						current_chunk->neighbour_chunks.west = west_chunk;
+						west_chunk->neighbour_chunks.east = current_chunk;
+					}
+				}
 		}
 	}
 	ChunkManager::~ChunkManager() noexcept
 	{
 		std::cout << "Freeing Chunk Manager Data\n";
 		delete[] chunk_indices;
+		Chunk* chunk;
+		for (int x = 0; x < RENDER_DISTANCE; x++)
+			for (int z = 0; z < RENDER_DISTANCE; z++)
+			{
+				chunk = chunks[x][z];
+				delete chunk;
+			}
 	}
 	/* Pretty straightforward stuff too */
 	void ChunkManager::updateChunkMeshQueue()
@@ -64,17 +85,16 @@ namespace World
 		/* Batch the chunk meshes */
 		if (!chunk_mesh_loading_queue.empty())
 		{
-			auto& chunk = chunk_mesh_loading_queue.front();
+			Chunk* chunk = chunk_mesh_loading_queue.front();
 			chunk_mesh_loading_queue.pop();
 			chunk->generate_mesh();
 		}
 	}
 	void ChunkManager::renderChunks()
 	{
-		for (auto& chunk : chunks)
-		{
-			chunk->draw();
-		}
+		for (int x = 0; x < RENDER_DISTANCE; x++)
+			for (int z = 0; z < RENDER_DISTANCE; z++)
+				chunks[x][z]->draw();
 	}
 	void ChunkManager::reloadChunkMesh()
 	{
@@ -82,10 +102,13 @@ namespace World
 		{
 			chunk_mesh_loading_queue.pop();
 		}
-		for (auto& chunk : chunks)
-		{
-			chunk->mesh.clear();
-			chunk_mesh_loading_queue.push(chunk);
-		}
+		Chunk* chunk;
+		for (int x = 0; x < RENDER_DISTANCE; x++)
+			for (int z = 0; z < RENDER_DISTANCE; z++)
+			{
+				chunk = chunks[x][z];
+				chunk->mesh.clear();
+				chunk_mesh_loading_queue.push(chunk);
+			}
 	}
 }

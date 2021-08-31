@@ -149,47 +149,50 @@ namespace Application
                     cameraptr->reset_input();
                     break;
                 case GLFW_KEY_W:
-                    dz = 1;
-                    break;
-                case GLFW_KEY_S:
                     dz = -1;
                     break;
-                case GLFW_KEY_A:
-                    dx = 1;
+                case GLFW_KEY_S:
+                    dz = 1;
                     break;
-                case GLFW_KEY_D:
+                case GLFW_KEY_A:
                     dx = -1;
                     break;
+                case GLFW_KEY_D:
+                    dx = 1;
+                    break;
                 case GLFW_KEY_SPACE:
-                    dy = -1;
+                    dy = 1;
                     break;
                 case GLFW_KEY_LEFT_SHIFT:
-                    dy = 1;
+                    dy = -1;
                     break;
                 case GLFW_KEY_F3:
                     worldptr->chunk_manager->reloadChunkMesh();
+                    break;
+                case GLFW_KEY_B:
+                    worldptr->setBlock(playerptr->getPos(), 0); // Breaking test
                     break;
                 }
             }
             else if (action == GLFW_RELEASE) {
                 switch (key) {
                 case GLFW_KEY_W:
-                    dz = -1;
-                    break;
-                case GLFW_KEY_S:
                     dz = 1;
                     break;
-                case GLFW_KEY_A:
-                    dx = -1;
+                case GLFW_KEY_S:
+                    dz = -1;
                     break;
-                case GLFW_KEY_D:
+                case GLFW_KEY_A:
                     dx = 1;
                     break;
+                case GLFW_KEY_D:
+                    dx = -1;
+                    break;
                 case GLFW_KEY_SPACE:
-                    dy = 1;
+                    dy = -1;
                     break;
                 case GLFW_KEY_LEFT_SHIFT:
-                    dy = -1;
+                    dy = 1;
                     break;
                 }
             }

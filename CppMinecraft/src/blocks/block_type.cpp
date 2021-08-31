@@ -12,10 +12,10 @@ namespace Blocks
 	using namespace Geometry;
 	using namespace Models;
 
-	BlockType::BlockType(std::shared_ptr<TextureManager> texture_manager, const char* name,
-		unsigned int id, Model* model, const std::string& texture_filepath,
+	BlockType::BlockType(const char* name, unsigned int block_id, Models::Model* model,
+		const std::vector<unsigned int>& texture_layout,
 		bool is_transparent, bool is_cube)
-		:name(name), id(id), texture_manager(texture_manager), model(model),
+		:name(name), id(block_id), texture_manager(texture_manager), model(model),
 		is_transparent(is_transparent), is_cube(is_cube)
 	{
 		/* Load the models and copy them (the copy is necessary though for textures) */
@@ -23,13 +23,12 @@ namespace Blocks
 		{
 			quads = new Quad[model->get_quad_number()];
 			memcpy(quads, model->get_quads(), model->get_quad_number() * sizeof(Quad));
-			float tex_id = id; // Temporary
-			texture_manager->addTexture(texture_filepath, tex_id);
+			
 			for (unsigned char i = 0; i < model->get_quad_number(); i++)
 			{
 				for (Vertex& vertex : quads[i].vertices)
 				{
-					vertex.tex_index = tex_id;
+					vertex.tex_index = texture_layout[i];
 				}
 			}
 		}
@@ -47,14 +46,5 @@ namespace Blocks
 	BlockType::~BlockType() noexcept
 	{
 		delete[] quads;
-	}
-	/* Encapsulation stuff */
-	const Quad* BlockType::get_quads() const
-	{
-		return quads;
-	}
-	constexpr unsigned int BlockType::get_quad_number() const
-	{
-		return model->get_quad_number();
 	}
 }

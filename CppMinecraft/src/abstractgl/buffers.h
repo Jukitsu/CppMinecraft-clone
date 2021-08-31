@@ -16,15 +16,10 @@ namespace AbstractGL
 		{
 			glDeleteBuffers(1, &id);
 		}
-		void bufferData(GLuint size)
+		void bufferData(const void* data, GLuint size)
 		{
 			bind();
-			glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
-		}
-		void bufferSubData(const void* data, GLuint size, unsigned int offset)
-		{
-			bind();
-			glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+			glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 		}
 		void bind() const
 		{
