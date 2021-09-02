@@ -10,7 +10,7 @@ namespace Texturing
 	using namespace AbstractGL;
 	TextureManager::TextureManager(unsigned int texture_width,
 		unsigned int texture_height, ShaderProgram* shader_program)
-		:texture_array(texture_width, texture_height, TEX_ARRAY_SIZE),
+		:texture_array(texture_width, texture_height, TEX_ARRAY_SIZE, 0, GL_NEAREST_MIPMAP_NEAREST),
 		texture_images(), shader_program(shader_program), current_index(0u)
 	{
 		/* Load the sampler location */

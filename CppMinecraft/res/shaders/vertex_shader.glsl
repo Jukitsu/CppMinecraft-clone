@@ -8,12 +8,12 @@ out vec3 local_position;
 out vec3 interpolated_tex_coords;
 out float interpolated_shading_value;
 
-uniform mat4 proj, view, model;
+uniform mat4 mvp;
 
 
 void main(void) {
 	local_position = vertex_position;
 	interpolated_tex_coords = tex_coords;
 	interpolated_shading_value = shading_value;
-	gl_Position = proj * view * model * vec4(vertex_position, 1.0);
+	gl_Position = mvp * vec4(vertex_position, 1.0);
 }

@@ -41,6 +41,16 @@ namespace World
 		for (Blocks::BlockType* block_type : block_types)
 			delete block_type;
 	}
+	int World::getBlock(const glm::vec3& pos)
+	{
+		glm::vec2 cpos = to_chunk_pos(pos);
+		glm::vec3 lpos = to_local_pos(pos);
+		Chunk* chunk = chunk_manager->getChunk(cpos);
+		if (chunk)
+		{
+			return chunk->getBlock(lpos);
+		}
+	}
 
 	void World::setBlock(const glm::vec3& pos, int block)
 	{
@@ -50,7 +60,7 @@ namespace World
 		if (chunk)
 		{
 			chunk->setBlock(lpos, block);
-			chunk->mesh.clear();
+			chunk->clearMeshes();
 			chunk->generate_mesh();
 		}
 	}

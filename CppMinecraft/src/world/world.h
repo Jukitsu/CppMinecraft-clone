@@ -20,6 +20,7 @@ namespace World
 		std::unique_ptr<ChunkManager> chunk_manager;
 		World(const std::shared_ptr<Texturing::TextureManager>& texture_manager);
 		~World() noexcept;
+		int getBlock(const glm::vec3& pos);
 		void setBlock(const glm::vec3& pos, int block);
 		void render()
 		{

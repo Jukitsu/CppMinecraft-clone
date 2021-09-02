@@ -10,9 +10,11 @@
 #include "blocks/block_type.h"
 #include "renderer/batch_info.h"
 
+
 #include "constants.h"
 
 #include "chunk_math.h"
+
 
 namespace World
 {
@@ -23,23 +25,26 @@ namespace World
 		std::array<Blocks::BlockType*, BLOCK_COUNT>* block_types;
 		Rendering::Renderer chunk_renderer;
 		unsigned int ***blocks;
+		Rendering::Mesh mesh;
 	public:
-		struct _neighbourChunks
-		{
+		struct _neighbourChunks {
 			Chunk* east;
 			Chunk* west;
 			Chunk* south;
 			Chunk* north;
 		} neighbour_chunks;
 
-		Rendering::Mesh mesh;
+		
 
 		Chunk(const glm::vec2& cpos, std::array<Blocks::BlockType*, BLOCK_COUNT>* block_types,
 			unsigned int* chunk_indices);
-		Chunk(const Chunk& other); // Avoid copying chunks, its expensive af
+		Chunk(const Chunk& other) = delete; // Avoid copying chunks, its expensive af
 		~Chunk() noexcept;
 
-
+		void clearMeshes()
+		{
+			mesh.clear();
+		}
 		const glm::vec2& getPos()
 		{
 			return position;
@@ -79,7 +84,7 @@ namespace World
 		void draw()
 		{
 			/* Draw call */
-			chunk_renderer.draw(mesh.current_index_count);
+			chunk_renderer.draw(mesh.current_quad_count * 6);
 		}
 	};
 }

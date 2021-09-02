@@ -10,7 +10,6 @@
 
 namespace World
 {
-	constexpr unsigned int RENDER_DISTANCE = 16;
 	class ChunkManager
 	{
 		unsigned long max_chunk_index_count;

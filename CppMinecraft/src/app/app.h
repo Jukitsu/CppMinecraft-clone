@@ -11,7 +11,7 @@
 #include "renderer/mesh.h"
 #include "renderer/geometry.h"
 #include "texture/texture_manager.h"
-#include "entity/player.h"
+#include "entity/player/player.h"
 #include "scene/camera.h"
 #include "world/world.h"
 #include "callbacks.h"
@@ -23,6 +23,7 @@ namespace Application
 	{
 		AbstractGL::ShaderProgram* shader_program;
 		Entity::Player* player;
+		Entity::PlayerHitray* hitray;
 		Scene::Camera* camera;
 		std::shared_ptr<Texturing::TextureManager> texture_manager;
 		World::World* world;

@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\app\app.cpp" />
-    <ClCompile Include="src\app\callbacks.cpp" />
     <ClCompile Include="src\renderer\mesh.cpp" />
     <ClCompile Include="src\abstractgl\caches.cpp" />
     <ClCompile Include="src\abstractgl\shader.cpp" />
@@ -13,6 +12,7 @@
     <ClCompile Include="src\world\chunk\chunk.cpp" />
     <ClCompile Include="src\world\chunk\chunk_manager.cpp" />
     <ClCompile Include="src\world\world.cpp" />
+    <ClCompile Include="src\entity\player\hit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\abstractgl\buffers.h" />
@@ -26,7 +26,7 @@
     <ClInclude Include="src\renderer\mesh.h" />
     <ClInclude Include="src\texture\texture_manager.h" />
     <ClInclude Include="src\scene\camera.h" />
-    <ClInclude Include="src\entity\player.h" />
+    <ClInclude Include="src\entity\player\player.h" />
     <ClInclude Include="src\entity\entity.h" />
     <ClInclude Include="src\blocks\block_type.h" />
     <ClInclude Include="src\blocks\models\models.h" />
@@ -37,6 +37,7 @@
     <ClInclude Include="src\abstractgl\vertex_array.h" />
     <ClInclude Include="src\world\chunk\constants.h" />
     <ClInclude Include="src\world\chunk\chunk_math.h" />
+    <ClInclude Include="src\entity\player\hit.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\cobblestone.png" />

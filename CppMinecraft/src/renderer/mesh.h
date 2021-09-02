@@ -28,27 +28,21 @@ namespace Rendering
 		size_t size; // Size of the Block Data in bytes
 	};
 
-	/* ONLY FOR BLOCK CHUNKS */
 	class Mesh
 	{
 		const unsigned long max_quads;
 		std::vector<Geometry::Vertex> mesh_data; // !! Load mesh data on initial load 
-		unsigned int* mesh_indices;
 		unsigned int max_index_count;
 		unsigned int max_vertex_count;
 	public:
-		unsigned int current_index_count;
+		unsigned int current_quad_count;
 
-		Mesh(unsigned long max_quads, unsigned int* indices);
+		Mesh(unsigned long max_quads);
 		~Mesh() noexcept;
 
 		const std::vector<Geometry::Vertex>& getVertexData() const
 		{
 			return mesh_data;
-		}
-		unsigned int* getIndices() const
-		{
-			return mesh_indices;
 		}
 		unsigned int getMaxIndexCount() const
 		{
@@ -61,14 +55,15 @@ namespace Rendering
 		void clear()
 		{
 			mesh_data.clear();
-			current_index_count = 0;
+			current_quad_count = 0;
 		}
 	private:
 		inline void pushVertex(const Geometry::Vertex& vertex);
 	public:
-		void pushQuad(const Geometry::Quad& quad, unsigned int current_quad_count);
-		unsigned int pushBlock(const Blocks::BlockType& block_type,
-			const glm::vec3& pos, unsigned int current_quad_count, const BatchInfo& batch_info);
+		void pushQuad(const Geometry::Quad& quad);
+		void pushBlock(const Blocks::BlockType& block_type,
+			const glm::vec3& pos,
+			const BatchInfo& batch_info); //Returns the new quad count
 	};
 
 }

@@ -6,9 +6,9 @@ namespace Rendering
 	using namespace Geometry;
 	using namespace Blocks;
 
-	Mesh::Mesh(unsigned long max_quads, unsigned int* indices)
-		:max_quads(max_quads), mesh_indices(indices),
-		current_index_count(0)
+	Mesh::Mesh(unsigned long max_quads)
+		:max_quads(max_quads),
+		current_quad_count(0)
 	{
 		max_vertex_count = max_quads * 4;
 		max_index_count = max_quads * 6;
@@ -24,16 +24,16 @@ namespace Rendering
 		mesh_data.push_back(vertex);
 	}
 	
-	void Mesh::pushQuad(const Quad& quad, unsigned int current_quad_count)
+	void Mesh::pushQuad(const Quad& quad)
 	{
 		for (const Vertex& vertex : quad.vertices)
 		{
 			pushVertex(vertex);
 		}
-		current_index_count += 6;
+		current_quad_count++;
 	}
-	unsigned int Mesh::pushBlock(const BlockType& block_type, 
-		const glm::vec3& pos, unsigned int current_quad_count, const BatchInfo& batch_info)
+	void Mesh::pushBlock(const BlockType& block_type, 
+		const glm::vec3& pos, const BatchInfo& batch_info)
 		/* Returns the new quad count*/
 	{
 		bool* batch_info_array = (bool*)&batch_info;
@@ -51,9 +51,8 @@ namespace Rendering
 					vertex.position[1] += pos.y;
 					vertex.position[2] += pos.z;
 				}
-				pushQuad(current_quad, current_quad_count);
+				pushQuad(current_quad);
 			}
 		}
-		return current_quad_count;
 	}
 }

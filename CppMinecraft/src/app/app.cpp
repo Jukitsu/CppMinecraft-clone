@@ -11,7 +11,7 @@ namespace Application
 
     App::App(unsigned int width, unsigned int height, bool vsync)
         :shader_program(), width(width), height(height), vsync(vsync), window(nullptr),
-        texture_manager(), camera(), player()
+        texture_manager(), camera(), player(), world()
     {
         /* Initialize the library */
         if (!glfwInit())
@@ -70,19 +70,20 @@ namespace Application
         shader_program->use();
 
         /* Create the player, camera and texture manager*/
-        player = new Entity::Player(glm::vec3(16, 32, 16));
+        player = new Entity::Player(glm::vec3(16, 70, 16), 1);
         camera = new Scene::Camera(player, shader_program, 852, 480);
         texture_manager = make_shared<Texturing::TextureManager>(16, 16, shader_program);
-
         /* Create the World */
         world = new World::World(texture_manager);
 
+        hitray = new Entity::PlayerHitray(world);
         /* Link some elements for the callbacks */
-        Application::link_elements(player, camera, world);
+        Application::link_elements(player, camera, world, hitray);
     }
 
     App::~App() noexcept
     {
+        delete hitray;
         delete shader_program;
         delete player;
         delete camera;

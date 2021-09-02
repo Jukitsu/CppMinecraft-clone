@@ -43,12 +43,14 @@ namespace World
 						for (unsigned int j = 0; j < CHUNK_HEIGHT; j++)
 							for (unsigned int k = 0; k < CHUNK_LENGTH; k++)
 							{
-								if (j == (CHUNK_HEIGHT - 1))
-									current_chunk->setBlock({ i, j, k }, (std::rand() % 6) ? 2 : 2);
-								else if (j > (CHUNK_HEIGHT - 3))
-									current_chunk->setBlock({ i, j, k }, (std::rand() % 6) ? 3 : 3);
+								if (j > SEA_LEVEL)
+									current_chunk->setBlock({ i, j, k }, 0);
+								else if (j >= SEA_LEVEL)
+									current_chunk->setBlock({ i, j, k }, 2);
+								else if (j >= (SEA_LEVEL - 3))
+									current_chunk->setBlock({ i, j, k }, 3);
 								else
-									current_chunk->setBlock({ i, j, k }, (std::rand() % 6) ? 1 : 1);
+									current_chunk->setBlock({ i, j, k }, 1);
 							}
 					chunks[x][z] = current_chunk;
 					pushToChunkMeshQueue(current_chunk);
@@ -107,7 +109,7 @@ namespace World
 			for (int z = 0; z < RENDER_DISTANCE; z++)
 			{
 				chunk = chunks[x][z];
-				chunk->mesh.clear();
+				chunk->clearMeshes();
 				chunk_mesh_loading_queue.push(chunk);
 			}
 	}

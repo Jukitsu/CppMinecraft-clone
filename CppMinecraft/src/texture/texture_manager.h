@@ -5,10 +5,11 @@
 
 #include "abstractgl/shader.h"
 #include "abstractgl/texture_array.h"
-#define TEX_ARRAY_SIZE 32
+
 
 namespace Texturing
 {
+	constexpr unsigned int TEX_ARRAY_SIZE = 32;
 	struct Image
 	{
 		unsigned char* image_data;

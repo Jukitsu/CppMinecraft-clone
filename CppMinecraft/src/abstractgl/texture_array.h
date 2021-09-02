@@ -8,7 +8,8 @@ namespace AbstractGL
 		GLuint id;
 		static const TextureArray* bound;
 	public:
-		TextureArray(GLsizei texture_width, GLsizei texture_height, GLsizei array_size);
+		TextureArray(GLsizei texture_width, GLsizei texture_height, GLsizei array_size, 
+			unsigned int mipmap_level, GLenum mipmap_type);
 		~TextureArray() noexcept
 		{
 			glDeleteTextures(1, &id);
