@@ -48,7 +48,7 @@ namespace Blocks
 			Geometry::Quad* quads;
 		public:
 			virtual const Geometry::Quad* get_quads() const = 0;
-			virtual constexpr unsigned int get_quad_number() const = 0;
+			virtual unsigned int get_quad_number() const = 0;
 		};
 
 		class Air : public Model
@@ -58,7 +58,7 @@ namespace Blocks
 			{
 				return nullptr;
 			}
-			constexpr unsigned int get_quad_number() const override
+			unsigned int get_quad_number() const override
 			{
 				return 0;
 			}
@@ -76,7 +76,7 @@ namespace Blocks
 			{
 				return quads;
 			}
-			constexpr unsigned int get_quad_number() const override
+			unsigned int get_quad_number() const override
 			{
 				return 6;
 			}

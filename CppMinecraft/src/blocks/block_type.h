@@ -28,7 +28,7 @@ namespace Blocks
 		{
 			return quads;
 		}
-		constexpr unsigned int get_quad_number() const
+		unsigned int get_quad_number() const
 		{
 			return model->get_quad_number();
 		}

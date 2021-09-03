@@ -7,7 +7,6 @@
 
 #include "app/app.h"
 
-#define sensitivity 0.004
 
 inline void setCtrReport()
 {
@@ -28,8 +27,7 @@ void* operator new(size_t size)
     void* ptr = malloc(size);
     if (!ptr)
         throw std::bad_alloc();
-    std::cout << "Allocated " << size << " bytes on the heap\n"
-    << "Current usage of the heap: "
+    std::cout << "Current usage of the heap: "
     << heap_allocation << " bytes\n";
     return ptr;
 }
