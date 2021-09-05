@@ -19,6 +19,8 @@ inline void setCtrReport()
 }
 
 
+
+
 #ifdef DEBUG
 long long heap_allocation;
 void* operator new(size_t size)
@@ -47,11 +49,10 @@ int main(void)
     setCtrReport();
     {
         /* Pretty straightforward stuff */
-        Application::App app(852, 480, false); 
+        Application::App app(852, 480, false, true, false); 
         app.init(); 
         app.run(); 
     }
     _CrtDumpMemoryLeaks(); // Memory leak detection
-    std::cin.get();
     return 0;
 }

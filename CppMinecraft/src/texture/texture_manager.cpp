@@ -8,13 +8,14 @@ namespace Texturing
 	* in the OpenGL texture array
 	*/
 	using namespace AbstractGL;
-	TextureManager::TextureManager(unsigned int texture_width,
-		unsigned int texture_height, ShaderProgram* shader_program)
-		:texture_array(texture_width, texture_height, TEX_ARRAY_SIZE, 0, GL_NEAREST_MIPMAP_NEAREST),
+	TextureManager::TextureManager(size_t texture_width,
+		size_t  texture_height, ShaderProgram* shader_program)
+		:texture_array(texture_width, texture_height, TEX_ARRAY_SIZE, true, GL_NEAREST_MIPMAP_LINEAR),
 		texture_images(), shader_program(shader_program), current_index(0u)
 	{
 		/* Load the sampler location */
 		sampler_location = shader_program->findUniform("texture_array_sampler");
+		stbi_set_flip_vertically_on_load(true);
 	}
 
 	TextureManager::~TextureManager()

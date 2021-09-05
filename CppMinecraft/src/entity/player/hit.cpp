@@ -27,7 +27,7 @@ namespace Entity
 		glm::vec3 lpos = position - block;
 		glm::vec3 abs_vector = vector;
 
-		for (unsigned short i = 0; i < 3; i++)
+		for (uint8_t i = 0; i < 3; i++)
 		{
 			if (vector[i] < 0)
 			{
@@ -88,5 +88,6 @@ namespace Entity
 				return check(distance, block, { block.x, block.y, block.z + sign.z });
 			}
 		}
+		return 0;
 	}
 }

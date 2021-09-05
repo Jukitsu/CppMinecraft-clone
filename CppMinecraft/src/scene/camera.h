@@ -16,7 +16,7 @@ namespace Scene
 		GLubyte mvp_loc;
 		AbstractGL::ShaderProgram* shader_program;
 	public:
-		unsigned int width, height;
+		size_t width, height;
 
 		Camera(Entity::Player* player,
 			AbstractGL::ShaderProgram* shader_program, GLsizei width, GLsizei height)
@@ -59,8 +59,8 @@ namespace Scene
 		{
 			view = glm::mat4(1.0f);
 			model = glm::mat4(1.0f);
-			view = glm::rotate(view, (float)(-(player->getPitch())), -glm::vec3(1.0f, 0.0f, 0.0f));
-			view = glm::rotate(view, (float)(-(player->getYaw() - pi / 2)), -glm::vec3(0.0f, 1.0f, 0.0f));
+			view = glm::rotate(view, -player->getPitch(), -glm::vec3(1.0f, 0.0f, 0.0f));
+			view = glm::rotate(view, -(player->getYaw() - pi / 2), -glm::vec3(0.0f, 1.0f, 0.0f));
 			view = glm::translate(view, -player->getPos());
 			mvp = proj * view * model;
 		}

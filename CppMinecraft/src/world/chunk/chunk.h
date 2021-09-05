@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <array>
 
 #include "glm/glm.hpp"
 #include "glm/vec3.hpp"
@@ -16,18 +17,45 @@
 #include "chunk_math.h"
 
 
+
 namespace World
 {
-
+	class Subchunk
+	{
+		Rendering::Mesh mesh;
+		ptrdiff_t offset;
+	public:
+		Subchunk();
+		~Subchunk() noexcept;
+		ptrdiff_t getOffset()
+		{
+			return offset;
+		}
+		void setOffset(ptrdiff_t newOffset)
+		{
+			offset = newOffset;
+		}
+		void pushBlock(const Blocks::BlockType& block_type,
+			const glm::vec3& pos, const BatchInfo& batch_info)
+		{
+			mesh.pushBlock(block_type, pos, batch_info);
+		}
+		Rendering::Mesh& getMesh()
+		{
+			return mesh;
+		}
+	};
 	class Chunk
 	{
 		glm::vec2 position;
 		std::array<Blocks::BlockType*, BLOCK_COUNT>* block_types;
 		Rendering::Renderer chunk_renderer;
-		unsigned int ***blocks;
-		Rendering::Mesh mesh;
+		uint32_t*** blocks;
+		std::array<Subchunk, SUBCHUNK_COUNT> subchunks;
+		uint32_t index_count;
 	public:
-		struct _neighbourChunks {
+		struct _neighbourChunks 
+		{
 			Chunk* east;
 			Chunk* west;
 			Chunk* south;
@@ -35,15 +63,14 @@ namespace World
 		} neighbour_chunks;
 
 		
-
 		Chunk(const glm::vec2& cpos, std::array<Blocks::BlockType*, BLOCK_COUNT>* block_types,
-			unsigned int* chunk_indices);
+			uint32_t* chunk_indices);
 		Chunk(const Chunk& other) = delete; // Avoid copying chunks, its expensive af
 		~Chunk() noexcept;
 
-		void clearMeshes()
+		void resetIndexCount()
 		{
-			mesh.clear();
+			index_count = 0;
 		}
 		const glm::vec2& getPos()
 		{
@@ -57,15 +84,15 @@ namespace World
 					return blocks[x][y][z];
 			return 0;
 		}
-		void setBlock(const glm::vec3& pos, unsigned int blockid, bool update = false)
+		void setBlock(const glm::vec3& pos, uint16_t blockid, bool update = false)
 		{
-			unsigned int x = pos.x, y = pos.y, z = pos.z;
+			uint16_t x = pos.x, y = pos.y, z = pos.z;
 			if ((x >= 0) && (y >= 0) && (z >= 0))
 				if ((x < CHUNK_WIDTH) && (y < CHUNK_HEIGHT) && (z < CHUNK_LENGTH))
 					blocks[x][y][z] = blockid;
 
 		}
-		bool isOpaqueBlock(unsigned int blockid) const
+		bool isOpaqueBlock(uint16_t blockid) const
 		{
 			return !(*block_types)[blockid]->is_transparent;
 		}
@@ -77,14 +104,15 @@ namespace World
 		inline bool isOutOfChunk(const glm::vec3& local_pos);
 		inline bool canRenderFacing(const glm::vec3& facing_pos);
 		bool _canRenderFacingNeighbour(const glm::vec3& facing_pos);
-
+		
 	public:
-		void generate_mesh();
+		void generate_mesh(uint8_t sy = 0, uint8_t end = SUBCHUNK_COUNT);
+		void update_subchunks_at(const glm::vec3& local_pos);
 
 		void draw()
 		{
 			/* Draw call */
-			chunk_renderer.draw(mesh.current_quad_count * 6);
+			chunk_renderer.draw(index_count);
 		}
 	};
 }

@@ -9,28 +9,37 @@ namespace World
 	* Uses several meshes (regions) to batch the block data to OpenGL
 	*/
 	using namespace Blocks;
-	using BlockTypes = std::array<Blocks::BlockType*, BLOCK_COUNT>;
-	using Chunks = std::vector<std::shared_ptr<Chunk>>;
-	using getChunksFuncPtr = const std::vector<std::shared_ptr<Chunk>>& (ChunkManager::*)();
+	using BlockTypes = std::array<BlockType*, BLOCK_COUNT>;
+	
+	Subchunk::Subchunk()
+		:mesh(CHUNK_WIDTH * ( CHUNK_HEIGHT / SUBCHUNK_COUNT) * CHUNK_LENGTH * 6),
+		offset(0)
+	{
 
-	Chunk::Chunk(const glm::vec2& cpos, BlockTypes* block_types, unsigned int* chunk_indices)
-		:position(cpos), block_types(block_types), 
-		mesh(CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 3)
+	}
+
+	Subchunk::~Subchunk() noexcept
+	{
+
+	}
+
+	Chunk::Chunk(const glm::vec2& cpos, BlockTypes* block_types, uint32_t* chunk_indices)
+		:position(cpos), block_types(block_types) 
 	{
 		/* Initialize the 3D array*/
-		
-		blocks = new unsigned int** [CHUNK_WIDTH];
-		for (unsigned int i = 0; i < CHUNK_WIDTH; i++) {
-			blocks[i] = new unsigned int* [CHUNK_HEIGHT];
-			for (unsigned int j = 0; j < CHUNK_HEIGHT; j++)
+		blocks = new uint32_t** [CHUNK_WIDTH];
+		for (uint32_t i = 0; i < CHUNK_WIDTH; i++)
+		{
+			blocks[i] = new uint32_t * [CHUNK_HEIGHT];
+			for (uint32_t j = 0; j < CHUNK_HEIGHT; j++)
 			{
-				blocks[i][j] = new unsigned int[CHUNK_LENGTH];
+				blocks[i][j] = new uint32_t[CHUNK_LENGTH];
 				memset(blocks[i][j], 0, CHUNK_LENGTH);
 			}
 		}
-		unsigned int max_quads = CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 6;
-		unsigned int max_vertex_count = max_quads * 4;
-		unsigned int max_index_count = max_quads * 6;
+		size_t max_quads = CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 6;
+		size_t max_vertex_count = 0;
+		size_t max_index_count = max_quads * 6;
 		/* Allocate the buffers and pass the indices*/
 		chunk_renderer.allocateBuffers(max_vertex_count, max_index_count, chunk_indices);
 		chunk_renderer.bindLayout();
@@ -42,9 +51,9 @@ namespace World
 		std::cout << "Freeing Chunk Data" << '\n';
 		if (blocks)
 		{
-			for (unsigned int i = 0; i < CHUNK_LENGTH; i++)
+			for (uint32_t i = 0; i < CHUNK_LENGTH; i++)
 			{
-				for (unsigned int j = 0; j < CHUNK_HEIGHT; j++)
+				for (uint32_t j = 0; j < CHUNK_HEIGHT; j++)
 					delete[] blocks[i][j];
 				delete[] blocks[i];
 			}
@@ -101,39 +110,59 @@ namespace World
 	
 	
 	/* Chunk mesh batcher*/
-	void Chunk::generate_mesh()
+	void Chunk::update_subchunks_at(const glm::vec3& local_pos)
 	{
-		unsigned int offset;
-		unsigned int region_index;
-		unsigned int block;
-		unsigned int current_quad_count = 0;
-		for (unsigned int lx = 0; lx < CHUNK_WIDTH; lx++)
-			for (unsigned int ly = 0; ly < CHUNK_HEIGHT; ly++)
-				for (unsigned int lz = 0; lz < CHUNK_LENGTH; lz++)
-				{
-					glm::vec3 lpos(lx, ly, lz);
-					block = blocks[lx][ly][lz]; // get the block number of the block at that local position
-					if (!block)
-						continue;
-					const BlockType& block_type = *(*block_types)[block]; // get its block type
-					BatchInfo batch_info = { true, true, true, true, true, true };
-					/* Face culling */
-					if (block_type.is_cube)
-					{
-						batch_info.renderEast = canRenderFacing(lpos + glm::vec3(1, 0, 0));
-						batch_info.renderWest = canRenderFacing(lpos + glm::vec3(-1, 0, 0));
-						batch_info.renderUp = canRenderFacing(lpos + glm::vec3(0, 1, 0));
-						batch_info.renderDown = canRenderFacing(lpos + glm::vec3(0, -1, 0));
-						batch_info.renderNorth = canRenderFacing(lpos + glm::vec3(0, 0, -1));
-						batch_info.renderSouth = canRenderFacing(lpos + glm::vec3(0, 0, 1));
-					}
-					/* Push the block quads in the mesh */
-					mesh.pushBlock(block_type,
-						to_world_pos(position, lpos), batch_info);
-				}
-			
-		/* Batch the mesh vertex data */
-		chunk_renderer.bufferBatch(mesh, 0);
+		generate_mesh(local_pos.y / (CHUNK_HEIGHT / SUBCHUNK_COUNT));
 	}
-	
+	void Chunk::generate_mesh(uint8_t sy, uint8_t end)
+	{
+		uint16_t block;
+		uint32_t current_quad_count = 0;
+		for (uint16_t i = 0u; sy && (i < sy); i++)
+			current_quad_count += subchunks[i].getMesh().current_quad_count;
+
+		for (sy; sy < end; sy++)
+		{
+			Subchunk& subchunk = subchunks[sy];
+			subchunk.getMesh().clear();
+			subchunk.setOffset(current_quad_count * 4);
+			uint32_t ly;
+			for (uint32_t sly = 0; sly < (CHUNK_HEIGHT / SUBCHUNK_COUNT); sly++)
+				for (uint32_t lx = 0; lx < CHUNK_WIDTH; lx++)
+					for (uint32_t lz = 0; lz < CHUNK_LENGTH; lz++)
+			{
+				ly = sy * (CHUNK_HEIGHT / SUBCHUNK_COUNT) + sly;
+				glm::vec3 lpos(lx, ly, lz);
+				block = blocks[lx][ly][lz]; // get the block number of the block at that local position
+				if (!block)
+					continue;
+				const BlockType& block_type = *(*block_types)[block]; // get its block type
+				BatchInfo batch_info = { true, true, true, true, true, true };
+				/* Face culling */
+				if (block_type.is_cube)
+				{
+					batch_info.renderEast = canRenderFacing(lpos + glm::vec3(1, 0, 0));
+					batch_info.renderWest = canRenderFacing(lpos + glm::vec3(-1, 0, 0));
+					batch_info.renderUp = canRenderFacing(lpos + glm::vec3(0, 1, 0));
+					batch_info.renderDown = canRenderFacing(lpos + glm::vec3(0, -1, 0));
+					batch_info.renderNorth = canRenderFacing(lpos + glm::vec3(0, 0, -1));
+					batch_info.renderSouth = canRenderFacing(lpos + glm::vec3(0, 0, 1));
+				}
+				subchunk.pushBlock(block_type, 
+					to_world_pos(position, lpos), batch_info);
+			}
+			current_quad_count += subchunk.getMesh().current_quad_count;
+		}
+		/* Batch the mesh vertex data */
+		if (current_quad_count * 4 * sizeof(Geometry::Vertex) > chunk_renderer.getVBOsize())
+		{
+			chunk_renderer.reallocVBO(current_quad_count * 4 + ((CHUNK_HEIGHT / SUBCHUNK_COUNT) * sizeof(int)));
+			generate_mesh(0, sy);
+		}
+
+		for (Subchunk& subchunk: subchunks)
+			chunk_renderer.bufferBatch(subchunk.getMesh(), subchunk.getOffset());
+
+		index_count = current_quad_count * 6;
+	}
 }

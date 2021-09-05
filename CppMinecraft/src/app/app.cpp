@@ -9,9 +9,9 @@ namespace Application
     using std::make_shared;
     using std::make_unique;
 
-    App::App(unsigned int width, unsigned int height, bool vsync)
+    App::App(size_t width, size_t height, bool vsync, bool gl_debug, bool msaa)
         :shader_program(), width(width), height(height), vsync(vsync), window(nullptr),
-        texture_manager(), camera(), player(), world()
+        texture_manager(), camera(), player(), world(), hitray()
     {
         /* Initialize the library */
         if (!glfwInit())
@@ -48,17 +48,28 @@ namespace Application
             throw std::runtime_error("Error initializing GLEW");
         }
 
-#ifdef _GL_DEBUG
-        /* Enable Debug output */
-        glEnable(GL_DEBUG_OUTPUT);
-        glDebugMessageCallback(GLDebugMsgCallback, nullptr);
-#endif
-        std::cout << "OpenGL Version " << glGetString(GL_VERSION) << '\n';
+        std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << '\n';
+
+        if (gl_debug)
+        {
+            /* Enable Debug output */
+            std::cout << "Enabled OpenGL debugging\n";
+            glEnable(GL_DEBUG_OUTPUT);
+            glDebugMessageCallback(GLDebugMsgCallback, nullptr);
+        }
+
+        if (msaa)
+        {
+            std::cout << "Enabled multisample antialiasing, expect low performance\n";
+            glEnable(GL_MULTISAMPLE);
+            glfwWindowHint(GLFW_SAMPLES, 4);
+        }
     }
     
     void App::init()
     {
         /* Initialize shaders */
+        std::cout << "Compiling and building core shaders\n";
         shader_program = new AbstractGL::ShaderProgram;
         {
             AbstractGL::Shader vs("res/shaders/vertex_shader.glsl", GL_VERTEX_SHADER),
@@ -69,25 +80,32 @@ namespace Application
         shader_program->compile();
         shader_program->use();
 
-        /* Create the player, camera and texture manager*/
-        player = new Entity::Player(glm::vec3(16, 70, 16), 1);
-        camera = new Scene::Camera(player, shader_program, 852, 480);
+        /* Creating the texture manager */
+        std::cout << "Loading textures\n";
         texture_manager = make_shared<Texturing::TextureManager>(16, 16, shader_program);
+
         /* Create the World */
+        std::cout << "Loading and generating World\n";
         world = new World::World(texture_manager);
 
+        /* Create the player, camera */
+        std::cout << "Initializing Camera\n";
+        player = new Entity::Player(glm::vec3(16, 130, 16), 5);
+        camera = new Scene::Camera(player, shader_program, 852, 480);
+
         hitray = new Entity::PlayerHitray(world);
+
         /* Link some elements for the callbacks */
         Application::link_elements(player, camera, world, hitray);
     }
 
     App::~App() noexcept
     {
+        delete world;
         delete hitray;
-        delete shader_program;
         delete player;
         delete camera;
-        delete world;
+        delete shader_program;
     }
 
     inline void App::update(float delta_time)

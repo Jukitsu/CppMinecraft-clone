@@ -10,7 +10,6 @@ namespace World
 	* and the chunk universal indices
 	* Contains the World generator for now
 	*/
-	using ChunkPtr = std::shared_ptr<Chunk>;
 	using BlockTypesPtr = std::array<Blocks::BlockType*, BLOCK_COUNT>*;
 
 	ChunkManager::ChunkManager(BlockTypesPtr block_types)
@@ -18,8 +17,8 @@ namespace World
 	{
 		/* Create the chunk universal indices */
 		max_chunk_index_count = CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 6 * 6;
-		chunk_indices = new unsigned int[max_chunk_index_count];
-		for (unsigned int nquad = 0; nquad < max_chunk_index_count / 6; nquad++)
+		chunk_indices = new uint32_t[max_chunk_index_count];
+		for (uint32_t nquad = 0; nquad < max_chunk_index_count / 6; nquad++)
 		{
 			chunk_indices[nquad * 6] = 4 * nquad + 0;
 			chunk_indices[nquad * 6 + 1] = 4 * nquad + 1;
@@ -39,18 +38,18 @@ namespace World
 					glm::vec2 chunk_position{ x, z };
 					Chunk* current_chunk = new Chunk(chunk_position,
 						block_types, chunk_indices);
-					for (unsigned int i = 0; i < CHUNK_WIDTH; i++)
-						for (unsigned int j = 0; j < CHUNK_HEIGHT; j++)
-							for (unsigned int k = 0; k < CHUNK_LENGTH; k++)
+					for (uint32_t i = 0; i < CHUNK_WIDTH; i++)
+						for (uint32_t j = 0; j < CHUNK_HEIGHT; j++)
+							for (uint32_t k = 0; k < CHUNK_LENGTH; k++)
 							{
 								if (j > SEA_LEVEL)
 									current_chunk->setBlock({ i, j, k }, 0);
 								else if (j >= SEA_LEVEL)
-									current_chunk->setBlock({ i, j, k }, std::rand() % 2 ? 2 : 0);
+									current_chunk->setBlock({ i, j, k }, 2);
 								else if (j >= (SEA_LEVEL - 3))
-									current_chunk->setBlock({ i, j, k }, std::rand() % 2 ? 3 : 0);
+									current_chunk->setBlock({ i, j, k }, 3);
 								else
-									current_chunk->setBlock({ i, j, k }, std::rand() % 2 ? 1 : 0);
+									current_chunk->setBlock({ i, j, k }, 1);
 							}
 					chunks[x][z] = current_chunk;
 					pushToChunkMeshQueue(current_chunk);
@@ -90,7 +89,9 @@ namespace World
 			Chunk* chunk = chunk_mesh_loading_queue.front();
 			chunk_mesh_loading_queue.pop();
 			chunk->generate_mesh();
+			return;
 		}
+		is_reloading = false;
 	}
 	void ChunkManager::renderChunks()
 	{
@@ -100,17 +101,18 @@ namespace World
 	}
 	void ChunkManager::reloadChunkMesh()
 	{
-		while (!chunk_mesh_loading_queue.empty())
+		if (is_reloading)
 		{
-			chunk_mesh_loading_queue.pop();
+			return;
 		}
 		Chunk* chunk;
 		for (int x = 0; x < RENDER_DISTANCE; x++)
 			for (int z = 0; z < RENDER_DISTANCE; z++)
 			{
 				chunk = chunks[x][z];
-				chunk->clearMeshes();
+				chunk->resetIndexCount();
 				chunk_mesh_loading_queue.push(chunk);
 			}
+		is_reloading = true;
 	}
 }

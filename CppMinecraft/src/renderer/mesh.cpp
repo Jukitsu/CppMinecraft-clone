@@ -6,7 +6,7 @@ namespace Rendering
 	using namespace Geometry;
 	using namespace Blocks;
 
-	Mesh::Mesh(unsigned long max_quads)
+	Mesh::Mesh(size_t max_quads)
 		:max_quads(max_quads),
 		current_quad_count(0)
 	{
@@ -37,7 +37,7 @@ namespace Rendering
 		/* Returns the new quad count*/
 	{
 		bool* batch_info_array = (bool*)&batch_info;
-		for (unsigned int i = 0; i < block_type.get_quad_number(); i++)
+		for (uint16_t i = 0; i < block_type.get_quad_number(); i++)
 		{
 			if (batch_info_array[i < 6 ? i : 0])
 			{

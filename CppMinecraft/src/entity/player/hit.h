@@ -8,7 +8,7 @@
 
 namespace Entity
 {
-	constexpr unsigned short HIT_RANGE = 3;
+	constexpr uint16_t HIT_RANGE = 3;
 	class PlayerHitray
 	{
 	public:

@@ -20,6 +20,8 @@ namespace World
 		texture_manager->addTexture("res/textures/grass.png"); // ID: 2
 		texture_manager->addTexture("res/textures/grass_side.png"); // ID: 3
 		texture_manager->addTexture("res/textures/dirt.png"); // ID: 4
+		texture_manager->addTexture("res/textures/cobblestone.png"); // ID: 5
+		texture_manager->addTexture("res/textures/planks.png"); // ID: 6
 
 		/* Initializing the block models */
 		std::cout << "Initializing the block models\n";
@@ -31,6 +33,10 @@ namespace World
 			&models.cube, { 3, 3, 2, 4, 3, 3 }, false, true);
 		block_types[3] = new Blocks::BlockType("Dirt", 3,
 			&models.cube, { 4, 4, 4, 4, 4, 4 }, false, true);
+		block_types[4] = new Blocks::BlockType("Cobblestone", 4, 
+			&models.cube, { 5, 5, 5, 5, 5, 5 }, false, true);
+		block_types[5] = new Blocks::BlockType("Planks", 5,
+			&models.cube, { 6, 6, 6, 6, 6, 6 }, false, true);
 		chunk_manager = std::make_unique<ChunkManager>(&block_types);
 		texture_manager->generateMipmaps();
 		texture_manager->activate();
@@ -50,6 +56,7 @@ namespace World
 		{
 			return chunk->getBlock(lpos);
 		}
+		return 0;
 	}
 
 	void World::setBlock(const glm::vec3& pos, int block)
@@ -60,8 +67,8 @@ namespace World
 		if (chunk)
 		{
 			chunk->setBlock(lpos, block);
-			chunk->clearMeshes();
-			chunk->generate_mesh();
+			chunk->resetIndexCount();
+			chunk->update_subchunks_at(lpos);
 		}
 	}
 

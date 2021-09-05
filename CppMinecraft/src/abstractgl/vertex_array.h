@@ -26,12 +26,12 @@ namespace AbstractGL
 				bound = this;
 			}
 		}
-		void linkAttrib(VertexBuffer* vbo, GLubyte va_index,
-			GLubyte data_dim, GLenum type, GLsizei stride, GLubyte offset)
+		void linkAttrib(VertexBuffer* vbo, GLuint va_index,
+			GLint data_dim, GLenum type, GLsizei stride, ptrdiff_t offset)
 		{
 			bind();
 			vbo->bind();
-			glVertexAttribPointer((GLuint)va_index, (GLint)data_dim,
+			glVertexAttribPointer(va_index, data_dim,
 				GL_FLOAT, GL_FALSE, stride, (const void*)offset);
 			glEnableVertexAttribArray(va_index);
 		}

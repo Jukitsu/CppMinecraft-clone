@@ -1,5 +1,6 @@
 #pragma once
 #include "OpenGL.h"
+#include <iostream>
 
 namespace AbstractGL
 {
@@ -8,7 +9,9 @@ namespace AbstractGL
 		GLuint id;
 		static const VertexBuffer* bound;
 	public:
+		GLuint current_size;
 		VertexBuffer()
+			:id(0), current_size(0)
 		{
 			glGenBuffers(1, &id);
 		}
@@ -19,9 +22,10 @@ namespace AbstractGL
 		void allocate(GLuint size)
 		{
 			bind();
+			current_size = size;
 			glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
 		}
-		void bufferSubData(const void* data, GLuint size, int offset)
+		void bufferSubData(const void* data, GLuint size, GLintptr offset)
 		{
 			bind();
 			glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);

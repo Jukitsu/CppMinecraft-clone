@@ -28,10 +28,10 @@ namespace Application
 		std::shared_ptr<Texturing::TextureManager> texture_manager;
 		World::World* world;
 		GLFWwindow* window;
-		unsigned int width, height;
+		size_t width, height;
 		bool vsync;
 	public:
-		App(unsigned int width, unsigned int height, bool vsync);
+		App(size_t width, size_t height, bool vsync, bool gl_debug, bool msaa);
 		~App() noexcept;
 		void init();
 		inline void update(float delta_time);

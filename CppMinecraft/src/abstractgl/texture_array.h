@@ -9,13 +9,13 @@ namespace AbstractGL
 		static const TextureArray* bound;
 	public:
 		TextureArray(GLsizei texture_width, GLsizei texture_height, GLsizei array_size, 
-			unsigned int mipmap_level, GLenum mipmap_type);
+			bool do_mipmap, GLenum mipmap_type);
 		~TextureArray() noexcept
 		{
 			glDeleteTextures(1, &id);
 		}
 
-		void addTextureData(GLsizei width, GLsizei height, int index, GLubyte* data);
+		void addTextureData(GLsizei width, GLsizei height, int32_t index, GLubyte* data);
 
 		void bind() const
 		{

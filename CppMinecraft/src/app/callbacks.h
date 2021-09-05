@@ -155,6 +155,7 @@ namespace Application
                 }
                 else
                 {
+                    /*
                     hitrayptr->update(playerptr->getYaw(),
                         playerptr->getPitch(), playerptr->getPos());
                     while (hitrayptr->distance < Entity::HIT_RANGE)
@@ -163,11 +164,14 @@ namespace Application
                             worldptr->setBlock(hitrayptr->block, 0);
                             break;
                         }
+                    */
+                    worldptr->setBlock(playerptr->getPos(), 0);
                 }
                 break;
             case GLFW_MOUSE_BUTTON_RIGHT:
                 if (mouse_captured)
                 {
+                    /*
                     hitrayptr->update(playerptr->getYaw(),
                         playerptr->getPitch(), playerptr->getPos());
                     while (hitrayptr->distance < Entity::HIT_RANGE)
@@ -176,6 +180,8 @@ namespace Application
                             worldptr->setBlock(hitrayptr->block, playerptr->holding);
                             break;
                         }
+                    */
+                    worldptr->setBlock(playerptr->getPos(), playerptr->holding);
                 }
                 break;
             case GLFW_MOUSE_BUTTON_MIDDLE:

@@ -9,12 +9,12 @@
 
 namespace Texturing
 {
-	constexpr unsigned int TEX_ARRAY_SIZE = 32;
+	constexpr uint32_t TEX_ARRAY_SIZE = 32;
 	struct Image
 	{
-		unsigned char* image_data;
-		int width, height;
-		int comp;
+		GLubyte* image_data;
+		GLsizei width, height;
+		GLint comp;
 	};
 
 	class TextureManager
@@ -23,10 +23,10 @@ namespace Texturing
 		Image texture_images[TEX_ARRAY_SIZE];
 		AbstractGL::TextureArray texture_array;
 		GLubyte sampler_location;
-		mutable unsigned int current_index;
+		mutable uint32_t current_index;
 	public:
-		TextureManager(unsigned int texture_width,
-			unsigned int texture_height, AbstractGL::ShaderProgram* shader_program);
+		TextureManager(size_t texture_width,
+			size_t texture_height, AbstractGL::ShaderProgram* shader_program);
 		~TextureManager();
 		void addTexture(const std::string& texture_path);
 
@@ -39,7 +39,7 @@ namespace Texturing
 			texture_array.activate();
 			shader_program->setUniform1i(sampler_location, 0); // Pass the Texture Array Sampler to the shaders
 		}
-		unsigned int getCurrentIndex() const
+		uint32_t getCurrentIndex() const
 		{
 			return current_index;
 		}

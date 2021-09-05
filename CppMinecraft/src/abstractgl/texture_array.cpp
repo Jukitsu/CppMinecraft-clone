@@ -3,10 +3,10 @@
 namespace AbstractGL
 {
 	TextureArray::TextureArray(GLsizei texture_width, GLsizei texture_height, GLsizei array_size, 
-		unsigned int mipmap_level, GLenum mipmap_type)
+		bool do_mipmap, GLenum mipmap_type)
 		:id()
 	{
-		mipmap_type = mipmap_level ? mipmap_type : GL_NEAREST;
+		mipmap_type = do_mipmap ? mipmap_type : GL_NEAREST;
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D_ARRAY, id);
 		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, mipmap_type);
@@ -19,7 +19,7 @@ namespace AbstractGL
 	
 
 	void TextureArray::addTextureData(GLsizei width, 
-		GLsizei height, int index, GLubyte* data)
+		GLsizei height, int32_t index, GLubyte* data)
 	{
 		bind();
 		glTexSubImage3D(

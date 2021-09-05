@@ -11,9 +11,9 @@ namespace Blocks
 	using Texturing::TextureManager;
 	using namespace Geometry;
 	using namespace Models;
-
-	BlockType::BlockType(const char* name, unsigned int block_id, Models::Model* model,
-		const std::vector<unsigned int>& texture_layout,
+	
+	BlockType::BlockType(const char* name, size_t block_id, Models::Model* model,
+		const std::vector<size_t>& texture_layout,
 		bool is_transparent, bool is_cube)
 		:name(name), id(block_id), texture_manager(texture_manager), model(model),
 		is_transparent(is_transparent), is_cube(is_cube)
@@ -24,7 +24,7 @@ namespace Blocks
 			quads = new Quad[model->get_quad_number()];
 			memcpy(quads, model->get_quads(), model->get_quad_number() * sizeof(Quad));
 			
-			for (unsigned char i = 0; i < model->get_quad_number(); i++)
+			for (uint8_t i = 0; i < model->get_quad_number(); i++)
 			{
 				for (Vertex& vertex : quads[i].vertices)
 				{

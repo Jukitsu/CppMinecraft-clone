@@ -7,8 +7,8 @@ namespace Geometry
 	struct Vertex
 	{
 		float position[3];
-		float tex_coords[2];
-		float tex_index;
+		uint32_t tex_UV;
+		uint32_t tex_index;
 		float shading_value;
 	};
 
@@ -17,7 +17,7 @@ namespace Geometry
 		Vertex vertices[4];
 	};
 	
-	const std::array<unsigned int, 6> quad_indices
+	const std::array<uint32_t, 6> quad_indices
 	{
 		0, 1, 2,
 		0, 2, 3
