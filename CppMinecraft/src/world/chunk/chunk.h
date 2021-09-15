@@ -50,9 +50,9 @@ namespace World
 		glm::vec2 position;
 		std::array<Blocks::BlockType*, BLOCK_COUNT>* block_types;
 		Rendering::Renderer chunk_renderer;
-		uint32_t*** blocks;
+		BlockID*** blocks;
 		std::array<Subchunk, SUBCHUNK_COUNT> subchunks;
-		uint32_t index_count;
+		size_t index_count;
 	public:
 		struct _neighbourChunks 
 		{
@@ -64,7 +64,7 @@ namespace World
 
 		
 		Chunk(const glm::vec2& cpos, std::array<Blocks::BlockType*, BLOCK_COUNT>* block_types,
-			uint32_t* chunk_indices);
+			GLuint* chunk_indices);
 		Chunk(const Chunk& other) = delete; // Avoid copying chunks, its expensive af
 		~Chunk() noexcept;
 
@@ -76,15 +76,15 @@ namespace World
 		{
 			return position;
 		}
-		int getBlock(const glm::vec3& pos) const
+		BlockID getBlock(const glm::vec3& pos) const
 		{
-			int x = pos.x, y = pos.y, z = pos.z;
+			uint16_t x = pos.x, y = pos.y, z = pos.z;
 			if ((x >= 0) && (y >= 0) && (z >= 0))
 				if ((x < CHUNK_WIDTH) && (y < CHUNK_HEIGHT) && (z < CHUNK_LENGTH))
 					return blocks[x][y][z];
 			return 0;
 		}
-		void setBlock(const glm::vec3& pos, uint16_t blockid, bool update = false)
+		void setBlock(const glm::vec3& pos, BlockID blockid, bool update = false)
 		{
 			uint16_t x = pos.x, y = pos.y, z = pos.z;
 			if ((x >= 0) && (y >= 0) && (z >= 0))
@@ -92,7 +92,7 @@ namespace World
 					blocks[x][y][z] = blockid;
 
 		}
-		bool isOpaqueBlock(uint16_t blockid) const
+		bool isOpaqueBlock(BlockID blockid) const
 		{
 			return !(*block_types)[blockid]->is_transparent;
 		}

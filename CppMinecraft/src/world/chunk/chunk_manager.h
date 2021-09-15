@@ -12,8 +12,8 @@ namespace World
 {
 	class ChunkManager
 	{
-		uint32_t max_chunk_index_count;
-		uint32_t* chunk_indices;
+		size_t max_chunk_index_count;
+		GLuint* chunk_indices;
 		std::array<Blocks::BlockType*, BLOCK_COUNT>* block_types;
 		Chunk* chunks[RENDER_DISTANCE][RENDER_DISTANCE];
 		std::queue<Chunk*> chunk_mesh_loading_queue;
@@ -36,7 +36,7 @@ namespace World
 			Chunk* chunk = nullptr;
 			if (0 <= chunk_pos.x && chunk_pos.x < RENDER_DISTANCE)
 				if (0 <= chunk_pos.y && chunk_pos.y < RENDER_DISTANCE)
-					chunk = chunks[(uint32_t)floor(chunk_pos.x)][(uint32_t)floor(chunk_pos.y)];
+					chunk = chunks[(size_t)floor(chunk_pos.x)][(size_t)floor(chunk_pos.y)];
 			if (chunk && chunk->getPos() == chunk_pos)
 				return chunk;
 			return nullptr;

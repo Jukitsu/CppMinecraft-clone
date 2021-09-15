@@ -38,7 +38,7 @@ namespace Rendering
 		}
 		/* Allocate the Vertex Buffer and pass the Indices */
 		void allocateBuffers(size_t max_vertex_count, size_t max_index_count,
-			uint32_t* indices)
+			GLuint* indices)
 		{
 			vao.bind();
 			vbo.allocate(max_vertex_count * sizeof(Geometry::Vertex));
@@ -84,7 +84,7 @@ namespace Rendering
 			ibo.bind();
 		}
 		/* Draw the triangles */
-		void draw(uint32_t index_count) const
+		void draw(size_t index_count) const
 		{
 			vao.bind();
 			ibo.bind();

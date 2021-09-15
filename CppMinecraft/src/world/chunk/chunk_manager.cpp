@@ -17,8 +17,8 @@ namespace World
 	{
 		/* Create the chunk universal indices */
 		max_chunk_index_count = CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_LENGTH * 6 * 6;
-		chunk_indices = new uint32_t[max_chunk_index_count];
-		for (uint32_t nquad = 0; nquad < max_chunk_index_count / 6; nquad++)
+		chunk_indices = new GLuint[max_chunk_index_count];
+		for (GLuint nquad = 0; nquad < max_chunk_index_count / 6; nquad++)
 		{
 			chunk_indices[nquad * 6] = 4 * nquad + 0;
 			chunk_indices[nquad * 6 + 1] = 4 * nquad + 1;
@@ -38,9 +38,9 @@ namespace World
 					glm::vec2 chunk_position{ x, z };
 					Chunk* current_chunk = new Chunk(chunk_position,
 						block_types, chunk_indices);
-					for (uint32_t i = 0; i < CHUNK_WIDTH; i++)
-						for (uint32_t j = 0; j < CHUNK_HEIGHT; j++)
-							for (uint32_t k = 0; k < CHUNK_LENGTH; k++)
+					for (size_t i = 0; i < CHUNK_WIDTH; i++)
+						for (size_t j = 0; j < CHUNK_HEIGHT; j++)
+							for (size_t k = 0; k < CHUNK_LENGTH; k++)
 							{
 								if (j > SEA_LEVEL)
 									current_chunk->setBlock({ i, j, k }, 0);
@@ -73,8 +73,8 @@ namespace World
 		std::cout << "Freeing Chunk Manager Data\n";
 		delete[] chunk_indices;
 		Chunk* chunk;
-		for (int x = 0; x < RENDER_DISTANCE; x++)
-			for (int z = 0; z < RENDER_DISTANCE; z++)
+		for (size_t x = 0; x < RENDER_DISTANCE; x++)
+			for (size_t z = 0; z < RENDER_DISTANCE; z++)
 			{
 				chunk = chunks[x][z];
 				delete chunk;

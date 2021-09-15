@@ -26,7 +26,7 @@ namespace AbstractGL
 				bound = this;
 			}
 		}
-		void linkAttrib(VertexBuffer* vbo, GLuint va_index,
+		void linkAttrib(const VertexBuffer* vbo, GLuint va_index,
 			GLint data_dim, GLenum type, GLsizei stride, ptrdiff_t offset)
 		{
 			bind();

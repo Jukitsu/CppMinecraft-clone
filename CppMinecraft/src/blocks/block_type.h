@@ -7,6 +7,8 @@
 #include "models/models.h"
 #include "texture/texture_manager.h"
 
+typedef uint32_t BlockID;
+
 namespace Blocks
 {
 	class BlockType

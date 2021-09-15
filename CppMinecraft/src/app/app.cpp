@@ -90,7 +90,7 @@ namespace Application
 
         /* Create the player, camera */
         std::cout << "Initializing Camera\n";
-        player = new Entity::Player(glm::vec3(16, 130, 16), 5);
+        player = new Entity::Player(glm::vec3(16, 70, 16), 5);
         camera = new Scene::Camera(player, shader_program, 852, 480);
 
         hitray = new Entity::PlayerHitray(world);
@@ -118,7 +118,7 @@ namespace Application
     inline void App::draw()
     {
         /* Clear some stuff here*/
-        glClearColor(0.25f, 0.6f, 1.0f, 1.0f);
+        glClearColor(0.4f, 0.7f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
 #ifndef _DEBUG

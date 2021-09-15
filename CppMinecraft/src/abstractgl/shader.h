@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "glm/glm.hpp"
 #include "glm/matrix.hpp"
@@ -35,6 +36,7 @@ namespace AbstractGL
 	class ShaderProgram 
 	{
 		GLuint id;
+		std::vector<GLuint> shaders;
 		const static ShaderProgram* used;
 	public:
 		ShaderProgram() 
@@ -44,11 +46,16 @@ namespace AbstractGL
 		~ShaderProgram() noexcept 
 		{
 			stop();
+			for (GLuint shaderID : shaders)
+			{
+				glDetachShader(id, shaderID);
+			}
 			glDeleteProgram(id);
 		}
 		void bindShader(Shader&& shader)
 		{
 			glAttachShader(id, shader.id);
+			shaders.push_back(shader.id);
 		}
 		void compile()
 		{

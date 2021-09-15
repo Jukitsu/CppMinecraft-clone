@@ -23,17 +23,17 @@ namespace World
 
 	}
 
-	Chunk::Chunk(const glm::vec2& cpos, BlockTypes* block_types, uint32_t* chunk_indices)
+	Chunk::Chunk(const glm::vec2& cpos, BlockTypes* block_types, GLuint* chunk_indices)
 		:position(cpos), block_types(block_types) 
 	{
 		/* Initialize the 3D array*/
-		blocks = new uint32_t** [CHUNK_WIDTH];
+		blocks = new BlockID** [CHUNK_WIDTH];
 		for (uint32_t i = 0; i < CHUNK_WIDTH; i++)
 		{
-			blocks[i] = new uint32_t * [CHUNK_HEIGHT];
+			blocks[i] = new BlockID* [CHUNK_HEIGHT];
 			for (uint32_t j = 0; j < CHUNK_HEIGHT; j++)
 			{
-				blocks[i][j] = new uint32_t[CHUNK_LENGTH];
+				blocks[i][j] = new BlockID[CHUNK_LENGTH];
 				memset(blocks[i][j], 0, CHUNK_LENGTH);
 			}
 		}
@@ -51,9 +51,9 @@ namespace World
 		std::cout << "Freeing Chunk Data" << '\n';
 		if (blocks)
 		{
-			for (uint32_t i = 0; i < CHUNK_LENGTH; i++)
+			for (size_t i = 0; i < CHUNK_LENGTH; i++)
 			{
-				for (uint32_t j = 0; j < CHUNK_HEIGHT; j++)
+				for (size_t j = 0; j < CHUNK_HEIGHT; j++)
 					delete[] blocks[i][j];
 				delete[] blocks[i];
 			}
@@ -116,8 +116,8 @@ namespace World
 	}
 	void Chunk::generate_mesh(uint8_t sy, uint8_t end)
 	{
-		uint16_t block;
-		uint32_t current_quad_count = 0;
+		BlockID block;
+		size_t current_quad_count = 0;
 		for (uint16_t i = 0u; sy && (i < sy); i++)
 			current_quad_count += subchunks[i].getMesh().current_quad_count;
 
@@ -126,10 +126,10 @@ namespace World
 			Subchunk& subchunk = subchunks[sy];
 			subchunk.getMesh().clear();
 			subchunk.setOffset(current_quad_count * 4);
-			uint32_t ly;
-			for (uint32_t sly = 0; sly < (CHUNK_HEIGHT / SUBCHUNK_COUNT); sly++)
-				for (uint32_t lx = 0; lx < CHUNK_WIDTH; lx++)
-					for (uint32_t lz = 0; lz < CHUNK_LENGTH; lz++)
+			size_t ly;
+			for (size_t sly = 0; sly < (CHUNK_HEIGHT / SUBCHUNK_COUNT); sly++)
+				for (size_t lx = 0; lx < CHUNK_WIDTH; lx++)
+					for (size_t lz = 0; lz < CHUNK_LENGTH; lz++)
 			{
 				ly = sy * (CHUNK_HEIGHT / SUBCHUNK_COUNT) + sly;
 				glm::vec3 lpos(lx, ly, lz);
